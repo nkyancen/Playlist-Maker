@@ -24,7 +24,7 @@
             android:contentDescription="@string/back"
             android:foreground="?attr/selectableItemBackground"
             android:outlineSpotShadowColor="@color/white"
-            app:icon="@drawable/icon_arrow_back"
+            app:icon="@drawable/ic_arrow_back"
             app:iconGravity="textStart"
             app:iconPadding="0dp"
             app:iconTint="@color/dark_grey" />
@@ -75,7 +75,7 @@
         android:textAllCaps="false"
         android:textColor="@color/dark_grey"
         android:textSize="@dimen/settings_text_size"
-        app:icon="@drawable/icon_share"
+        app:icon="@drawable/ic_share"
         app:iconGravity="end"
         app:iconPadding="@dimen/main_icon_padding"
         app:iconTint="@color/grey" />
@@ -97,7 +97,7 @@
         android:textAllCaps="false"
         android:textColor="@color/dark_grey"
         android:textSize="@dimen/settings_text_size"
-        app:icon="@drawable/icon_support"
+        app:icon="@drawable/ic_support"
         app:iconGravity="end"
         app:iconPadding="@dimen/main_icon_padding"
         app:iconTint="@color/grey" />
@@ -119,7 +119,7 @@
         android:textAllCaps="false"
         android:textColor="@color/dark_grey"
         android:textSize="@dimen/settings_text_size"
-        app:icon="@drawable/icon_arrow_forward"
+        app:icon="@drawable/ic_arrow_forward"
         app:iconGravity="end"
         app:iconPadding="@dimen/main_icon_padding"
         app:iconTint="@color/grey" />

@@ -52,7 +52,7 @@
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/header_text_size"
             app:cornerRadius="@dimen/corner_radius"
-            app:icon="@drawable/icon_search"
+            app:icon="@drawable/ic_search"
             app:iconGravity="textStart"
             app:iconPadding="@dimen/main_icon_padding"
             app:iconTint="@color/dark_grey" />
@@ -70,7 +70,7 @@
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/header_text_size"
             app:cornerRadius="@dimen/corner_radius"
-            app:icon="@drawable/icon_media"
+            app:icon="@drawable/ic_media"
             app:iconGravity="textStart"
             app:iconPadding="@dimen/main_icon_padding"
             app:iconTint="@color/dark_grey" />
@@ -88,7 +88,7 @@
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/header_text_size"
             app:cornerRadius="@dimen/corner_radius"
-            app:icon="@drawable/icon_settings"
+            app:icon="@drawable/ic_settings"
             app:iconGravity="textStart"
             app:iconPadding="@dimen/main_icon_padding"
             app:iconTint="@color/dark_grey" />
