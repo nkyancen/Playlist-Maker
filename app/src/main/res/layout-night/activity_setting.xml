@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/dark_grey"
     android:orientation="vertical"
     tools:context=".SettingsActivity">
 
@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:background="@color/white"
+        android:background="@color/dark_grey"
         android:orientation="horizontal"
         android:padding="@dimen/environment_heading_padding">
 
@@ -20,14 +20,14 @@
             android:id="@+id/button_back"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/dark_grey"
             android:contentDescription="@string/back"
             android:foreground="?attr/selectableItemBackground"
             android:outlineSpotShadowColor="@color/white"
             app:icon="@drawable/icon_arrow_back"
             app:iconGravity="textStart"
             app:iconPadding="0dp"
-            app:iconTint="@color/dark_grey" />
+            app:iconTint="@color/white" />
 
         <TextView
             android:layout_width="0dp"
@@ -40,7 +40,7 @@
             android:paddingEnd="@dimen/header_padding"
             android:paddingBottom="@dimen/header_padding"
             android:text="@string/settings"
-            android:textColor="@color/dark_grey"
+            android:textColor="@color/white"
             android:textSize="@dimen/header_text_size" />
     </LinearLayout>
 
@@ -54,7 +54,7 @@
         android:paddingStart="@dimen/settings_padding_text_start"
         android:paddingEnd="@dimen/settings_padding_text_end"
         android:text="@string/dark_theme"
-        android:textColor="@color/dark_grey"
+        android:textColor="@color/white"
         android:textSize="@dimen/settings_text_size"
         app:switchMinWidth="35dp" />
 
@@ -62,7 +62,7 @@
         android:id="@+id/button_share"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/dark_grey"
         android:fontFamily="sans-serif"
         android:foreground="?attr/selectableItemBackground"
         android:outlineSpotShadowColor="@color/white"
@@ -73,18 +73,18 @@
         android:text="@string/share"
         android:textAlignment="textStart"
         android:textAllCaps="false"
-        android:textColor="@color/dark_grey"
+        android:textColor="@color/white"
         android:textSize="@dimen/settings_text_size"
         app:icon="@drawable/icon_share"
         app:iconGravity="end"
         app:iconPadding="@dimen/main_icon_padding"
-        app:iconTint="@color/grey" />
+        app:iconTint="@color/white" />
 
     <Button
         android:id="@+id/button_support"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/dark_grey"
         android:fontFamily="sans-serif"
         android:foreground="?attr/selectableItemBackground"
         android:outlineSpotShadowColor="@color/white"
@@ -95,18 +95,18 @@
         android:text="@string/support"
         android:textAlignment="textStart"
         android:textAllCaps="false"
-        android:textColor="@color/dark_grey"
+        android:textColor="@color/white"
         android:textSize="@dimen/settings_text_size"
         app:icon="@drawable/icon_support"
         app:iconGravity="end"
         app:iconPadding="@dimen/main_icon_padding"
-        app:iconTint="@color/grey" />
+        app:iconTint="@color/white" />
 
     <Button
         android:id="@+id/button_user_agreement"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/dark_grey"
         android:fontFamily="sans-serif"
         android:foreground="?attr/selectableItemBackground"
         android:outlineSpotShadowColor="@color/white"
@@ -117,11 +117,11 @@
         android:text="@string/user_agreement"
         android:textAlignment="textStart"
         android:textAllCaps="false"
-        android:textColor="@color/dark_grey"
+        android:textColor="@color/white"
         android:textSize="@dimen/settings_text_size"
         app:icon="@drawable/icon_arrow_forward"
         app:iconGravity="end"
         app:iconPadding="@dimen/main_icon_padding"
-        app:iconTint="@color/grey" />
+        app:iconTint="@color/white" />
 
 </LinearLayout>
