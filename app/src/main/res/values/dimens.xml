@@ -6,10 +6,10 @@
     <dimen name="main_icon_padding">8dp</dimen>
     <dimen name="header_padding_top">10dp</dimen>
     <dimen name="header_padding">12dp</dimen>
-    <dimen name="main_padding_top">30dp</dimen>
+    <dimen name="main_padding_top">0dp</dimen>
     <dimen name="environment_heading_padding">4dp</dimen>
     <dimen name="settings_padding_text_start">16dp</dimen>
     <dimen name="settings_padding_text_top">19dp</dimen>
-    <dimen name="settings_padding_text_end">12dp</dimen>
+    <dimen name="settings_padding_text_end">18dp</dimen>
     <dimen name="settings_padding_text_bottom">18dp</dimen>
 </resources>
