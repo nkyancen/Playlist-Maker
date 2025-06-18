@@ -10,6 +10,7 @@
     tools:context=".MainActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/header_main"
         android:layout_width="match_parent"
         android:layout_height="58dp"
         app:title="@string/app_name"
@@ -24,32 +25,32 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button_search"
             style="@style/MainButton"
             android:text="@string/search"
             app:cornerRadius="@dimen/corner_radius"
-            app:icon="@drawable/ic_search"
+            app:icon="@drawable/ic_search_24"
             app:iconGravity="textStart"
             app:iconPadding="@dimen/main_icon_padding"
             app:iconTint="@color/dark_grey" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button_media"
             style="@style/MainButton"
             android:text="@string/media"
             app:cornerRadius="@dimen/corner_radius"
-            app:icon="@drawable/ic_media"
+            app:icon="@drawable/ic_media_24"
             app:iconGravity="textStart"
             app:iconPadding="@dimen/main_icon_padding"
             app:iconTint="@color/dark_grey" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button_settings"
             style="@style/MainButton"
             android:text="@string/settings"
             app:cornerRadius="@dimen/corner_radius"
-            app:icon="@drawable/ic_settings"
+            app:icon="@drawable/ic_settings_24"
             app:iconGravity="textStart"
             app:iconPadding="@dimen/main_icon_padding"
             app:iconTint="@color/dark_grey" />

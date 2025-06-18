@@ -3,8 +3,8 @@ package ru.nkyancen.playlistmaker
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.button.MaterialButton
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -12,9 +12,9 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        val buttonSearch = findViewById<Button>(R.id.button_search)
-        val buttonMedia = findViewById<Button>(R.id.button_media)
-        val buttonSettings = findViewById<Button>(R.id.button_settings)
+        val buttonSearch = findViewById<MaterialButton>(R.id.button_search)
+        val buttonMedia = findViewById<MaterialButton>(R.id.button_media)
+        val buttonSettings = findViewById<MaterialButton>(R.id.button_settings)
 
         val buttonSearchClickListener: View.OnClickListener = object : View.OnClickListener {
             override fun onClick(v: View?) {

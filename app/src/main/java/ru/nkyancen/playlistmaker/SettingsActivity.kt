@@ -10,7 +10,7 @@ class SettingsActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_setting)
 
-        val buttonBack = findViewById<MaterialToolbar>(R.id.bar_settings)
+        val buttonBack = findViewById<MaterialToolbar>(R.id.header_settings)
 
         buttonBack.setNavigationOnClickListener {
             finish()
