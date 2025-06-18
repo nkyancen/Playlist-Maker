@@ -1,8 +1,8 @@
 package ru.nkyancen.playlistmaker
 
 import android.os.Bundle
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.appbar.MaterialToolbar
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -10,9 +10,9 @@ class SettingsActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_setting)
 
-        val buttonBack = findViewById<Button>(R.id.button_back)
+        val buttonBack = findViewById<MaterialToolbar>(R.id.bar_settings)
 
-        buttonBack.setOnClickListener {
+        buttonBack.setNavigationOnClickListener {
             finish()
         }
     }

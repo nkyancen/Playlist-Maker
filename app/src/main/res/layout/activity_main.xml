@@ -9,27 +9,12 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-
-    <LinearLayout
+    <com.google.android.material.appbar.MaterialToolbar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="@dimen/environment_heading_padding">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:fontFamily="sans-serif-medium"
-            android:paddingStart="@dimen/header_padding"
-            android:paddingTop="@dimen/header_padding_top"
-            android:paddingEnd="@dimen/header_padding"
-            android:paddingBottom="@dimen/header_padding"
-            android:text="@string/app_name"
-            android:textColor="@color/white"
-            android:textSize="@dimen/header_text_size" />
-
-    </LinearLayout>
+        android:layout_height="58dp"
+        app:title="@string/app_name"
+        app:titleTextAppearance="@style/HeaderTextStyle"
+        app:titleTextColor="@color/white" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,16 +26,8 @@
 
         <Button
             android:id="@+id/button_search"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/white"
-            android:fontFamily="sans-serif"
-            android:foreground="?attr/selectableItemBackground"
+            style="@style/MainButton"
             android:text="@string/search"
-            android:textAllCaps="false"
-            android:textColor="@color/dark_grey"
-            android:textSize="@dimen/header_text_size"
             app:cornerRadius="@dimen/corner_radius"
             app:icon="@drawable/ic_search"
             app:iconGravity="textStart"
@@ -59,16 +36,8 @@
 
         <Button
             android:id="@+id/button_media"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/white"
-            android:fontFamily="sans-serif"
-            android:foreground="?attr/selectableItemBackground"
+            style="@style/MainButton"
             android:text="@string/media"
-            android:textAllCaps="false"
-            android:textColor="@color/dark_grey"
-            android:textSize="@dimen/header_text_size"
             app:cornerRadius="@dimen/corner_radius"
             app:icon="@drawable/ic_media"
             app:iconGravity="textStart"
@@ -77,16 +46,8 @@
 
         <Button
             android:id="@+id/button_settings"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/white"
-            android:fontFamily="sans-serif"
-            android:foreground="?attr/selectableItemBackground"
+            style="@style/MainButton"
             android:text="@string/settings"
-            android:textAllCaps="false"
-            android:textColor="@color/dark_grey"
-            android:textSize="@dimen/header_text_size"
             app:cornerRadius="@dimen/corner_radius"
             app:icon="@drawable/ic_settings"
             app:iconGravity="textStart"
