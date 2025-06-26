@@ -1,14 +1,14 @@
 package ru.nkyancen.playlistmaker
 
-import android.content.Context
-import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.content.edit
 import com.google.android.material.appbar.MaterialToolbar
+import utils.CheckDayNightTheme
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsActivity : AppCompatActivity(), CheckDayNightTheme {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -20,41 +20,63 @@ class SettingsActivity : AppCompatActivity() {
             finish()
         }
 
+        applyNightMode(this@SettingsActivity)
+
         val switcher = findViewById<SwitchCompat>(R.id.switch_dark_theme)
 
-        switcher.isChecked = isNightThemeOn(this@SettingsActivity)
+        val sharedPreferences =
+            getSharedPreferences(
+                CheckDayNightTheme.SHARED_SETTINGS,
+                MODE_PRIVATE
+            )
 
-        switcher.setOnCheckedChangeListener { _, isChecked ->
-            val currentNightMode = AppCompatDelegate.getDefaultNightMode()
-            if (currentNightMode == AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-            } else if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        setSwitcherCheck(switcher)
+
+        switcher.setOnClickListener {
+            sharedPreferences.edit {
+                putBoolean(
+                    CheckDayNightTheme.IS_SWITCH_USE,
+                    true
+                )
+                if (switcher.isChecked) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    putBoolean(
+                        CheckDayNightTheme.IS_DARK_MODE,
+                        true
+                    )
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    putBoolean(
+                        CheckDayNightTheme.IS_DARK_MODE,
+                        false
+                    )
+                }
             }
         }
     }
 
-    private fun isNightThemeOn(context: Context): Boolean {
-        val currentNightMode = AppCompatDelegate.getDefaultNightMode()
+    private fun setSwitcherCheck(switcher: SwitchCompat) {
+        val sharedPreferences =
+            getSharedPreferences(
+                CheckDayNightTheme.SHARED_SETTINGS,
+                MODE_PRIVATE
+            )
 
-        return when (currentNightMode) {
-            AppCompatDelegate.MODE_NIGHT_YES -> {
-                true
-            }
+        val isSystemDarkModeOn = sharedPreferences.getBoolean(
+            CheckDayNightTheme.IS_SYSTEM_MODE,
+            false
+        )
 
-            AppCompatDelegate.MODE_NIGHT_NO -> {
-                false
-            }
+        val isDarkModeOn = sharedPreferences.getBoolean(
+            CheckDayNightTheme.IS_DARK_MODE,
+            false
+        )
 
-            else -> {
-                val configuration = context.resources.configuration
-                val uiMode = configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val isSwitchUse = sharedPreferences.getBoolean(
+            CheckDayNightTheme.IS_SWITCH_USE,
+            false
+        )
 
-                uiMode == Configuration.UI_MODE_NIGHT_YES
-            }
-        }
-
+        switcher.isChecked = (isSystemDarkModeOn and !isSwitchUse) or (isDarkModeOn and isSwitchUse)
     }
 }
