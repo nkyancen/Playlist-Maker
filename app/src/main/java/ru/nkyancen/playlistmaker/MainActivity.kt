@@ -4,15 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
-import utils.CheckDayNightTheme
 
-class MainActivity : AppCompatActivity(), CheckDayNightTheme {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
-
-        applyNightMode(this@MainActivity)
 
         val buttonSearch = findViewById<MaterialButton>(R.id.button_search)
         val buttonMedia = findViewById<MaterialButton>(R.id.button_media)

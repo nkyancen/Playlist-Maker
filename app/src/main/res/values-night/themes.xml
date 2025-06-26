@@ -9,6 +9,6 @@
         <!-- Secondary colors -->
         <item name="colorSecondary">@color/dark_grey</item>
         <item name="colorOnSecondary">@color/white</item>
-        <item name="colorSecondaryVariant">@color/light_grey</item>
+        <item name="colorSecondaryVariant">@color/dark_grey</item>
     </style>
 </resources>

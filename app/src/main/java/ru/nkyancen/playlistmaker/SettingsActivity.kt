@@ -1,14 +1,17 @@
 package ru.nkyancen.playlistmaker
 
+import android.content.Context
+import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
-import androidx.core.content.edit
+import androidx.core.net.toUri
 import com.google.android.material.appbar.MaterialToolbar
-import utils.CheckDayNightTheme
+import com.google.android.material.button.MaterialButton
 
-class SettingsActivity : AppCompatActivity(), CheckDayNightTheme {
+class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -20,63 +23,60 @@ class SettingsActivity : AppCompatActivity(), CheckDayNightTheme {
             finish()
         }
 
-        applyNightMode(this@SettingsActivity)
-
         val switcher = findViewById<SwitchCompat>(R.id.switch_dark_theme)
 
-        val sharedPreferences =
-            getSharedPreferences(
-                CheckDayNightTheme.SHARED_SETTINGS,
-                MODE_PRIVATE
-            )
-
-        setSwitcherCheck(switcher)
+        switcher.isChecked = isDarkMode(this@SettingsActivity)
 
         switcher.setOnClickListener {
-            sharedPreferences.edit {
-                putBoolean(
-                    CheckDayNightTheme.IS_SWITCH_USE,
-                    true
-                )
-                if (switcher.isChecked) {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    putBoolean(
-                        CheckDayNightTheme.IS_DARK_MODE,
-                        true
-                    )
-                } else {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    putBoolean(
-                        CheckDayNightTheme.IS_DARK_MODE,
-                        false
-                    )
-                }
+            when (switcher.isChecked) {
+                true -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                false -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
+        }
+
+        val buttonShare = findViewById<MaterialButton>(R.id.button_share)
+
+        buttonShare.setOnClickListener {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.setType("plain/text")
+            shareIntent.putExtra(
+                Intent.EXTRA_TEXT,
+                getString(R.string.share_text)
+            )
+            startActivity(Intent.createChooser(shareIntent, null))
+        }
+
+        val buttonSupport = findViewById<MaterialButton>(R.id.button_support)
+
+        buttonSupport.setOnClickListener {
+            val supportIntent = Intent(Intent.ACTION_SENDTO)
+            supportIntent.data = "mailto:".toUri()
+            supportIntent.putExtra(
+                Intent.EXTRA_EMAIL,
+                resources.getStringArray(R.array.email)
+            )
+            supportIntent.putExtra(
+                Intent.EXTRA_SUBJECT,
+                getString(R.string.mail_title)
+            )
+            supportIntent.putExtra(
+                Intent.EXTRA_TEXT,
+                getString(R.string.mail_text)
+            )
+            startActivity(supportIntent)
+        }
+
+        val buttonUserAgreement = findViewById<MaterialButton>(R.id.button_user_agreement)
+
+        buttonUserAgreement.setOnClickListener {
+            val userAgreementIntent = Intent(Intent.ACTION_VIEW)
+            userAgreementIntent.data = "https://yandex.ru/legal/practicum_offer/".toUri()
+            startActivity(userAgreementIntent)
         }
     }
 
-    private fun setSwitcherCheck(switcher: SwitchCompat) {
-        val sharedPreferences =
-            getSharedPreferences(
-                CheckDayNightTheme.SHARED_SETTINGS,
-                MODE_PRIVATE
-            )
-
-        val isSystemDarkModeOn = sharedPreferences.getBoolean(
-            CheckDayNightTheme.IS_SYSTEM_MODE,
-            false
-        )
-
-        val isDarkModeOn = sharedPreferences.getBoolean(
-            CheckDayNightTheme.IS_DARK_MODE,
-            false
-        )
-
-        val isSwitchUse = sharedPreferences.getBoolean(
-            CheckDayNightTheme.IS_SWITCH_USE,
-            false
-        )
-
-        switcher.isChecked = (isSystemDarkModeOn and !isSwitchUse) or (isDarkModeOn and isSwitchUse)
+    private fun isDarkMode(context: Context): Boolean {
+        val darkModeFlag = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        return darkModeFlag == Configuration.UI_MODE_NIGHT_YES
     }
 }

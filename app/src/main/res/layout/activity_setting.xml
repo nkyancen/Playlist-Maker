@@ -38,19 +38,19 @@
         app:thumbTint="@color/switch_thumb_color"
         />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_share"
         style="@style/ButtonSettings"
         android:text="@string/share"
         app:icon="@drawable/ic_share_24" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_support"
         style="@style/ButtonSettings"
         android:text="@string/support"
         app:icon="@drawable/ic_support_24" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_user_agreement"
         style="@style/ButtonSettings"
         android:text="@string/user_agreement"
