@@ -60,7 +60,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        savedInstanceState.putString(SEARCH_REQUEST, searchText)
+        searchText = savedInstanceState.getString(SEARCH_REQUEST,EMPTY_SEARCH_TEXT)
     }
 
     override fun onSaveInstanceState(
@@ -68,7 +68,7 @@ class SearchActivity : AppCompatActivity() {
         outPersistentState: PersistableBundle
     ) {
         super.onSaveInstanceState(outState, outPersistentState)
-        searchText = outState.getString(SEARCH_REQUEST,EMPTY_SEARCH_TEXT)
+        outState.putString(SEARCH_REQUEST, searchText)
     }
 
     companion object{
