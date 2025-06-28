@@ -4,11 +4,12 @@
     <dimen name="header_text_size">22sp</dimen>
     <dimen name="corner_radius">16dp</dimen>
     <dimen name="main_icon_padding">8dp</dimen>
-    <dimen name="header_padding_top">10dp</dimen>
-    <dimen name="header_padding">12dp</dimen>
-    <dimen name="environment_heading_padding">4dp</dimen>
     <dimen name="settings_padding_text_start">16dp</dimen>
     <dimen name="settings_padding_text_top">19dp</dimen>
     <dimen name="settings_padding_text_end">18dp</dimen>
     <dimen name="settings_padding_text_bottom">18dp</dimen>
+    <dimen name="search_horizontal_padding">16dp</dimen>
+    <dimen name="search_vertical_padding">8dp</dimen>
+    <dimen name="search_corner_radius">8dp</dimen>
+    <dimen name="search_icon_vertical_padding">10dp</dimen>
 </resources>
