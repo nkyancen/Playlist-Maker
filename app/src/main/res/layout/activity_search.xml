@@ -42,6 +42,7 @@
             android:maxLines="1"
             android:textAppearance="@style/SettingsTextStyle"
             android:textColorHint="?attr/colorOnSecondary"
+            android:textColor="@color/dark_gray"
             tools:ignore="LabelFor" />
 
         <ImageView

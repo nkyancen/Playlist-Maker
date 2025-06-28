@@ -1,6 +1,7 @@
 package ru.nkyancen.playlistmaker
 
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -10,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.appbar.MaterialToolbar
 
 class SearchActivity : AppCompatActivity() {
+    var searchText: String = EMPTY_SEARCH_TEXT
+    var searchEditText: EditText? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -22,11 +25,10 @@ class SearchActivity : AppCompatActivity() {
         }
 
         val clearButton = findViewById<ImageView>(R.id.clearIcon)
-        val searchEditText = findViewById<EditText>(R.id.searchEditText)
-
+        searchEditText = findViewById(R.id.searchEditText)
 
         clearButton.setOnClickListener {
-            searchEditText.setText("")
+            searchEditText?.setText(EMPTY_SEARCH_TEXT)
         }
 
         val searchTextWatcher = object : TextWatcher {
@@ -36,10 +38,16 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
+                searchText = if (!s.isNullOrEmpty()) {s.toString()} else {EMPTY_SEARCH_TEXT}
             }
         }
 
-        searchEditText.addTextChangedListener(searchTextWatcher)
+        searchEditText?.addTextChangedListener(searchTextWatcher)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        searchEditText?.setText(searchText)
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
@@ -50,4 +58,21 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        savedInstanceState.putString(SEARCH_REQUEST, searchText)
+    }
+
+    override fun onSaveInstanceState(
+        outState: Bundle,
+        outPersistentState: PersistableBundle
+    ) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        searchText = outState.getString(SEARCH_REQUEST,EMPTY_SEARCH_TEXT)
+    }
+
+    companion object{
+        const val SEARCH_REQUEST = "Search request"
+        const val EMPTY_SEARCH_TEXT = ""
+    }
 }
