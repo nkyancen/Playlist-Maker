@@ -16,4 +16,6 @@
     </string-array>
     <string name="mail_title">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="mail_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <!--  Ссылка на оферту  -->
+    <string name="oferta_url">https://yandex.ru/legal/practicum_offer/</string>
 </resources>

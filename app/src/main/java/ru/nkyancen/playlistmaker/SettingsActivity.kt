@@ -84,7 +84,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun createAgreementIntent() {
         val userAgreementIntent = Intent(Intent.ACTION_VIEW)
-        userAgreementIntent.data = "https://yandex.ru/legal/practicum_offer/".toUri()
+        userAgreementIntent.data = getString(R.string.oferta_url).toUri()
         startActivity(userAgreementIntent)
     }
 
