@@ -1,7 +1,6 @@
 package ru.nkyancen.playlistmaker
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -12,8 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.appbar.MaterialToolbar
 
 class SearchActivity : AppCompatActivity() {
-    var searchText: String = EMPTY_SEARCH_TEXT
-    var searchEditText: EditText? = null
+    private var searchText: String = EMPTY_SEARCH_TEXT
+    private lateinit var searchEditText: EditText
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -29,9 +28,9 @@ class SearchActivity : AppCompatActivity() {
         searchEditText = findViewById(R.id.searchEditText)
 
         clearButton.setOnClickListener {
-            searchEditText?.setText(EMPTY_SEARCH_TEXT)
+            searchEditText.setText(EMPTY_SEARCH_TEXT)
             val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
-            inputMethodManager?.hideSoftInputFromWindow(searchEditText?.windowToken, 0)
+            inputMethodManager?.hideSoftInputFromWindow(searchEditText.windowToken, 0)
         }
 
         val searchTextWatcher = object : TextWatcher {
@@ -41,16 +40,16 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
-                searchText = if (!s.isNullOrEmpty()) {s.toString()} else {EMPTY_SEARCH_TEXT}
+                searchText = s?.toString() ?: EMPTY_SEARCH_TEXT
             }
         }
 
-        searchEditText?.addTextChangedListener(searchTextWatcher)
+        searchEditText.addTextChangedListener(searchTextWatcher)
     }
 
     override fun onResume() {
         super.onResume()
-        searchEditText?.setText(searchText)
+        searchEditText.setText(searchText)
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
@@ -66,8 +65,8 @@ class SearchActivity : AppCompatActivity() {
         searchText = savedInstanceState.getString(SEARCH_REQUEST,EMPTY_SEARCH_TEXT)
     }
 
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        super.onSaveInstanceState(outState, outPersistentState)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
         outState.putString(SEARCH_REQUEST, searchText)
     }
 

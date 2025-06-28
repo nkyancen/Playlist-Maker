@@ -12,7 +12,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 
 class SettingsActivity : AppCompatActivity() {
-    private var switcher: SwitchCompat? = null
+    private lateinit var switcher: SwitchCompat
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,11 +27,10 @@ class SettingsActivity : AppCompatActivity() {
 
         switcher = findViewById(R.id.darkThemeSwitch)
 
-        switcher?.setOnClickListener {
-            when (switcher?.isChecked) {
+        switcher.setOnClickListener {
+            when (switcher.isChecked) {
                 true -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 false -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                else -> {}
             }
         }
 
@@ -90,7 +89,7 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        switcher?.isChecked = isDarkMode(this@SettingsActivity)
+        switcher.isChecked = isDarkMode(this@SettingsActivity)
     }
 
     private fun isDarkMode(context: Context): Boolean {
