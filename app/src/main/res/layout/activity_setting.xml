@@ -8,22 +8,16 @@
 
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/header_settings"
-        android:layout_width="match_parent"
-        android:layout_height="58dp"
-        android:layout_marginBottom="24dp"
-        app:contentInsetStartWithNavigation="64dp"
-        app:navigationIcon="@drawable/ic_arrow_back_24"
-        app:navigationIconTint="?attr/colorOnPrimary"
-        app:title="@string/settings"
-        app:titleTextAppearance="@style/HeaderTextStyle"
-        app:titleTextColor="?attr/colorOnPrimary"/>
+        android:id="@+id/settingsHeader"
+        style="@style/ToolBar"
+        app:title="@string/settings" />
 
 
     <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switch_dark_theme"
+        android:id="@+id/darkThemeSwitch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:backgroundTint="@color/no_color"
         android:fontFamily="@font/ys_display_regular"
         android:foreground="?attr/selectableItemBackground"
@@ -34,24 +28,23 @@
         android:textColor="?attr/colorOnPrimary"
         android:textSize="@dimen/settings_text_size"
         app:switchMinWidth="35dp"
-        app:trackTint="@color/switch_track_color"
         app:thumbTint="@color/switch_thumb_color"
-        />
+        app:trackTint="@color/switch_track_color" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_share"
+        android:id="@+id/shareButton"
         style="@style/ButtonSettings"
         android:text="@string/share"
         app:icon="@drawable/ic_share_24" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_support"
+        android:id="@+id/supportButton"
         style="@style/ButtonSettings"
         android:text="@string/support"
         app:icon="@drawable/ic_support_24" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_user_agreement"
+        android:id="@+id/userAgreementButton"
         style="@style/ButtonSettings"
         android:text="@string/user_agreement"
         app:icon="@drawable/ic_arrow_forward_24" />

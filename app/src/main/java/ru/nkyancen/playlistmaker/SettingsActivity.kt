@@ -12,67 +12,85 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 
 class SettingsActivity : AppCompatActivity() {
+    private var switcher: SwitchCompat? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_setting)
 
-        val buttonBack = findViewById<MaterialToolbar>(R.id.header_settings)
+        val backButton = findViewById<MaterialToolbar>(R.id.settingsHeader)
 
-        buttonBack.setNavigationOnClickListener {
+        backButton.setNavigationOnClickListener {
             finish()
         }
 
-        val switcher = findViewById<SwitchCompat>(R.id.switch_dark_theme)
+        switcher = findViewById(R.id.darkThemeSwitch)
 
-        switcher.isChecked = isDarkMode(this@SettingsActivity)
-
-        switcher.setOnClickListener {
-            when (switcher.isChecked) {
+        switcher?.setOnClickListener {
+            when (switcher?.isChecked) {
                 true -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 false -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                else -> {}
             }
         }
 
-        val buttonShare = findViewById<MaterialButton>(R.id.button_share)
+        val shareButton = findViewById<MaterialButton>(R.id.shareButton)
 
-        buttonShare.setOnClickListener {
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.setType("plain/text")
-            shareIntent.putExtra(
-                Intent.EXTRA_TEXT,
-                getString(R.string.share_text)
-            )
-            startActivity(Intent.createChooser(shareIntent, null))
+        shareButton.setOnClickListener {
+            createShareIntent()
         }
 
-        val buttonSupport = findViewById<MaterialButton>(R.id.button_support)
+        val supportButton = findViewById<MaterialButton>(R.id.supportButton)
 
-        buttonSupport.setOnClickListener {
-            val supportIntent = Intent(Intent.ACTION_SENDTO)
-            supportIntent.data = "mailto:".toUri()
-            supportIntent.putExtra(
-                Intent.EXTRA_EMAIL,
-                resources.getStringArray(R.array.email)
-            )
-            supportIntent.putExtra(
-                Intent.EXTRA_SUBJECT,
-                getString(R.string.mail_title)
-            )
-            supportIntent.putExtra(
-                Intent.EXTRA_TEXT,
-                getString(R.string.mail_text)
-            )
-            startActivity(supportIntent)
+        supportButton.setOnClickListener {
+            createSupportIntent()
         }
 
-        val buttonUserAgreement = findViewById<MaterialButton>(R.id.button_user_agreement)
+        val userAgreementButton = findViewById<MaterialButton>(R.id.userAgreementButton)
 
-        buttonUserAgreement.setOnClickListener {
-            val userAgreementIntent = Intent(Intent.ACTION_VIEW)
-            userAgreementIntent.data = "https://yandex.ru/legal/practicum_offer/".toUri()
-            startActivity(userAgreementIntent)
+        userAgreementButton.setOnClickListener {
+            createAgreementIntent()
         }
+    }
+
+    private fun createShareIntent() {
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.setType("plain/text")
+        shareIntent.putExtra(
+            Intent.EXTRA_TEXT,
+            getString(R.string.share_text)
+        )
+        startActivity(Intent.createChooser(shareIntent, null))
+    }
+
+    private fun createSupportIntent() {
+        val supportIntent = Intent(Intent.ACTION_SENDTO)
+        supportIntent.data = "mailto:".toUri()
+        supportIntent.putExtra(
+            Intent.EXTRA_EMAIL,
+            resources.getStringArray(R.array.email)
+        )
+        supportIntent.putExtra(
+            Intent.EXTRA_SUBJECT,
+            getString(R.string.mail_title)
+        )
+        supportIntent.putExtra(
+            Intent.EXTRA_TEXT,
+            getString(R.string.mail_text)
+        )
+        startActivity(supportIntent)
+    }
+
+    private fun createAgreementIntent() {
+        val userAgreementIntent = Intent(Intent.ACTION_VIEW)
+        userAgreementIntent.data = "https://yandex.ru/legal/practicum_offer/".toUri()
+        startActivity(userAgreementIntent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        switcher?.isChecked = isDarkMode(this@SettingsActivity)
     }
 
     private fun isDarkMode(context: Context): Boolean {

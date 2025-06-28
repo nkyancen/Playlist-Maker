@@ -13,7 +13,7 @@
         android:layout_height="58dp"
         app:title="@string/app_name"
         app:titleTextAppearance="@style/HeaderTextStyle"
-        app:titleTextColor="?attr/colorOnSecondary" />
+        app:titleTextColor="@color/white" />
 
     <LinearLayout
         style="@style/LinearVertical"
@@ -22,19 +22,19 @@
         android:padding="16dp">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_search"
+            android:id="@+id/searchButton"
             style="@style/MainButton"
             android:text="@string/search"
             app:icon="@drawable/ic_search_24" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_media"
+            android:id="@+id/mediaButton"
             style="@style/MainButton"
             android:text="@string/media"
             app:icon="@drawable/ic_media_24" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_settings"
+            android:id="@+id/settingsButton"
             style="@style/MainButton"
             android:text="@string/settings"
             app:icon="@drawable/ic_settings_24" />

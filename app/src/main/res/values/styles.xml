@@ -21,10 +21,10 @@
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:textAppearance">@style/HeaderTextStyle</item>
-        <item name="android:backgroundTint">?attr/colorOnSecondary</item>
-        <item name="android:textColor">?attr/colorSecondaryVariant</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textColor">@color/dark_gray</item>
         <item name="android:textSize">@dimen/header_text_size</item>
-        <item name="iconTint">?attr/colorSecondaryVariant</item>
+        <item name="iconTint">@color/dark_gray</item>
         <item name="iconPadding">@dimen/main_icon_padding</item>
         <item name="iconGravity">textStart</item>
         <item name="cornerRadius">@dimen/corner_radius</item>
@@ -49,6 +49,16 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="ToolBar" parent="Widget.Material3.Toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="contentInsetStartWithNavigation">64dp</item>
+        <item name="navigationIcon">@drawable/ic_arrow_back_24</item>
+        <item name="navigationIconTint">?attr/colorOnPrimary</item>
+        <item name="titleTextAppearance">@style/HeaderTextStyle</item>
+        <item name="titleTextColor">?attr/colorOnPrimary</item>
     </style>
 
 </resources>

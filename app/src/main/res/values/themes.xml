@@ -1,15 +1,15 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="PlaylistMakerTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary colors -->
         <item name="colorPrimary">@color/white</item>
-        <item name="colorOnPrimary">@color/dark_grey</item>
-        <item name="colorPrimaryVariant">@color/grey</item>
+        <item name="colorOnPrimary">@color/dark_gray</item>
+        <item name="colorPrimaryVariant">@color/gray</item>
 
         <!-- Secondary colors -->
         <item name="colorSecondary">@color/blue</item>
-        <item name="colorOnSecondary">@color/white</item>
-        <item name="colorSecondaryVariant">@color/dark_grey</item>
+        <item name="colorOnSecondary">@color/gray</item>
+        <item name="colorSecondaryVariant">@color/light_gray</item>
     </style>
 
 </resources>
