@@ -63,10 +63,7 @@ class SearchActivity : AppCompatActivity() {
         searchText = savedInstanceState.getString(SEARCH_REQUEST,EMPTY_SEARCH_TEXT)
     }
 
-    override fun onSaveInstanceState(
-        outState: Bundle,
-        outPersistentState: PersistableBundle
-    ) {
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
         super.onSaveInstanceState(outState, outPersistentState)
         outState.putString(SEARCH_REQUEST, searchText)
     }
