@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="HeaderTextStyle">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/header_text_size</item>
+    </style>
+
+    <style name="SettingsTextStyle">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/settings_text_size</item>
+    </style>
+
+    <style name="Button" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:outlineSpotShadowColor">@color/no_color</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="MainButton" parent="Button">
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textAppearance">@style/HeaderTextStyle</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:textSize">@dimen/header_text_size</item>
+        <item name="iconTint">@color/dark_gray</item>
+        <item name="iconPadding">@dimen/main_icon_padding</item>
+        <item name="iconGravity">textStart</item>
+        <item name="cornerRadius">@dimen/corner_radius</item>
+    </style>
+
+    <style name="ButtonSettings" parent="Button">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:backgroundTint">@color/no_color</item>
+        <item name="android:textAppearance">@style/SettingsTextStyle</item>
+        <item name="android:paddingStart">@dimen/settings_padding_text_start</item>
+        <item name="android:paddingTop">@dimen/settings_padding_text_top</item>
+        <item name="android:paddingEnd">@dimen/settings_padding_text_end</item>
+        <item name="android:paddingBottom">@dimen/settings_padding_text_bottom</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="iconGravity">end</item>
+        <item name="iconPadding">@dimen/main_icon_padding</item>
+        <item name="iconTint">?attr/colorPrimaryVariant</item>
+    </style>
+
+    <style name="LinearVertical">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="ToolBar" parent="Widget.Material3.Toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="contentInsetStartWithNavigation">64dp</item>
+        <item name="navigationIcon">@drawable/ic_arrow_back_24</item>
+        <item name="navigationIconTint">?attr/colorOnPrimary</item>
+        <item name="titleTextAppearance">@style/HeaderTextStyle</item>
+        <item name="titleTextColor">?attr/colorOnPrimary</item>
+    </style>
+
+</resources>

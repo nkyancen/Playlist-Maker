@@ -2,9 +2,8 @@ package ru.nkyancen.playlistmaker
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.button.MaterialButton
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -12,28 +11,25 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        val buttonSearch = findViewById<Button>(R.id.button_search)
-        val buttonMedia = findViewById<Button>(R.id.button_media)
-        val buttonSettings = findViewById<Button>(R.id.button_settings)
+        val searchButton = findViewById<MaterialButton>(R.id.searchButton)
+        val mediaButton = findViewById<MaterialButton>(R.id.mediaButton)
+        val settingsButton = findViewById<MaterialButton>(R.id.settingsButton)
 
-        val buttonSearchClickListener: View.OnClickListener = object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                val searchIntent = Intent(this@MainActivity, SearchActivity::class.java)
-                startActivity(searchIntent)
-            }
+        searchButton.setOnClickListener {
+            changeActivity(SearchActivity::class.java)
         }
 
-        buttonSearch.setOnClickListener(buttonSearchClickListener)
-
-        buttonMedia.setOnClickListener {
-            val mediaLibraryIntent = Intent(this@MainActivity, MediaLibraryActivity::class.java)
-            startActivity(mediaLibraryIntent)
+        mediaButton.setOnClickListener {
+            changeActivity(MediaLibraryActivity::class.java)
         }
 
-        buttonSettings.setOnClickListener {
-            val settingsIntent = Intent(this@MainActivity, SettingsActivity::class.java)
-            startActivity(settingsIntent)
+        settingsButton.setOnClickListener {
+            changeActivity(SettingsActivity::class.java)
         }
+    }
 
+    private fun changeActivity(target: Class<*>) {
+        val targetIntent = Intent(this@MainActivity, target)
+        startActivity(targetIntent)
     }
 }
