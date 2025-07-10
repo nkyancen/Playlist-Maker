@@ -8,7 +8,7 @@
     tools:context=".MainActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/header_main"
+        android:id="@+id/mainHeader"
         android:layout_width="match_parent"
         android:layout_height="58dp"
         app:title="@string/app_name"
