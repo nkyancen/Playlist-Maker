@@ -1,7 +1,8 @@
-package ru.nkyancen.playlistmaker
+package ru.nkyancen.playlistmaker.generalView
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import ru.nkyancen.playlistmaker.R
 
 class MediaLibraryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

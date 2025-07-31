@@ -1,4 +1,4 @@
-package ru.nkyancen.playlistmaker
+package ru.nkyancen.playlistmaker.generalView
 
 import android.content.Context
 import android.content.Intent
@@ -10,6 +10,7 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.core.net.toUri
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
+import ru.nkyancen.playlistmaker.R
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var switcher: SwitchCompat
