@@ -37,15 +37,14 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchPlaceholderText: TextView
     private lateinit var searchPlaceholderButton: MaterialButton
 
-    private val searchBaseUrl = "https://itunes.apple.com/"
     private val retrofit = Retrofit.Builder()
-        .baseUrl(searchBaseUrl)
+        .baseUrl(SEARCH_BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     private val searchService = retrofit.create(SearchApi::class.java)
 
-    private var searchState: String = CLEAR
+    private var searchState = SearchState.CLEAR
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +68,7 @@ class SearchActivity : AppCompatActivity() {
 
         clearButton.setOnClickListener {
             clearSearchQuery()
-            searchState = CLEAR
+            searchState = SearchState.CLEAR
             showSearchPlaceholder()
         }
 
@@ -123,21 +122,18 @@ class SearchActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun showSearchPlaceholder() {
-        if (searchState.isNotEmpty()) {
+        if (searchState != SearchState.OK) {
             mediaList.clear()
             searchAdapter.notifyDataSetChanged()
             searchPlaceholder.visibility = View.VISIBLE
             searchPlaceholderButton.visibility = View.GONE
             when (searchState) {
-                NOTHING_FOUND -> {
+                SearchState.NOTHING_FOUND -> {
                     searchPlaceholderImage.setImageResource(R.drawable.ic_placeholder_nothing_found_120)
                     searchPlaceholderText.text = getString(R.string.search_nothing_found)
-                    val searchTextCache = searchEditText.text.toString()
-                    clearSearchQuery()
-                    searchText = searchTextCache
                 }
 
-                WITHOUT_INTERNET -> {
+                SearchState.WITHOUT_INTERNET -> {
                     searchEditText.setText(searchText)
                     searchPlaceholderImage.setImageResource(R.drawable.ic_placeholder_withot_intenet_120)
                     searchPlaceholderText.text = getString(R.string.search_without_internet)
@@ -159,21 +155,18 @@ class SearchActivity : AppCompatActivity() {
                     call: Call<TracksResponse?>,
                     response: Response<TracksResponse?>
                 ) {
-                    when (response.code()) {
-                        200 -> {
-                            if (response.body()?.tracks?.isNotEmpty() == true) {
-                                mediaList.clear()
-                                mediaList.addAll(response.body()?.tracks!!)
-                                searchAdapter.notifyDataSetChanged()
-                                searchState = OK
-                            } else {
-                                searchState = NOTHING_FOUND
-                            }
+                    if (response.isSuccessful) {
+                        val currentResponse = response.body()?.tracks
+                        if (!currentResponse.isNullOrEmpty()) {
+                            mediaList.clear()
+                            mediaList.addAll(currentResponse)
+                            searchAdapter.notifyDataSetChanged()
+                            searchState = SearchState.OK
+                        } else {
+                            searchState = SearchState.NOTHING_FOUND
                         }
-
-                        else -> {
-                            searchState = WITHOUT_INTERNET
-                        }
+                    } else {
+                        searchState = SearchState.WITHOUT_INTERNET
                     }
                     showSearchPlaceholder()
                 }
@@ -182,7 +175,7 @@ class SearchActivity : AppCompatActivity() {
                     call: Call<TracksResponse?>,
                     t: Throwable
                 ) {
-                    searchState = WITHOUT_INTERNET
+                    searchState = SearchState.WITHOUT_INTERNET
                     showSearchPlaceholder()
                 }
             })
@@ -191,15 +184,20 @@ class SearchActivity : AppCompatActivity() {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         searchText = savedInstanceState.getString(SEARCH_REQUEST, EMPTY_TEXT)
-        searchState = savedInstanceState.getString(SEARCH_STATE, CLEAR)
+        searchState = SearchState.valueOf(
+            savedInstanceState.getString(
+                SEARCH_STATE,
+                SearchState.CLEAR.name
+            )
+        )
         refreshScreen()
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun refreshScreen() {
         when (searchState) {
-            OK -> searchTracks()
-            CLEAR -> {}
+            SearchState.OK -> searchTracks()
+            SearchState.CLEAR -> {}
             else -> showSearchPlaceholder()
         }
     }
@@ -207,17 +205,20 @@ class SearchActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SEARCH_REQUEST, searchText)
-        outState.putString(SEARCH_STATE, searchState)
+        outState.putString(SEARCH_STATE, searchState.name)
     }
 
     companion object {
         const val SEARCH_REQUEST = "Search request"
         const val SEARCH_STATE = "Search state"
         const val EMPTY_TEXT = ""
+        const val SEARCH_BASE_URL = "https://itunes.apple.com/"
+    }
 
-        const val OK = ""
-        const val NOTHING_FOUND = "nothing found"
-        const val WITHOUT_INTERNET = "without internet"
-        const val CLEAR = "clear"
+    enum class SearchState() {
+        OK,
+        CLEAR,
+        NOTHING_FOUND,
+        WITHOUT_INTERNET;
     }
 }
