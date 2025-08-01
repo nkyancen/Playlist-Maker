@@ -193,7 +193,6 @@ class SearchActivity : AppCompatActivity() {
         refreshScreen()
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun refreshScreen() {
         when (searchState) {
             SearchState.OK -> searchTracks()

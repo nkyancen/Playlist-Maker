@@ -1,6 +1,5 @@
 package ru.nkyancen.playlistmaker.searchResultsView
 
-import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -9,10 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.nkyancen.playlistmaker.R
+import ru.nkyancen.playlistmaker.utils.UnitsConverter
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class SearchViewHolder(searchItemView: View) : RecyclerView.ViewHolder(searchItemView) {
+class SearchViewHolder(searchItemView: View) : RecyclerView.ViewHolder(searchItemView),
+    UnitsConverter {
     private val searchView: LinearLayout = searchItemView.findViewById(R.id.searchView)
     private val albumImageView: ImageView = searchItemView.findViewById(R.id.albumImage)
     private val trackNameView: TextView = searchItemView.findViewById(R.id.trackName)
@@ -29,11 +30,7 @@ class SearchViewHolder(searchItemView: View) : RecyclerView.ViewHolder(searchIte
             .fitCenter()
             .transform(
                 RoundedCorners(
-                    TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP,
-                        2.0f,
-                        searchView.resources.displayMetrics
-                    ).toInt()
+                    dpToPx(2.0f, searchView)
                 )
             )
             .into(albumImageView)
@@ -41,7 +38,7 @@ class SearchViewHolder(searchItemView: View) : RecyclerView.ViewHolder(searchIte
         trackNameView.text = model.trackName ?: ""
         artistNameView.text = model.artistName ?: ""
         artistNameView.requestLayout()
-        trackTimeView.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTime ?: 0L)
+        trackTimeView.text =
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTime ?: 0L)
     }
-
 }
