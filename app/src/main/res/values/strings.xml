@@ -18,4 +18,8 @@
     <string name="mail_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <!--  Ссылка на оферту  -->
     <string name="oferta_url">https://yandex.ru/legal/practicum_offer/</string>
+    <!--  Плейсхолдер экрана поиска -->
+    <string name="search_nothing_found">Ничего не нашлось</string>
+    <string name="search_without_internet">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="search_refresh">Обновить</string>
 </resources>

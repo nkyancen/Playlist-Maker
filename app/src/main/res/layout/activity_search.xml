@@ -5,9 +5,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorPrimary"
     android:orientation="vertical"
-    tools:context=".SearchActivity"
-    android:background="?attr/colorPrimary">
+    tools:context=".generalView.SearchActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/searchHeader"
@@ -33,8 +33,10 @@
             android:drawablePadding="4dp"
             android:drawableTint="?attr/colorOnSecondary"
             android:hint="@string/search"
+            android:imeOptions="actionDone"
             android:inputType="text"
             android:maxLines="1"
+            android:singleLine="true"
             android:textAppearance="@style/SettingsTextStyle"
             android:textColor="@color/dark_gray"
             android:textColorHint="?attr/colorOnSecondary"
@@ -53,12 +55,60 @@
             app:tint="?attr/colorOnSecondary" />
     </FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/searchListRecycler"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:orientation="vertical"
-        android:layout_marginTop="16dp"/>
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchListRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/search_results_margin_top"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <LinearLayout
+            android:id="@+id/searchPlaceholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/search_placeholder_margin_horizontal"
+            android:layout_marginTop="102dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/searchPlaceholderImage"
+                android:layout_width="@dimen/search_placeholder_image_size"
+                android:layout_height="@dimen/search_placeholder_image_size"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/search"
+                android:src="@drawable/ic_placeholder_withot_intenet_120" />
+
+            <TextView
+                android:id="@+id/searchPlaceholderText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/search_results_margin_top"
+                android:text="@string/search_without_internet"
+                android:textAlignment="center"
+                android:textAppearance="@style/SearchTextStyle.Placeholder" />
+
+            <Button
+                android:id="@+id/searchPlaceholderButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/search_placeholder_margin_horizontal"
+                android:backgroundTint="?attr/colorOnPrimary"
+                android:paddingVertical="@dimen/search_placeholder_button_padding_vertical"
+                android:text="@string/search_refresh"
+                android:textAppearance="@style/SearchTextStyle.Placeholder.Button"
+                android:textColor="?attr/colorPrimary"
+                app:cornerRadius="@dimen/search_placeholder_button_corner_radius"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+    </FrameLayout>
+
 
 </LinearLayout>
