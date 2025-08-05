@@ -1,7 +1,6 @@
 package ru.nkyancen.playlistmaker.generalView
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
@@ -11,21 +10,14 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 import ru.nkyancen.playlistmaker.R
 import ru.nkyancen.playlistmaker.utils.ThemeSetter
 
-const val IS_DARK_THEME = "is dark theme"
-
 class SettingsActivity : AppCompatActivity(), ThemeSetter {
     private lateinit var themeSwitcher: SwitchMaterial
-
-    private lateinit var sharedPrefs: SharedPreferences
-
     private var isDarkThemeEnabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_setting)
-
-        sharedPrefs = getSharedPreferences(IS_DARK_THEME, MODE_PRIVATE)
 
         val backButton = findViewById<MaterialToolbar>(R.id.settingsHeader)
 
