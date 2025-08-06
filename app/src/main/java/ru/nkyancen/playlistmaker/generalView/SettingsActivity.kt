@@ -8,11 +8,10 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.switchmaterial.SwitchMaterial
 import ru.nkyancen.playlistmaker.R
-import ru.nkyancen.playlistmaker.utils.ThemeSetter
+import ru.nkyancen.playlistmaker.utils.App
 
-class SettingsActivity : AppCompatActivity(), ThemeSetter {
+class SettingsActivity : AppCompatActivity() {
     private lateinit var themeSwitcher: SwitchMaterial
-    private var isDarkThemeEnabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,11 +26,16 @@ class SettingsActivity : AppCompatActivity(), ThemeSetter {
 
         themeSwitcher = findViewById(R.id.darkThemeSwitch)
 
-        themeSwitcher.setOnCheckedChangeListener { switcher, checker ->
-            switchTheme(checker)
+//        themeSwitcher.setOnCheckedChangeListener { _, checker ->
+//            (applicationContext as App).switchDarkTheme(checker)
+//        }
+
+        themeSwitcher.setOnClickListener {
+            (applicationContext as App).switchDarkTheme(
+                themeSwitcher.isChecked
+            )
         }
 
-        isDarkThemeEnabled = isDarkMode(this@SettingsActivity)
 
         val shareButton = findViewById<MaterialButton>(R.id.shareButton)
 
@@ -88,11 +92,6 @@ class SettingsActivity : AppCompatActivity(), ThemeSetter {
 
     override fun onResume() {
         super.onResume()
-        themeSwitcher.isChecked = isDarkThemeEnabled
-    }
-
-    private fun switchTheme(checker: Boolean) {
-        isDarkThemeEnabled = checker
-        setTheme(isDarkThemeEnabled)
+        themeSwitcher.isChecked = (applicationContext as App).isDarkMode(this)
     }
 }

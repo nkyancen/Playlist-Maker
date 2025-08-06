@@ -214,7 +214,7 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_BASE_URL = "https://itunes.apple.com/"
     }
 
-    enum class SearchState() {
+    enum class SearchState {
         OK,
         CLEAR,
         NOTHING_FOUND,
