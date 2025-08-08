@@ -7,7 +7,7 @@ import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 
-const val IS_DARK_THEME = "Is Dark Theme On"
+const val IS_DARK_THEME_TAG = "Is Dark Theme On"
 
 class App : Application() {
     var isDarkTheme = false
@@ -16,7 +16,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        sharedPrefs = getSharedPreferences(IS_DARK_THEME, MODE_PRIVATE)
+        sharedPrefs = getSharedPreferences(IS_DARK_THEME_TAG, MODE_PRIVATE)
 
         applyDarkTheme()
     }
@@ -29,7 +29,7 @@ class App : Application() {
 
     fun applyDarkTheme() {
         isDarkTheme = sharedPrefs.getBoolean(
-            IS_DARK_THEME,
+            IS_DARK_THEME_TAG,
             isDarkMode(applicationContext as App)
         )
 
@@ -47,7 +47,7 @@ class App : Application() {
 
         sharedPrefs.edit {
             putBoolean(
-                IS_DARK_THEME,
+                IS_DARK_THEME_TAG,
                 isDarkTheme
             )
         }
