@@ -51,7 +51,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var historyListener: SharedPreferences.OnSharedPreferenceChangeListener
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL_SEARCH)
+        .baseUrl(SEARCH_BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
@@ -279,7 +279,7 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_REQUEST = "Search request"
         const val SEARCH_STATE = "Search state"
         const val EMPTY_TEXT = ""
-        const val BASE_URL_SEARCH = "https://itunes.apple.com/"
+        const val SEARCH_BASE_URL = "https://itunes.apple.com/"
     }
 
     enum class SearchState {
