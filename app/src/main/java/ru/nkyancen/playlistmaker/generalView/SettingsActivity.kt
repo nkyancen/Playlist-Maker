@@ -88,6 +88,6 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        themeSwitcher.isChecked = (applicationContext as App).isDarkMode(this)
+        themeSwitcher.isChecked = (applicationContext as App).isDarkTheme(this)
     }
 }

@@ -10,9 +10,9 @@ import androidx.core.content.edit
 const val IS_DARK_THEME_TAG = "Is Dark Theme On"
 
 class App : Application() {
-    var isDarkTheme = false
+    private var isDarkTheme = false
 
-    lateinit var sharedPrefs: SharedPreferences
+    private lateinit var sharedPrefs: SharedPreferences
 
     override fun onCreate() {
         super.onCreate()
@@ -27,16 +27,16 @@ class App : Application() {
         applyDarkTheme()
     }
 
-    fun applyDarkTheme() {
+    private fun applyDarkTheme() {
         isDarkTheme = sharedPrefs.getBoolean(
             IS_DARK_THEME_TAG,
-            isDarkMode(applicationContext as App)
+            isDarkTheme(applicationContext as App)
         )
 
         setTheme()
     }
 
-    fun isDarkMode(context: Context): Boolean {
+    fun isDarkTheme(context: Context): Boolean {
         val darkModeFlag =
             context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         return darkModeFlag == Configuration.UI_MODE_NIGHT_YES
@@ -55,11 +55,12 @@ class App : Application() {
         setTheme()
     }
 
-    fun setTheme() {
+    private fun setTheme() {
         AppCompatDelegate.setDefaultNightMode(
-            when (isDarkTheme) {
-                true -> AppCompatDelegate.MODE_NIGHT_YES
-                false -> AppCompatDelegate.MODE_NIGHT_NO
+            if (isDarkTheme) {
+                AppCompatDelegate.MODE_NIGHT_YES
+            } else {
+                AppCompatDelegate.MODE_NIGHT_NO
             }
         )
     }

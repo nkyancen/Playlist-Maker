@@ -9,9 +9,10 @@ const val SEARCH_HISTORY_TAG = "Search History"
 class SearchHistory(
     val sharedPrefs: SharedPreferences
 ) {
+    private val gson = Gson()
 
     fun write(historyList: List<Track>) {
-        val history = Gson().toJson(historyList)
+        val history = gson.toJson(historyList)
         sharedPrefs.edit {
             putString(SEARCH_HISTORY_TAG, history)
         }
@@ -23,7 +24,7 @@ class SearchHistory(
             null
         ) ?: return ArrayList(emptyList<Track>())
 
-        return ArrayList(Gson().fromJson(history, Array<Track>::class.java).toList())
+        return ArrayList(gson.fromJson(history, Array<Track>::class.java).toList())
     }
 
     fun add(newItem: Track) {
@@ -51,6 +52,6 @@ class SearchHistory(
     }
 
     companion object {
-        const val HISTORY_LIMIT = 10
+        private const val HISTORY_LIMIT = 10
     }
 }
