@@ -14,7 +14,7 @@ import java.util.Locale
 
 class SearchViewHolder(searchItemView: View) : RecyclerView.ViewHolder(searchItemView),
     UnitsConverter {
-    private val searchView: LinearLayout = searchItemView.findViewById(R.id.searchView)
+    private val searchView: LinearLayout = searchItemView.findViewById(R.id.searchItemView)
     private val albumImageView: ImageView = searchItemView.findViewById(R.id.albumImage)
     private val trackNameView: TextView = searchItemView.findViewById(R.id.trackName)
     private val artistNameView: TextView = searchItemView.findViewById(R.id.artistName)

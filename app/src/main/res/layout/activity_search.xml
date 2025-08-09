@@ -61,20 +61,15 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/searchListRecycler"
-            android:layout_width="match_parent"
+            style="@style/SearchRecyclerView"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/search_results_margin_top"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            android:layout_marginTop="@dimen/search_results_margin_top" />
 
         <LinearLayout
             android:id="@+id/searchPlaceholder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/LinearVertical.SearchPlaceholder"
             android:layout_marginHorizontal="@dimen/search_placeholder_margin_horizontal"
-            android:layout_marginTop="102dp"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:layout_marginTop="@dimen/search_placeholder_margin_top">
 
             <ImageView
                 android:id="@+id/searchPlaceholderImage"
@@ -82,30 +77,41 @@
                 android:layout_height="@dimen/search_placeholder_image_size"
                 android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/search"
-                android:src="@drawable/ic_placeholder_withot_intenet_120" />
+                android:src="@drawable/ic_placeholder_without_internet_120" />
 
             <TextView
                 android:id="@+id/searchPlaceholderText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/search_results_margin_top"
-                android:text="@string/search_without_internet"
-                android:textAlignment="center"
-                android:textAppearance="@style/SearchTextStyle.Placeholder" />
+                style="@style/TextViewPlaceholderSearch"
+                android:layout_marginTop="@dimen/search_results_margin_top" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/searchPlaceholderButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/search_placeholder_margin_horizontal"
-                android:backgroundTint="?attr/colorOnPrimary"
-                android:paddingVertical="@dimen/search_placeholder_button_padding_vertical"
-                android:text="@string/search_refresh"
-                android:textAppearance="@style/SearchTextStyle.Placeholder.Button"
-                android:textColor="?attr/colorPrimary"
-                app:cornerRadius="@dimen/search_placeholder_button_corner_radius"
-                android:visibility="gone"/>
+                style="@style/ButtonPlaceholderSearch"
+                android:text="@string/search_refresh" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/searchHistoryLayout"
+            style="@style/LinearVertical.SearchPlaceholder"
+            android:layout_marginTop="@dimen/search_history_margin_top"
+            android:visibility="gone">
+
+            <TextView
+                style="@style/TextViewPlaceholderSearch"
+                android:paddingHorizontal="@dimen/search_history_title_padding_horizontal"
+                android:paddingTop="@dimen/search_history_title_padding_top"
+                android:paddingBottom="@dimen/search_history_title_padding_bottom"
+                android:text="@string/search_history_title" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/searchHistoryRecycler"
+                style="@style/SearchRecyclerView"
+                android:layout_marginTop="@dimen/search_history_recycler_margin_top" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/searchHistoryClearButton"
+                style="@style/ButtonPlaceholderSearch"
+                android:text="@string/search_history_clear"/>
         </LinearLayout>
 
     </FrameLayout>

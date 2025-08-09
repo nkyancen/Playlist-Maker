@@ -22,4 +22,7 @@
     <string name="search_nothing_found">Ничего не нашлось</string>
     <string name="search_without_internet">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
     <string name="search_refresh">Обновить</string>
+    <!--  История поиска  -->
+    <string name="search_history_title">История поиска</string>
+    <string name="search_history_clear">Очистить историю</string>
 </resources>

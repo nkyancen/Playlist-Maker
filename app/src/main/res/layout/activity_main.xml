@@ -23,19 +23,19 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/searchButton"
-            style="@style/MainButton"
+            style="@style/Button.Main"
             android:text="@string/search"
             app:icon="@drawable/ic_search_24" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/mediaButton"
-            style="@style/MainButton"
+            style="@style/Button.Main"
             android:text="@string/media"
             app:icon="@drawable/ic_media_24" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/settingsButton"
-            style="@style/MainButton"
+            style="@style/Button.Main"
             android:text="@string/settings"
             app:icon="@drawable/ic_settings_24" />
     </LinearLayout>

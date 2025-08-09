@@ -3,6 +3,7 @@ package ru.nkyancen.playlistmaker.searchResultsView
 import com.google.gson.annotations.SerializedName
 
 data class Track(
+    @SerializedName("trackId") val id: Long,
     @SerializedName("trackName") val trackName: String?,
     @SerializedName("artistName") val artistName: String?,
     @SerializedName("trackTimeMillis") val trackTime: Long?,

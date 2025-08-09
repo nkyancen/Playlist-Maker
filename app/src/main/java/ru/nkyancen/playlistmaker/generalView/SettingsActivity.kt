@@ -1,19 +1,17 @@
 package ru.nkyancen.playlistmaker.generalView
 
-import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.widget.SwitchCompat
 import androidx.core.net.toUri
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.switchmaterial.SwitchMaterial
 import ru.nkyancen.playlistmaker.R
+import ru.nkyancen.playlistmaker.utils.App
 
 class SettingsActivity : AppCompatActivity() {
-    private lateinit var switcher: SwitchCompat
+    private lateinit var themeSwitcher: SwitchMaterial
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,14 +24,14 @@ class SettingsActivity : AppCompatActivity() {
             finish()
         }
 
-        switcher = findViewById(R.id.darkThemeSwitch)
+        themeSwitcher = findViewById(R.id.darkThemeSwitch)
 
-        switcher.setOnClickListener {
-            when (switcher.isChecked) {
-                true -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                false -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
+        themeSwitcher.setOnClickListener {
+            (applicationContext as App).switchDarkTheme(
+                themeSwitcher.isChecked
+            )
         }
+
 
         val shareButton = findViewById<MaterialButton>(R.id.shareButton)
 
@@ -56,7 +54,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun createShareIntent() {
         val shareIntent = Intent(Intent.ACTION_SEND)
-        shareIntent.setType("plain/text")
+        shareIntent.type = "plain/text"
         shareIntent.putExtra(
             Intent.EXTRA_TEXT,
             getString(R.string.share_text)
@@ -90,11 +88,6 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        switcher.isChecked = isDarkMode(this@SettingsActivity)
-    }
-
-    private fun isDarkMode(context: Context): Boolean {
-        val darkModeFlag = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        return darkModeFlag == Configuration.UI_MODE_NIGHT_YES
+        themeSwitcher.isChecked = (applicationContext as App).isDarkTheme(this)
     }
 }

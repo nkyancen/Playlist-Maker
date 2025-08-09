@@ -13,7 +13,7 @@
         app:title="@string/settings" />
 
 
-    <androidx.appcompat.widget.SwitchCompat
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/darkThemeSwitch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,19 +33,19 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/shareButton"
-        style="@style/ButtonSettings"
+        style="@style/Button.Settings"
         android:text="@string/share"
         app:icon="@drawable/ic_share_24" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/supportButton"
-        style="@style/ButtonSettings"
+        style="@style/Button.Settings"
         android:text="@string/support"
         app:icon="@drawable/ic_support_24" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/userAgreementButton"
-        style="@style/ButtonSettings"
+        style="@style/Button.Settings"
         android:text="@string/user_agreement"
         app:icon="@drawable/ic_arrow_forward_24" />
 
