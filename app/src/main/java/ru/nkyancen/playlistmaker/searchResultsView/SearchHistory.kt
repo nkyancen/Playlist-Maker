@@ -30,7 +30,7 @@ class SearchHistory(
     fun add(newItem: Track) {
         val history = read()
 
-        var deletedIndex = 0
+        var deletedIndex = -1
 
         history.forEachIndexed { index, item ->
             if (item.id == newItem.id) {
@@ -46,8 +46,9 @@ class SearchHistory(
             history.removeAt(HISTORY_LIMIT - 1)
         }
 
-        history.add(0, newItem)
-
+        if (deletedIndex != 0) {
+            history.add(0, newItem)
+        }
         write(history)
     }
 
