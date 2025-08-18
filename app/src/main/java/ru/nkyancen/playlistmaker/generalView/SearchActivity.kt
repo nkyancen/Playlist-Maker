@@ -148,7 +148,17 @@ class SearchActivity : AppCompatActivity() {
             if (hasFocus
                 && s?.isEmpty() == true
                 && historyList.isNotEmpty()
-            ) View.VISIBLE else View.GONE
+            ) {
+                searchPlaceholder.visibility = View.GONE
+                View.VISIBLE
+            } else {
+                if (searchState == SearchState.WITHOUT_INTERNET ||
+                    searchState == SearchState.NOTHING_FOUND
+                ) {
+                    searchPlaceholder.visibility = View.VISIBLE
+                }
+                View.GONE
+            }
     }
 
     override fun onResume() {
@@ -171,6 +181,7 @@ class SearchActivity : AppCompatActivity() {
         inputMethodManager?.hideSoftInputFromWindow(searchEditText.windowToken, 0)
         searchState = SearchState.CLEAR
         showSearchPlaceholder()
+        searchEditText.requestFocus()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -199,6 +210,8 @@ class SearchActivity : AppCompatActivity() {
                 SearchState.NOTHING_FOUND -> {
                     searchPlaceholderImage.setImageResource(R.drawable.ic_placeholder_nothing_found_120)
                     searchPlaceholderText.text = getString(R.string.search_nothing_found)
+                    historyLayout.visibility = View.GONE
+                    searchEditText.clearFocus()
                 }
 
                 SearchState.WITHOUT_INTERNET -> {
@@ -206,6 +219,8 @@ class SearchActivity : AppCompatActivity() {
                     searchPlaceholderImage.setImageResource(R.drawable.ic_placeholder_without_internet_120)
                     searchPlaceholderText.text = getString(R.string.search_without_internet)
                     searchPlaceholderButton.visibility = View.VISIBLE
+                    historyLayout.visibility = View.GONE
+                    searchEditText.clearFocus()
                 }
 
                 else -> searchPlaceholder.visibility = View.GONE

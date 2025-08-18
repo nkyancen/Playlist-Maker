@@ -1,20 +1,27 @@
 package ru.nkyancen.playlistmaker.searchResultsView
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.nkyancen.playlistmaker.R
+import ru.nkyancen.playlistmaker.generalView.MediaPlayerActivity
+
 
 class SearchViewAdapter(
     private val tracks: List<Track>,
     private val historyUser: SearchHistory
 ) : RecyclerView.Adapter<SearchViewHolder> () {
 
+    private lateinit var context: Context
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): SearchViewHolder {
-        val view = LayoutInflater.from(parent.context)
+        context = parent.context
+        val view = LayoutInflater.from(context)
             .inflate(
                 R.layout.search_item_view,
                 parent,
@@ -31,6 +38,9 @@ class SearchViewAdapter(
 
         holder.itemView.setOnClickListener {
             historyUser.add(tracks[position])
+
+            val targetIntent = Intent(context, MediaPlayerActivity::class.java)
+            context.startActivity(targetIntent)
         }
     }
 

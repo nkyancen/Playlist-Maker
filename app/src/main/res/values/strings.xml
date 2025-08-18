@@ -25,4 +25,14 @@
     <!--  История поиска  -->
     <string name="search_history_title">История поиска</string>
     <string name="search_history_clear">Очистить историю</string>
+    <!--  Медиаплеер  -->
+    <string name="player_track_time">Длительность</string>
+    <string name="player_track_album">Альбом</string>
+    <string name="player_track_year">Год</string>
+    <string name="player_track_genre">Жанр</string>
+    <string name="player_track_country">Страна</string>
+    <string name="player_play_button_description">play/pause</string>
+    <string name="player_add_button_description">Add to playlist</string>
+    <string name="player_favorites_button_description">Add to favorites</string>
+    <string name="player_album_image_description">Album Image</string>
 </resources>
