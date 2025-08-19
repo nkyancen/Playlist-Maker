@@ -7,8 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.nkyancen.playlistmaker.R
 import ru.nkyancen.playlistmaker.generalViews.MediaPlayerActivity
-import ru.nkyancen.playlistmaker.model.CURRENT_TRACK_TAG
-import ru.nkyancen.playlistmaker.model.Track
+import ru.nkyancen.playlistmaker.model.*
 
 
 class SearchViewAdapter(
