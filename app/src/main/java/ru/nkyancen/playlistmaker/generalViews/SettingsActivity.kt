@@ -11,20 +11,38 @@ import ru.nkyancen.playlistmaker.R
 import ru.nkyancen.playlistmaker.utils.App
 
 class SettingsActivity : AppCompatActivity() {
+    private lateinit var backButton: MaterialToolbar
+
     private lateinit var themeSwitcher: SwitchMaterial
+
+    private lateinit var shareButton: MaterialButton
+    private lateinit var supportButton: MaterialButton
+    private lateinit var userAgreementButton: MaterialButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_setting)
 
-        val backButton = findViewById<MaterialToolbar>(R.id.settingsHeader)
+        initializeViews()
 
+        setClickListeners()
+    }
+
+    private fun initializeViews() {
+        backButton = findViewById(R.id.settingsHeader)
+
+        themeSwitcher = findViewById(R.id.darkThemeSwitch)
+
+        shareButton = findViewById(R.id.shareButton)
+        supportButton = findViewById(R.id.supportButton)
+        userAgreementButton = findViewById(R.id.userAgreementButton)
+    }
+
+    private fun setClickListeners() {
         backButton.setNavigationOnClickListener {
             finish()
         }
-
-        themeSwitcher = findViewById(R.id.darkThemeSwitch)
 
         themeSwitcher.setOnClickListener {
             (applicationContext as App).switchDarkTheme(
@@ -32,20 +50,15 @@ class SettingsActivity : AppCompatActivity() {
             )
         }
 
-
-        val shareButton = findViewById<MaterialButton>(R.id.shareButton)
-
         shareButton.setOnClickListener {
             createShareIntent()
         }
 
-        val supportButton = findViewById<MaterialButton>(R.id.supportButton)
 
         supportButton.setOnClickListener {
             createSupportIntent()
         }
 
-        val userAgreementButton = findViewById<MaterialButton>(R.id.userAgreementButton)
 
         userAgreementButton.setOnClickListener {
             createAgreementIntent()
