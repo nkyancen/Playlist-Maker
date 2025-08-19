@@ -25,6 +25,12 @@ import ru.nkyancen.playlistmaker.searchResults.*
 
 
 class SearchActivity : AppCompatActivity() {
+    companion object {
+        const val SEARCH_REQUEST = "Search request"
+        const val SEARCH_STATE = "Search state"
+        const val EMPTY_TEXT = ""
+    }
+
     private var searchText: String = EMPTY_TEXT
     private lateinit var searchEditText: EditText
 
@@ -66,6 +72,30 @@ class SearchActivity : AppCompatActivity() {
         setClickListeners()
 
         setSearchEditListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        searchEditText.setText(searchText)
+        refreshScreen()
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        searchText = savedInstanceState.getString(SEARCH_REQUEST, EMPTY_TEXT)
+        searchState = SearchState.valueOf(
+            savedInstanceState.getString(
+                SEARCH_STATE,
+                SearchState.CLEAR.name
+            )
+        )
+        refreshScreen()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(SEARCH_REQUEST, searchText)
+        outState.putString(SEARCH_STATE, searchState.name)
     }
 
     private fun initializeViews() {
@@ -174,12 +204,6 @@ class SearchActivity : AppCompatActivity() {
             }
     }
 
-    override fun onResume() {
-        super.onResume()
-        searchEditText.setText(searchText)
-        refreshScreen()
-    }
-
     private fun clearButtonVisibility(s: CharSequence?): Int {
         return if (s.isNullOrEmpty()) {
             View.GONE
@@ -277,35 +301,11 @@ class SearchActivity : AppCompatActivity() {
             })
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        searchText = savedInstanceState.getString(SEARCH_REQUEST, EMPTY_TEXT)
-        searchState = SearchState.valueOf(
-            savedInstanceState.getString(
-                SEARCH_STATE,
-                SearchState.CLEAR.name
-            )
-        )
-        refreshScreen()
-    }
-
     private fun refreshScreen() {
         when (searchState) {
             SearchState.OK -> searchTracks()
             SearchState.CLEAR -> {}
             else -> showSearchPlaceholder()
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_REQUEST, searchText)
-        outState.putString(SEARCH_STATE, searchState.name)
-    }
-
-    companion object {
-        const val SEARCH_REQUEST = "Search request"
-        const val SEARCH_STATE = "Search state"
-        const val EMPTY_TEXT = ""
     }
 }
