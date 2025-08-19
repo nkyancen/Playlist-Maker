@@ -10,8 +10,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.nkyancen.playlistmaker.R
 import ru.nkyancen.playlistmaker.model.Track
 import ru.nkyancen.playlistmaker.utils.UnitsConverter
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class SearchViewHolder(searchItemView: View) : RecyclerView.ViewHolder(searchItemView),
     UnitsConverter {
@@ -39,7 +37,6 @@ class SearchViewHolder(searchItemView: View) : RecyclerView.ViewHolder(searchIte
         trackNameView.text = model.trackName ?: ""
         artistNameView.text = model.artistName ?: ""
         artistNameView.requestLayout()
-        trackTimeView.text =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTime ?: 0L)
+        trackTimeView.text = formatTime(model.trackTime)
     }
 }

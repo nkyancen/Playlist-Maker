@@ -13,10 +13,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.appbar.MaterialToolbar
 import ru.nkyancen.playlistmaker.R
-import ru.nkyancen.playlistmaker.model.*
+import ru.nkyancen.playlistmaker.model.CURRENT_TRACK_TAG
+import ru.nkyancen.playlistmaker.model.Track
 import ru.nkyancen.playlistmaker.utils.UnitsConverter
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class MediaPlayerActivity() : AppCompatActivity(), UnitsConverter {
 
@@ -40,8 +39,6 @@ class MediaPlayerActivity() : AppCompatActivity(), UnitsConverter {
     private lateinit var trackGenreText: TextView
     private lateinit var trackCountryText: TextView
 
-    private val timeFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_media_player)
@@ -50,7 +47,7 @@ class MediaPlayerActivity() : AppCompatActivity(), UnitsConverter {
 
         setClickListeners()
 
-        setValuesInViews()
+        setContentToViews()
     }
 
     private fun initializeViews() {
@@ -82,7 +79,7 @@ class MediaPlayerActivity() : AppCompatActivity(), UnitsConverter {
         }
     }
 
-    private fun setValuesInViews() {
+    private fun setContentToViews() {
         val currentTrack =  (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(CURRENT_TRACK_TAG, Track::class.java)
         } else {
@@ -107,9 +104,9 @@ class MediaPlayerActivity() : AppCompatActivity(), UnitsConverter {
         titleText.text = currentTrack.trackName
         artistNameText.text = currentTrack.artistName
 
-        progressText.text = timeFormat.format(0L)
+        progressText.text = formatTime(0L)
 
-        trackTimeText.text  = timeFormat.format(currentTrack.trackTime ?: 0L)
+        trackTimeText.text  = formatTime(currentTrack.trackTime)
 
         if (currentTrack.albumName.isNullOrEmpty()) {
             trackAlbumGroup.visibility = View.GONE
