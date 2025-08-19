@@ -15,9 +15,9 @@ import com.google.android.material.appbar.MaterialToolbar
 import ru.nkyancen.playlistmaker.R
 import ru.nkyancen.playlistmaker.model.CURRENT_TRACK_TAG
 import ru.nkyancen.playlistmaker.model.Track
-import ru.nkyancen.playlistmaker.utils.UnitsConverter
+import ru.nkyancen.playlistmaker.utils.Converter
 
-class MediaPlayerActivity() : AppCompatActivity(), UnitsConverter {
+class MediaPlayerActivity() : AppCompatActivity(), Converter {
 
     private lateinit var playerMain: ConstraintLayout
     private lateinit var backButton: MaterialToolbar

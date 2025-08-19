@@ -5,7 +5,7 @@ import android.view.View
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-interface UnitsConverter {
+interface Converter {
     fun dpToPx(value: Float, targetView: View): Int {
         return TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,

@@ -9,10 +9,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.nkyancen.playlistmaker.R
 import ru.nkyancen.playlistmaker.model.Track
-import ru.nkyancen.playlistmaker.utils.UnitsConverter
+import ru.nkyancen.playlistmaker.utils.Converter
 
 class SearchViewHolder(searchItemView: View) : RecyclerView.ViewHolder(searchItemView),
-    UnitsConverter {
+    Converter {
     private val searchView: LinearLayout = searchItemView.findViewById(R.id.searchItemView)
     private val albumImageView: ImageView = searchItemView.findViewById(R.id.albumImage)
     private val trackNameView: TextView = searchItemView.findViewById(R.id.trackName)
