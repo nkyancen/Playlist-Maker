@@ -31,6 +31,29 @@
         <item name="android:textColor">?attr/colorPrimaryVariant</item>
     </style>
 
+    <style name="PlayerTextStyle">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/player_text_size</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="PlayerTextStyle.Secondary">
+        <item name="android:textSize">@dimen/player_secondary_text_size</item>
+    </style>
+
+    <style name="PlayerTextStyle.Additional">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/player_additional_text_size</item>
+    </style>
+
+    <style name="PlayerTextStyle.Additional.Name">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="PlayerTextStyle.Additional.Item">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
     <style name="Button" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:outlineSpotShadowColor">@color/no_color</item>
@@ -80,7 +103,7 @@
         <item name="cornerRadius">@dimen/search_placeholder_button_corner_radius</item>
     </style>
 
-    <style name="TextViewPlaceholderSearch" parent="Widget.AppCompat.TextView">
+    <style name="TextViewPlaceholderSearch" parent="Widget.MaterialComponents.TextView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textAlignment">center</item>
@@ -106,7 +129,7 @@
         <item name="layoutManager">androidx.recyclerview.widget.LinearLayoutManager</item>
     </style>
 
-    <style name="ToolBar" parent="Widget.Material3.Toolbar">
+    <style name="ToolBar" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">56dp</item>
         <item name="contentInsetStartWithNavigation">64dp</item>
@@ -116,4 +139,32 @@
         <item name="titleTextColor">?attr/colorOnPrimary</item>
     </style>
 
+    <style name="TextViewPlayerItem" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">9dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="TextViewPlayerItem.Name">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textAppearance">@style/PlayerTextStyle.Additional.Name</item>
+        <item name="layout_constraintStart_toEndOf">@id/playerAdditionalStartBaseLine</item>
+        <item name="android:paddingEnd">4dp</item>
+        <item name="layout_constraintHorizontal_bias">0.0</item>
+    </style>
+
+    <style name="TextViewPlayerItem.Item">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:textAppearance">@style/PlayerTextStyle.Additional.Item</item>
+        <item name="android:textAlignment">textEnd</item>
+        <item name="layout_constraintEnd_toStartOf">@id/playerAdditionalEndBaseLine</item>
+    </style>
+
+    <style name="ImageButtonPlayer" parent="Widget.MaterialComponents.TimePicker.ImageButton">
+        <item name="android:layout_height">@dimen/player_image_button_size</item>
+        <item name="android:layout_width">@dimen/player_image_button_size</item>
+        <item name="android:background">@drawable/round_button</item>
+    </style>
 </resources>

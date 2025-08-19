@@ -1,8 +1,9 @@
-package ru.nkyancen.playlistmaker.searchResultsView
+package ru.nkyancen.playlistmaker.searchResults
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import androidx.core.content.edit
+import ru.nkyancen.playlistmaker.model.Track
 
 const val SEARCH_HISTORY_TAG = "Search History"
 

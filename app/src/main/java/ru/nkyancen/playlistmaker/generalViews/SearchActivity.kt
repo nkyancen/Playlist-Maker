@@ -1,4 +1,4 @@
-package ru.nkyancen.playlistmaker.generalView
+package ru.nkyancen.playlistmaker.generalViews
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
@@ -19,13 +19,18 @@ import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import ru.nkyancen.playlistmaker.R
-import ru.nkyancen.playlistmaker.searchResultsView.*
+import ru.nkyancen.playlistmaker.model.*
+import ru.nkyancen.playlistmaker.searchResults.*
 
 
 class SearchActivity : AppCompatActivity() {
+    companion object {
+        const val SEARCH_REQUEST = "Search request"
+        const val SEARCH_STATE = "Search state"
+        const val EMPTY_TEXT = ""
+    }
+
     private var searchText: String = EMPTY_TEXT
     private lateinit var searchEditText: EditText
 
@@ -34,42 +39,70 @@ class SearchActivity : AppCompatActivity() {
     private val historyList = arrayListOf<Track>()
 
     private lateinit var searchAdapter: SearchViewAdapter
-    private lateinit var searchRecycler: RecyclerView
 
     private lateinit var searchPlaceholder: LinearLayout
     private lateinit var searchPlaceholderImage: ImageView
     private lateinit var searchPlaceholderText: TextView
     private lateinit var searchPlaceholderButton: MaterialButton
 
+    private lateinit var backButton: MaterialToolbar
+    private lateinit var clearButton: ImageView
+
     private lateinit var historyAdapter: SearchViewAdapter
     private lateinit var historyLayout: LinearLayout
-    private lateinit var historyRecycler: RecyclerView
+
     private lateinit var historyClearButton: MaterialButton
 
-    private lateinit var historySharedPrefs: SharedPreferences
     private lateinit var historySearchUser: SearchHistory
     private lateinit var historyListener: SharedPreferences.OnSharedPreferenceChangeListener
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(SEARCH_BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val searchService = retrofit.create(SearchApi::class.java)
-
     private var searchState = SearchState.CLEAR
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_search)
 
-        val backButton = findViewById<MaterialToolbar>(R.id.searchHeader)
-        val clearButton = findViewById<ImageView>(R.id.clearIcon)
+        initializeViews()
+
+        initializeHistoryUser()
+
+        setRecyclersAdapters()
+
+        setClickListeners()
+
+        setSearchEditListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        searchEditText.setText(searchText)
+        refreshScreen()
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        searchText = savedInstanceState.getString(SEARCH_REQUEST, EMPTY_TEXT)
+        searchState = SearchState.valueOf(
+            savedInstanceState.getString(
+                SEARCH_STATE,
+                SearchState.CLEAR.name
+            )
+        )
+        refreshScreen()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(SEARCH_REQUEST, searchText)
+        outState.putString(SEARCH_STATE, searchState.name)
+    }
+
+    private fun initializeViews() {
+        backButton = findViewById(R.id.searchHeader)
+        clearButton = findViewById(R.id.clearIcon)
 
         searchEditText = findViewById(R.id.searchEditText)
-        searchRecycler = findViewById(R.id.searchListRecycler)
 
         searchPlaceholder = findViewById(R.id.searchPlaceholder)
         searchPlaceholderImage = findViewById(R.id.searchPlaceholderImage)
@@ -77,23 +110,36 @@ class SearchActivity : AppCompatActivity() {
         searchPlaceholderButton = findViewById(R.id.searchPlaceholderButton)
 
         historyLayout = findViewById(R.id.searchHistoryLayout)
-        historyRecycler = findViewById(R.id.searchHistoryRecycler)
         historyClearButton = findViewById(R.id.searchHistoryClearButton)
+    }
 
-        historySharedPrefs = getSharedPreferences(SEARCH_HISTORY_TAG, MODE_PRIVATE)
+    private fun initializeHistoryUser() {
+        val historySharedPrefs = getSharedPreferences(SEARCH_HISTORY_TAG, MODE_PRIVATE)
 
-        historySearchUser = SearchHistory(historySharedPrefs)
-        searchAdapter = SearchViewAdapter(mediaList, historySearchUser)
-        historyAdapter = SearchViewAdapter(historyList, historySearchUser)
-
-        historyListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPrefs, key ->
-            if (key == SEARCH_HISTORY_TAG) {
-                updateHistory()
+        historyListener =
+            SharedPreferences.OnSharedPreferenceChangeListener { sharedPrefs, key ->
+                if (key == SEARCH_HISTORY_TAG) {
+                    updateHistory()
+                }
             }
-        }
 
         historySharedPrefs.registerOnSharedPreferenceChangeListener(historyListener)
 
+        historySearchUser = SearchHistory(historySharedPrefs)
+    }
+
+    private fun setRecyclersAdapters() {
+        val searchRecycler = findViewById<RecyclerView>(R.id.searchListRecycler)
+        searchAdapter = SearchViewAdapter(mediaList, historySearchUser)
+        searchRecycler.adapter = searchAdapter
+
+        val historyRecycler = findViewById<RecyclerView>(R.id.searchHistoryRecycler)
+        historyAdapter = SearchViewAdapter(historyList, historySearchUser)
+        historyRecycler.adapter = historyAdapter
+        updateHistory()
+    }
+
+    private fun setClickListeners() {
         backButton.setNavigationOnClickListener {
             finish()
         }
@@ -106,9 +152,12 @@ class SearchActivity : AppCompatActivity() {
             clearHistory()
         }
 
-        historyRecycler.adapter = historyAdapter
-        updateHistory()
+        searchPlaceholderButton.setOnClickListener {
+            searchTracks()
+        }
+    }
 
+    private fun setSearchEditListeners() {
         searchEditText.setOnFocusChangeListener { _, hasFocus ->
             historyVisibilityChange(hasFocus, searchEditText.text)
         }
@@ -128,12 +177,6 @@ class SearchActivity : AppCompatActivity() {
 
         searchEditText.addTextChangedListener(searchTextWatcher)
 
-        searchRecycler.adapter = searchAdapter
-
-        searchPlaceholderButton.setOnClickListener {
-            searchTracks()
-        }
-
         searchEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 searchTracks()
@@ -148,13 +191,17 @@ class SearchActivity : AppCompatActivity() {
             if (hasFocus
                 && s?.isEmpty() == true
                 && historyList.isNotEmpty()
-            ) View.VISIBLE else View.GONE
-    }
-
-    override fun onResume() {
-        super.onResume()
-        searchEditText.setText(searchText)
-        refreshScreen()
+            ) {
+                searchPlaceholder.visibility = View.GONE
+                View.VISIBLE
+            } else {
+                if (searchState == SearchState.WITHOUT_INTERNET ||
+                    searchState == SearchState.NOTHING_FOUND
+                ) {
+                    searchPlaceholder.visibility = View.VISIBLE
+                }
+                View.GONE
+            }
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
@@ -171,6 +218,7 @@ class SearchActivity : AppCompatActivity() {
         inputMethodManager?.hideSoftInputFromWindow(searchEditText.windowToken, 0)
         searchState = SearchState.CLEAR
         showSearchPlaceholder()
+        searchEditText.requestFocus()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -199,6 +247,8 @@ class SearchActivity : AppCompatActivity() {
                 SearchState.NOTHING_FOUND -> {
                     searchPlaceholderImage.setImageResource(R.drawable.ic_placeholder_nothing_found_120)
                     searchPlaceholderText.text = getString(R.string.search_nothing_found)
+                    historyLayout.visibility = View.GONE
+                    searchEditText.clearFocus()
                 }
 
                 SearchState.WITHOUT_INTERNET -> {
@@ -206,6 +256,8 @@ class SearchActivity : AppCompatActivity() {
                     searchPlaceholderImage.setImageResource(R.drawable.ic_placeholder_without_internet_120)
                     searchPlaceholderText.text = getString(R.string.search_without_internet)
                     searchPlaceholderButton.visibility = View.VISIBLE
+                    historyLayout.visibility = View.GONE
+                    searchEditText.clearFocus()
                 }
 
                 else -> searchPlaceholder.visibility = View.GONE
@@ -216,7 +268,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun searchTracks() {
-        searchService.getTracks(searchText)
+        SearchService().service.getTracks(searchText)
             .enqueue(object : Callback<TracksResponse> {
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onResponse(
@@ -249,43 +301,11 @@ class SearchActivity : AppCompatActivity() {
             })
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        searchText = savedInstanceState.getString(SEARCH_REQUEST, EMPTY_TEXT)
-        searchState = SearchState.valueOf(
-            savedInstanceState.getString(
-                SEARCH_STATE,
-                SearchState.CLEAR.name
-            )
-        )
-        refreshScreen()
-    }
-
     private fun refreshScreen() {
         when (searchState) {
             SearchState.OK -> searchTracks()
             SearchState.CLEAR -> {}
             else -> showSearchPlaceholder()
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_REQUEST, searchText)
-        outState.putString(SEARCH_STATE, searchState.name)
-    }
-
-    companion object {
-        const val SEARCH_REQUEST = "Search request"
-        const val SEARCH_STATE = "Search state"
-        const val EMPTY_TEXT = ""
-        const val SEARCH_BASE_URL = "https://itunes.apple.com/"
-    }
-
-    enum class SearchState {
-        OK,
-        CLEAR,
-        NOTHING_FOUND,
-        WITHOUT_INTERNET;
     }
 }

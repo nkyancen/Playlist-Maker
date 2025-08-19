@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/LinearVertical"
     android:background="?attr/colorPrimary"
-    tools:context=".generalView.SettingsActivity">
+    tools:context=".generalViews.SettingsActivity">
 
 
     <com.google.android.material.appbar.MaterialToolbar

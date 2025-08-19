@@ -6,6 +6,9 @@
     <dimen name="search_errors_text_size">19sp</dimen>
     <dimen name="search_errors_button_text_size">14sp</dimen>
     <dimen name="header_text_size">22sp</dimen>
+    <dimen name="player_text_size">22sp</dimen>
+    <dimen name="player_secondary_text_size">14sp</dimen>
+    <dimen name="player_additional_text_size">13sp</dimen>
 <!--    -->
     <dimen name="corner_radius">16dp</dimen>
     <dimen name="main_icon_padding">8dp</dimen>
@@ -39,4 +42,10 @@
     <dimen name="search_history_title_padding_horizontal">16dp</dimen>
     <dimen name="search_history_recycler_margin_top">8dp</dimen>
 
+    <dimen name="player_padding">24dp</dimen>
+    <dimen name="player_additional_padding">16dp</dimen>
+    <dimen name="player_image_button_size">51dp</dimen>
+    <dimen name="player_bottom_padding">20dp</dimen>
+    <dimen name="player_play_button_vertical_margin">30dp</dimen>
+    <dimen name="player_play_button_size">100dp</dimen>
 </resources>
