@@ -1,5 +1,6 @@
-package ru.nkyancen.playlistmaker.generalView
+package ru.nkyancen.playlistmaker.generalViews
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
@@ -12,9 +13,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.appbar.MaterialToolbar
 import ru.nkyancen.playlistmaker.R
-import ru.nkyancen.playlistmaker.searchResultsView.SEARCH_HISTORY_TAG
-import ru.nkyancen.playlistmaker.searchResultsView.SearchHistory
-import ru.nkyancen.playlistmaker.searchResultsView.Track
+import ru.nkyancen.playlistmaker.model.CURRENT_TRACK_TAG
+import ru.nkyancen.playlistmaker.model.Track
 import ru.nkyancen.playlistmaker.utils.UnitsConverter
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -40,6 +40,8 @@ class MediaPlayerActivity() : AppCompatActivity(), UnitsConverter {
     private lateinit var trackYearGroup: Group
     private lateinit var trackGenreText: TextView
     private lateinit var trackCountryText: TextView
+
+    private val timeFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,9 +72,12 @@ class MediaPlayerActivity() : AppCompatActivity(), UnitsConverter {
             finish()
         }
 
-        currentTrack = SearchHistory(
-            getSharedPreferences(SEARCH_HISTORY_TAG, MODE_PRIVATE)
-        ).read()[0]
+        currentTrack =  (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(CURRENT_TRACK_TAG, Track::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra(CURRENT_TRACK_TAG)
+        })!!
 
 
         Glide.with(playerMain.context)
@@ -90,9 +95,10 @@ class MediaPlayerActivity() : AppCompatActivity(), UnitsConverter {
 
         titleText.text = currentTrack.trackName
         artistNameText.text = currentTrack.artistName
-        progressText.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(0L)
 
-        trackTimeText.text  = SimpleDateFormat("mm:ss", Locale.getDefault()).format(currentTrack.trackTime ?: 0L)
+        progressText.text = timeFormat.format(0L)
+
+        trackTimeText.text  = timeFormat.format(currentTrack.trackTime ?: 0L)
 
         if (currentTrack.albumName.isNullOrEmpty()) {
             trackAlbumGroup.visibility = View.GONE

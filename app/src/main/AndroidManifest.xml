@@ -25,16 +25,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".generalView.SettingsActivity"
+            android:name=".generalViews.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".generalView.SearchActivity"
+            android:name=".generalViews.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".generalView.MediaLibraryActivity"
+            android:name=".generalViews.MediaLibraryActivity"
             android:exported="false" />
         <activity
-            android:name=".generalView.MediaPlayerActivity"
+            android:name=".generalViews.MediaPlayerActivity"
             android:exported="false" />
     </application>
 

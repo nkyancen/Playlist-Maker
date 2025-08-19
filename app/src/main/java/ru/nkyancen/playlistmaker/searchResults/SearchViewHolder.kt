@@ -1,4 +1,4 @@
-package ru.nkyancen.playlistmaker.searchResultsView
+package ru.nkyancen.playlistmaker.searchResults
 
 import android.view.View
 import android.widget.ImageView
@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.nkyancen.playlistmaker.R
+import ru.nkyancen.playlistmaker.model.Track
 import ru.nkyancen.playlistmaker.utils.UnitsConverter
 import java.text.SimpleDateFormat
 import java.util.Locale

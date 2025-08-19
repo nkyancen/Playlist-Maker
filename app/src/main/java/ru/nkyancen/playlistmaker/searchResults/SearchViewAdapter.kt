@@ -1,4 +1,4 @@
-package ru.nkyancen.playlistmaker.searchResultsView
+package ru.nkyancen.playlistmaker.searchResults
 
 import android.content.Context
 import android.content.Intent
@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.nkyancen.playlistmaker.R
-import ru.nkyancen.playlistmaker.generalView.MediaPlayerActivity
+import ru.nkyancen.playlistmaker.generalViews.MediaPlayerActivity
+import ru.nkyancen.playlistmaker.model.CURRENT_TRACK_TAG
+import ru.nkyancen.playlistmaker.model.Track
 
 
 class SearchViewAdapter(
@@ -37,9 +39,11 @@ class SearchViewAdapter(
         holder.bind(tracks[position])
 
         holder.itemView.setOnClickListener {
+            val targetIntent = Intent(context, MediaPlayerActivity::class.java)
+            targetIntent.putExtra(CURRENT_TRACK_TAG, tracks[position])
+
             historyUser.add(tracks[position])
 
-            val targetIntent = Intent(context, MediaPlayerActivity::class.java)
             context.startActivity(targetIntent)
         }
     }

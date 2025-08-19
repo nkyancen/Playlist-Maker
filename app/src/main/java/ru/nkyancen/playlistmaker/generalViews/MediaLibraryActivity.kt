@@ -1,4 +1,4 @@
-package ru.nkyancen.playlistmaker.generalView
+package ru.nkyancen.playlistmaker.generalViews
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

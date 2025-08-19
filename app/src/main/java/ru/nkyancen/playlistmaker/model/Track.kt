@@ -1,7 +1,13 @@
-package ru.nkyancen.playlistmaker.searchResultsView
+package ru.nkyancen.playlistmaker.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
+
+const val CURRENT_TRACK_TAG = "Current Track"
+
+@Parcelize
 data class Track(
     @SerializedName("trackId") val id: Long,
     @SerializedName("trackName") val trackName: String?,
@@ -12,7 +18,7 @@ data class Track(
     @SerializedName("releaseDate") val releaseDate: String?,
     @SerializedName("primaryGenreName") val genre: String?,
     @SerializedName("country") val country: String?
-) {
+) : Parcelable {
     fun getPlayerAlbumImage() = albumPosterUrl?.replaceAfterLast('/',"512x512bb.jpg")
 
     fun getTrackYear() = releaseDate?.split('-')[0]
