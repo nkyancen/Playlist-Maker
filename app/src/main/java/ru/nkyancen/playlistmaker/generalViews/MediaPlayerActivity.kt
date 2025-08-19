@@ -20,9 +20,9 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class MediaPlayerActivity() : AppCompatActivity(), UnitsConverter {
-    private lateinit var currentTrack: Track
 
     private lateinit var playerMain: ConstraintLayout
+    private lateinit var backButton: MaterialToolbar
     private lateinit var albumImage: ImageView
 
     private lateinit var titleText: TextView
@@ -47,7 +47,15 @@ class MediaPlayerActivity() : AppCompatActivity(), UnitsConverter {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_media_player)
 
-        val backButton = findViewById<MaterialToolbar>(R.id.playerHeader)
+        initializeViews()
+
+        setClickListeners()
+
+        setValuesInViews()
+    }
+
+    private fun initializeViews() {
+        backButton = findViewById(R.id.playerHeader)
 
         playerMain = findViewById(R.id.playerMain)
 
@@ -67,12 +75,16 @@ class MediaPlayerActivity() : AppCompatActivity(), UnitsConverter {
         trackYearGroup = findViewById(R.id.playerTrackYearGroup)
         trackGenreText = findViewById(R.id.playerTrackGenreText)
         trackCountryText = findViewById(R.id.playerTrackCountryText)
+    }
 
+    private fun setClickListeners() {
         backButton.setNavigationOnClickListener {
             finish()
         }
+    }
 
-        currentTrack =  (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    private fun setValuesInViews() {
+        val currentTrack =  (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(CURRENT_TRACK_TAG, Track::class.java)
         } else {
             @Suppress("DEPRECATION")
