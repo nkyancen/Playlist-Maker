@@ -13,8 +13,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.appbar.MaterialToolbar
 import ru.nkyancen.playlistmaker.R
-import ru.nkyancen.playlistmaker.model.CURRENT_TRACK_TAG
-import ru.nkyancen.playlistmaker.model.Track
+import ru.nkyancen.playlistmaker.model.*
 import ru.nkyancen.playlistmaker.utils.UnitsConverter
 import java.text.SimpleDateFormat
 import java.util.Locale
