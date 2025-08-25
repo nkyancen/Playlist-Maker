@@ -106,7 +106,7 @@ class MediaPlayerActivity() : AppCompatActivity(), Converter {
 
         progressText.text = formatTime(0L)
 
-        trackTimeText.text = formatTime(currentTrack.trackTime)
+        trackTimeText.text  = formatTime(currentTrack.trackTime)
 
         if (currentTrack.albumName.isNullOrEmpty()) {
             trackAlbumGroup.visibility = View.GONE
