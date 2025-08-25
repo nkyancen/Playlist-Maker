@@ -80,7 +80,7 @@ class MediaPlayerActivity() : AppCompatActivity(), Converter {
     }
 
     private fun setContentToViews() {
-        val currentTrack =  (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        val currentTrack = (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(CURRENT_TRACK_TAG, Track::class.java)
         } else {
             @Suppress("DEPRECATION")
@@ -106,7 +106,7 @@ class MediaPlayerActivity() : AppCompatActivity(), Converter {
 
         progressText.text = formatTime(0L)
 
-        trackTimeText.text  = formatTime(currentTrack.trackTime)
+        trackTimeText.text = formatTime(currentTrack.trackTime)
 
         if (currentTrack.albumName.isNullOrEmpty()) {
             trackAlbumGroup.visibility = View.GONE
