@@ -11,7 +11,7 @@
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/searchHeader"
-        style="@style/ToolBar"
+        style="@style/ToolBar.General"
         app:title="@string/search" />
 
     <FrameLayout

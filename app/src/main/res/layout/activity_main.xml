@@ -9,10 +9,8 @@
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/mainHeader"
-        android:layout_width="match_parent"
-        android:layout_height="58dp"
+        style="@style/ToolBar"
         app:title="@string/app_name"
-        app:titleTextAppearance="@style/HeaderTextStyle"
         app:titleTextColor="@color/white" />
 
     <LinearLayout

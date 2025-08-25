@@ -11,7 +11,7 @@
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/playerHeader"
-        style="@style/ToolBar" />
+        style="@style/ToolBar.General" />
 
     <ScrollView
         android:layout_width="match_parent"

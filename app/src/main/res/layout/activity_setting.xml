@@ -9,7 +9,7 @@
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/settingsHeader"
-        style="@style/ToolBar"
+        style="@style/ToolBar.General"
         app:title="@string/settings" />
 
 
