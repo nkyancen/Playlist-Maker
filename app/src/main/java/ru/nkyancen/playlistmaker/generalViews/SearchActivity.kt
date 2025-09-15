@@ -308,4 +308,11 @@ class SearchActivity : AppCompatActivity() {
             else -> showSearchPlaceholder()
         }
     }
+
+    private enum class SearchState {
+        OK,
+        CLEAR,
+        NOTHING_FOUND,
+        WITHOUT_INTERNET;
+    }
 }

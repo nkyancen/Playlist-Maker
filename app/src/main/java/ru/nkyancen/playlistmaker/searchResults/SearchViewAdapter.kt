@@ -2,6 +2,8 @@ package ru.nkyancen.playlistmaker.searchResults
 
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -13,9 +15,13 @@ import ru.nkyancen.playlistmaker.model.*
 class SearchViewAdapter(
     private val tracks: List<Track>,
     private val historyUser: SearchHistory
-) : RecyclerView.Adapter<SearchViewHolder> () {
+) : RecyclerView.Adapter<SearchViewHolder>() {
 
     private lateinit var context: Context
+
+    private var isClickAllowed = true
+
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -38,12 +44,14 @@ class SearchViewAdapter(
         holder.bind(tracks[position])
 
         holder.itemView.setOnClickListener {
-            val targetIntent = Intent(context, MediaPlayerActivity::class.java)
-            targetIntent.putExtra(CURRENT_TRACK_TAG, tracks[position])
+            if (clickDebounce()) {
+                val targetIntent = Intent(context, MediaPlayerActivity::class.java)
+                targetIntent.putExtra(CURRENT_TRACK_TAG, tracks[position])
 
-            historyUser.add(tracks[position])
+                historyUser.add(tracks[position])
 
-            context.startActivity(targetIntent)
+                context.startActivity(targetIntent)
+            }
         }
     }
 
@@ -51,4 +59,17 @@ class SearchViewAdapter(
         return tracks.size
     }
 
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+
+        return current
+    }
+
+    companion object {
+        const val CLICK_DEBOUNCE_DELAY = 1000L
+    }
 }
