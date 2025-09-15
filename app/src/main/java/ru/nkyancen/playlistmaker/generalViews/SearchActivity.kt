@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -45,6 +46,8 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var searchAdapter: SearchViewAdapter
 
+    private lateinit var searchResultsList: RecyclerView
+
     private lateinit var searchPlaceholder: LinearLayout
     private lateinit var searchPlaceholderImage: ImageView
     private lateinit var searchPlaceholderText: TextView
@@ -52,6 +55,8 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var backButton: MaterialToolbar
     private lateinit var clearButton: ImageView
+
+    private lateinit var searchProgressBar: ProgressBar
 
     private lateinit var historyAdapter: SearchViewAdapter
     private lateinit var historyLayout: LinearLayout
@@ -108,6 +113,9 @@ class SearchActivity : AppCompatActivity() {
         clearButton = findViewById(R.id.clearIcon)
 
         searchEditText = findViewById(R.id.searchEditText)
+
+        searchResultsList = findViewById(R.id.searchListRecycler)
+        searchProgressBar = findViewById(R.id.searchProgressBar)
 
         searchPlaceholder = findViewById(R.id.searchPlaceholder)
         searchPlaceholderImage = findViewById(R.id.searchPlaceholderImage)
@@ -274,6 +282,11 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun searchTracks() {
+        searchPlaceholder.visibility = View.GONE
+        historyLayout.visibility = View.GONE
+        searchResultsList.visibility = View.GONE
+        searchProgressBar.visibility = View.VISIBLE
+
         SearchService().service.getTracks(searchText)
             .enqueue(object : Callback<TracksResponse> {
                 @SuppressLint("NotifyDataSetChanged")
@@ -281,7 +294,9 @@ class SearchActivity : AppCompatActivity() {
                     call: Call<TracksResponse?>,
                     response: Response<TracksResponse?>
                 ) {
+                    searchProgressBar.visibility = View.GONE
                     if (response.isSuccessful) {
+                        searchResultsList.visibility = View.VISIBLE
                         val currentResponse = response.body()?.tracks
                         if (!currentResponse.isNullOrEmpty()) {
                             mediaList.clear()
@@ -301,6 +316,7 @@ class SearchActivity : AppCompatActivity() {
                     call: Call<TracksResponse?>,
                     t: Throwable
                 ) {
+                    searchProgressBar.visibility = View.GONE
                     searchState = SearchState.WITHOUT_INTERNET
                     showSearchPlaceholder()
                 }

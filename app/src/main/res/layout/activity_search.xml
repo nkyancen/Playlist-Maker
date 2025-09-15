@@ -59,6 +59,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ProgressBar
+            android:id="@+id/searchProgressBar"
+            android:layout_width="@dimen/search_progressbar_size"
+            android:layout_height="@dimen/search_progressbar_size"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/blue"
+            android:visibility="gone"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/searchListRecycler"
             style="@style/SearchRecyclerView"
