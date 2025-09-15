@@ -70,6 +70,6 @@ class SearchViewAdapter(
     }
 
     companion object {
-        const val CLICK_DEBOUNCE_DELAY = 1000L
+        const val CLICK_DEBOUNCE_DELAY = 1_000L
     }
 }

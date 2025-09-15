@@ -3,10 +3,11 @@ package ru.nkyancen.playlistmaker.generalViews
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
@@ -29,7 +30,11 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_REQUEST = "Search request"
         const val SEARCH_STATE = "Search state"
         const val EMPTY_TEXT = ""
+        private const val SEARCH_DEBOUNCE_DELAY = 2_000L
     }
+
+    private val searchRunnable = Runnable { searchTracks() }
+    private val handler = Handler(Looper.getMainLooper())
 
     private var searchText: String = EMPTY_TEXT
     private lateinit var searchEditText: EditText
@@ -172,18 +177,19 @@ class SearchActivity : AppCompatActivity() {
 
                 clearButton.visibility = clearButtonVisibility(s)
                 searchText = s?.toString() ?: EMPTY_TEXT
+
+                if (s?.isEmpty() == false) {
+                    searchDebounce()
+                }
             }
         }
 
         searchEditText.addTextChangedListener(searchTextWatcher)
+    }
 
-        searchEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                searchTracks()
-                true
-            }
-            false
-        }
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
     private fun historyVisibilityChange(hasFocus: Boolean, s: CharSequence?) {
