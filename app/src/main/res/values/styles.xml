@@ -132,10 +132,13 @@
     <style name="ToolBar" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">56dp</item>
+        <item name="titleTextAppearance">@style/HeaderTextStyle</item>
+    </style>
+
+    <style name="ToolBar.General">
         <item name="contentInsetStartWithNavigation">64dp</item>
         <item name="navigationIcon">@drawable/ic_arrow_back_24</item>
         <item name="navigationIconTint">?attr/colorOnPrimary</item>
-        <item name="titleTextAppearance">@style/HeaderTextStyle</item>
         <item name="titleTextColor">?attr/colorOnPrimary</item>
     </style>
 

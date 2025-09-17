@@ -18,22 +18,13 @@ class App : Application() {
         super.onCreate()
         sharedPrefs = getSharedPreferences(IS_DARK_THEME_TAG, MODE_PRIVATE)
 
-        applyDarkTheme()
+        applyTheme()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
 
-        applyDarkTheme()
-    }
-
-    private fun applyDarkTheme() {
-        isDarkTheme = sharedPrefs.getBoolean(
-            IS_DARK_THEME_TAG,
-            isDarkTheme(applicationContext as App)
-        )
-
-        setTheme()
+        applyTheme()
     }
 
     fun isDarkTheme(context: Context): Boolean {
@@ -51,6 +42,15 @@ class App : Application() {
                 isDarkTheme
             )
         }
+
+        setTheme()
+    }
+
+    private fun applyTheme() {
+        isDarkTheme = sharedPrefs.getBoolean(
+            IS_DARK_THEME_TAG,
+            isDarkTheme(applicationContext as App)
+        )
 
         setTheme()
     }

@@ -17,7 +17,8 @@ data class Track(
     @SerializedName("collectionName") val albumName: String?,
     @SerializedName("releaseDate") val releaseDate: String?,
     @SerializedName("primaryGenreName") val genre: String?,
-    @SerializedName("country") val country: String?
+    @SerializedName("country") val country: String?,
+    @SerializedName("previewUrl") val previewUrl: String?
 ) : Parcelable {
     fun getPlayerAlbumImage() = albumPosterUrl?.replaceAfterLast('/',"512x512bb.jpg")
 

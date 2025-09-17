@@ -2,6 +2,8 @@ package ru.nkyancen.playlistmaker.generalViews
 
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -13,11 +15,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.appbar.MaterialToolbar
 import ru.nkyancen.playlistmaker.R
-import ru.nkyancen.playlistmaker.model.CURRENT_TRACK_TAG
-import ru.nkyancen.playlistmaker.model.Track
+import ru.nkyancen.playlistmaker.model.*
 import ru.nkyancen.playlistmaker.utils.Converter
+import ru.nkyancen.playlistmaker.utils.MediaPlayerService
+import ru.nkyancen.playlistmaker.utils.MediaPlayerService.PlayerState
 
-class MediaPlayerActivity() : AppCompatActivity(), Converter {
+
+class MediaPlayerActivity : AppCompatActivity(), Converter {
 
     private lateinit var playerMain: ConstraintLayout
     private lateinit var backButton: MaterialToolbar
@@ -39,15 +43,34 @@ class MediaPlayerActivity() : AppCompatActivity(), Converter {
     private lateinit var trackGenreText: TextView
     private lateinit var trackCountryText: TextView
 
+    private val mediaPlayer = MediaPlayerService()
+
+    private val handler = Handler(Looper.getMainLooper())
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_media_player)
 
         initializeViews()
 
-        setClickListeners()
-
         setContentToViews()
+
+        setClickListeners()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mediaPlayer.pausePlayer()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        playButtonControl()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.releasePlayer()
     }
 
     private fun initializeViews() {
@@ -77,16 +100,60 @@ class MediaPlayerActivity() : AppCompatActivity(), Converter {
         backButton.setNavigationOnClickListener {
             finish()
         }
+
+        playButton.setOnClickListener {
+            mediaPlayer.playbackControl()
+
+            playButtonControl()
+            timerControl()
+        }
+    }
+
+    private fun playButtonControl() {
+        if (mediaPlayer.playerState == PlayerState.PLAYING) {
+            playButton.setImageResource(R.drawable.player_pause_button_100)
+        } else {
+            playButton.setImageResource(R.drawable.player_play_button_100)
+        }
+    }
+
+    private fun timerControl() {
+        handler.postDelayed(
+            object : Runnable {
+                override fun run() {
+                    if (mediaPlayer.playerState == PlayerState.PLAYING) {
+                        progressText.text = formatTime(
+                            mediaPlayer.getCurrentPosition().toLong()
+                        )
+                        
+                        handler.postDelayed(
+                            this,
+                            TIMER_UPDATE_DELAY
+                        )
+                    } else {
+                        handler.removeCallbacks(this)
+
+                        if (mediaPlayer.playerState == PlayerState.PREPARED) {
+                            progressText.text = formatTime(0L)
+                            playButtonControl()
+                        }
+                    }
+                }
+            },
+            TIMER_UPDATE_DELAY
+        )
     }
 
     private fun setContentToViews() {
-        val currentTrack =  (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        val currentTrack = (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(CURRENT_TRACK_TAG, Track::class.java)
         } else {
             @Suppress("DEPRECATION")
             intent.getParcelableExtra(CURRENT_TRACK_TAG)
         })!!
 
+        mediaPlayer.preparePlayer(currentTrack.previewUrl)
+        playButton.setImageResource(R.drawable.player_play_button_100)
 
         Glide.with(playerMain.context)
             .load(
@@ -106,7 +173,7 @@ class MediaPlayerActivity() : AppCompatActivity(), Converter {
 
         progressText.text = formatTime(0L)
 
-        trackTimeText.text  = formatTime(currentTrack.trackTime)
+        trackTimeText.text = formatTime(currentTrack.trackTime)
 
         if (currentTrack.albumName.isNullOrEmpty()) {
             trackAlbumGroup.visibility = View.GONE
@@ -125,5 +192,9 @@ class MediaPlayerActivity() : AppCompatActivity(), Converter {
         trackGenreText.text = currentTrack.genre ?: ""
 
         trackCountryText.text = currentTrack.country ?: ""
+    }
+
+    companion object {
+        const val TIMER_UPDATE_DELAY = 300L
     }
 }

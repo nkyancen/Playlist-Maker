@@ -3,14 +3,16 @@ package ru.nkyancen.playlistmaker.generalViews
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -25,11 +27,9 @@ import ru.nkyancen.playlistmaker.searchResults.*
 
 
 class SearchActivity : AppCompatActivity() {
-    companion object {
-        const val SEARCH_REQUEST = "Search request"
-        const val SEARCH_STATE = "Search state"
-        const val EMPTY_TEXT = ""
-    }
+
+    private val searchRunnable = Runnable { searchTracks() }
+    private val handler = Handler(Looper.getMainLooper())
 
     private var searchText: String = EMPTY_TEXT
     private lateinit var searchEditText: EditText
@@ -40,6 +40,8 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var searchAdapter: SearchViewAdapter
 
+    private lateinit var searchResultsList: RecyclerView
+
     private lateinit var searchPlaceholder: LinearLayout
     private lateinit var searchPlaceholderImage: ImageView
     private lateinit var searchPlaceholderText: TextView
@@ -47,6 +49,8 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var backButton: MaterialToolbar
     private lateinit var clearButton: ImageView
+
+    private lateinit var searchProgressBar: ProgressBar
 
     private lateinit var historyAdapter: SearchViewAdapter
     private lateinit var historyLayout: LinearLayout
@@ -80,6 +84,11 @@ class SearchActivity : AppCompatActivity() {
         refreshScreen()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(searchRunnable)
+    }
+
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         searchText = savedInstanceState.getString(SEARCH_REQUEST, EMPTY_TEXT)
@@ -103,6 +112,9 @@ class SearchActivity : AppCompatActivity() {
         clearButton = findViewById(R.id.clearIcon)
 
         searchEditText = findViewById(R.id.searchEditText)
+
+        searchResultsList = findViewById(R.id.searchListRecycler)
+        searchProgressBar = findViewById(R.id.searchProgressBar)
 
         searchPlaceholder = findViewById(R.id.searchPlaceholder)
         searchPlaceholderImage = findViewById(R.id.searchPlaceholderImage)
@@ -172,18 +184,19 @@ class SearchActivity : AppCompatActivity() {
 
                 clearButton.visibility = clearButtonVisibility(s)
                 searchText = s?.toString() ?: EMPTY_TEXT
+
+                if (s?.isEmpty() == false) {
+                    searchDebounce()
+                }
             }
         }
 
         searchEditText.addTextChangedListener(searchTextWatcher)
+    }
 
-        searchEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                searchTracks()
-                true
-            }
-            false
-        }
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
     private fun historyVisibilityChange(hasFocus: Boolean, s: CharSequence?) {
@@ -268,6 +281,11 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun searchTracks() {
+        searchPlaceholder.visibility = View.GONE
+        historyLayout.visibility = View.GONE
+        searchResultsList.visibility = View.GONE
+        searchProgressBar.visibility = View.VISIBLE
+
         SearchService().service.getTracks(searchText)
             .enqueue(object : Callback<TracksResponse> {
                 @SuppressLint("NotifyDataSetChanged")
@@ -275,7 +293,9 @@ class SearchActivity : AppCompatActivity() {
                     call: Call<TracksResponse?>,
                     response: Response<TracksResponse?>
                 ) {
+                    searchProgressBar.visibility = View.GONE
                     if (response.isSuccessful) {
+                        searchResultsList.visibility = View.VISIBLE
                         val currentResponse = response.body()?.tracks
                         if (!currentResponse.isNullOrEmpty()) {
                             mediaList.clear()
@@ -295,6 +315,7 @@ class SearchActivity : AppCompatActivity() {
                     call: Call<TracksResponse?>,
                     t: Throwable
                 ) {
+                    searchProgressBar.visibility = View.GONE
                     searchState = SearchState.WITHOUT_INTERNET
                     showSearchPlaceholder()
                 }
@@ -307,5 +328,19 @@ class SearchActivity : AppCompatActivity() {
             SearchState.CLEAR -> {}
             else -> showSearchPlaceholder()
         }
+    }
+
+    companion object {
+        const val SEARCH_REQUEST = "Search request"
+        const val SEARCH_STATE = "Search state"
+        const val EMPTY_TEXT = ""
+        private const val SEARCH_DEBOUNCE_DELAY = 2_000L
+    }
+
+    private enum class SearchState {
+        OK,
+        CLEAR,
+        NOTHING_FOUND,
+        WITHOUT_INTERNET;
     }
 }
