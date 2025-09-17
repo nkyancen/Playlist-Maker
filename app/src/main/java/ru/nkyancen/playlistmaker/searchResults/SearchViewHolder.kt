@@ -9,10 +9,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.nkyancen.playlistmaker.R
 import ru.nkyancen.playlistmaker.model.Track
-import ru.nkyancen.playlistmaker.utils.Converter
+import ru.nkyancen.playlistmaker.common.Converter
 
-class SearchViewHolder(searchItemView: View) : RecyclerView.ViewHolder(searchItemView),
-    Converter {
+class SearchViewHolder(searchItemView: View) : RecyclerView.ViewHolder(searchItemView) {
     private val searchView: LinearLayout = searchItemView.findViewById(R.id.searchItemView)
     private val albumImageView: ImageView = searchItemView.findViewById(R.id.albumImage)
     private val trackNameView: TextView = searchItemView.findViewById(R.id.trackName)
@@ -29,7 +28,7 @@ class SearchViewHolder(searchItemView: View) : RecyclerView.ViewHolder(searchIte
             .fitCenter()
             .transform(
                 RoundedCorners(
-                    dpToPx(2.0f, searchView)
+                    Converter.dpToPx(2.0f, searchView)
                 )
             )
             .into(albumImageView)
@@ -37,6 +36,6 @@ class SearchViewHolder(searchItemView: View) : RecyclerView.ViewHolder(searchIte
         trackNameView.text = model.trackName ?: ""
         artistNameView.text = model.artistName ?: ""
         artistNameView.requestLayout()
-        trackTimeView.text = formatTime(model.trackTime)
+        trackTimeView.text = Converter.formatTime(model.trackTime)
     }
 }

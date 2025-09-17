@@ -1,15 +1,15 @@
-package ru.nkyancen.playlistmaker.utils
+package ru.nkyancen.playlistmaker.common
 
 import android.media.MediaPlayer
 
-class MediaPlayerService {
+object MediaPlayer {
 
     private var mediaPlayer = MediaPlayer()
-    var playerState = PlayerState.DEFAULT
+    var playerState = State.DEFAULT
         private set
 
     fun playbackControl() {
-        if (playerState == PlayerState.PLAYING) {
+        if (playerState == State.PLAYING) {
             pausePlayer()
         } else {
             startPlayer()
@@ -21,34 +21,34 @@ class MediaPlayerService {
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            playerState = PlayerState.PREPARED
+            playerState = State.PREPARED
         }
         setOnCompletionListener()
     }
 
     fun setOnCompletionListener() {
         mediaPlayer.setOnCompletionListener {
-            playerState = PlayerState.PREPARED
+            playerState = State.PREPARED
         }
     }
 
     fun startPlayer() {
         mediaPlayer.start()
-        playerState = PlayerState.PLAYING
+        playerState = State.PLAYING
     }
 
     fun pausePlayer() {
         mediaPlayer.pause()
-        playerState = PlayerState.PAUSED
+        playerState = State.PAUSED
     }
 
     fun releasePlayer() {
         mediaPlayer.release()
     }
 
-    fun getCurrentPosition(): Int = mediaPlayer.currentPosition
+    fun getCurrentPosition() = mediaPlayer.currentPosition
 
-    enum class PlayerState {
+    enum class State {
         DEFAULT,
         PREPARED,
         PLAYING,

@@ -1,4 +1,4 @@
-package ru.nkyancen.playlistmaker.utils
+package ru.nkyancen.playlistmaker.common
 
 import android.app.Application
 import android.content.Context

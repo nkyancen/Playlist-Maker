@@ -1,11 +1,11 @@
-package ru.nkyancen.playlistmaker.utils
+package ru.nkyancen.playlistmaker.common
 
 import android.util.TypedValue
 import android.view.View
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-interface Converter {
+object Converter {
     fun dpToPx(value: Float, targetView: View): Int {
         return TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,

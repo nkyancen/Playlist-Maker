@@ -16,12 +16,11 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.appbar.MaterialToolbar
 import ru.nkyancen.playlistmaker.R
 import ru.nkyancen.playlistmaker.model.*
-import ru.nkyancen.playlistmaker.utils.Converter
-import ru.nkyancen.playlistmaker.utils.MediaPlayerService
-import ru.nkyancen.playlistmaker.utils.MediaPlayerService.PlayerState
+import ru.nkyancen.playlistmaker.common.MediaPlayer
+import ru.nkyancen.playlistmaker.common.Converter
 
 
-class MediaPlayerActivity : AppCompatActivity(), Converter {
+class MediaPlayerActivity : AppCompatActivity() {
 
     private lateinit var playerMain: ConstraintLayout
     private lateinit var backButton: MaterialToolbar
@@ -43,9 +42,8 @@ class MediaPlayerActivity : AppCompatActivity(), Converter {
     private lateinit var trackGenreText: TextView
     private lateinit var trackCountryText: TextView
 
-    private val mediaPlayer = MediaPlayerService()
-
     private val handler = Handler(Looper.getMainLooper())
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +58,7 @@ class MediaPlayerActivity : AppCompatActivity(), Converter {
 
     override fun onPause() {
         super.onPause()
-        mediaPlayer.pausePlayer()
+        MediaPlayer.pausePlayer()
     }
 
     override fun onRestart() {
@@ -70,7 +68,7 @@ class MediaPlayerActivity : AppCompatActivity(), Converter {
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.releasePlayer()
+        MediaPlayer.releasePlayer()
     }
 
     private fun initializeViews() {
@@ -102,7 +100,7 @@ class MediaPlayerActivity : AppCompatActivity(), Converter {
         }
 
         playButton.setOnClickListener {
-            mediaPlayer.playbackControl()
+            MediaPlayer.playbackControl()
 
             playButtonControl()
             timerControl()
@@ -110,7 +108,7 @@ class MediaPlayerActivity : AppCompatActivity(), Converter {
     }
 
     private fun playButtonControl() {
-        if (mediaPlayer.playerState == PlayerState.PLAYING) {
+        if (MediaPlayer.playerState == MediaPlayer.State.PLAYING) {
             playButton.setImageResource(R.drawable.player_pause_button_100)
         } else {
             playButton.setImageResource(R.drawable.player_play_button_100)
@@ -121,9 +119,9 @@ class MediaPlayerActivity : AppCompatActivity(), Converter {
         handler.postDelayed(
             object : Runnable {
                 override fun run() {
-                    if (mediaPlayer.playerState == PlayerState.PLAYING) {
-                        progressText.text = formatTime(
-                            mediaPlayer.getCurrentPosition().toLong()
+                    if (MediaPlayer.playerState == MediaPlayer.State.PLAYING) {
+                        progressText.text = Converter.formatTime(
+                            MediaPlayer.getCurrentPosition().toLong()
                         )
                         
                         handler.postDelayed(
@@ -133,8 +131,8 @@ class MediaPlayerActivity : AppCompatActivity(), Converter {
                     } else {
                         handler.removeCallbacks(this)
 
-                        if (mediaPlayer.playerState == PlayerState.PREPARED) {
-                            progressText.text = formatTime(0L)
+                        if (MediaPlayer.playerState == MediaPlayer.State.PREPARED) {
+                            progressText.text = Converter.formatTime(0L)
                             playButtonControl()
                         }
                     }
@@ -152,7 +150,7 @@ class MediaPlayerActivity : AppCompatActivity(), Converter {
             intent.getParcelableExtra(CURRENT_TRACK_TAG)
         })!!
 
-        mediaPlayer.preparePlayer(currentTrack.previewUrl)
+        MediaPlayer.preparePlayer(currentTrack.previewUrl)
         playButton.setImageResource(R.drawable.player_play_button_100)
 
         Glide.with(playerMain.context)
@@ -163,7 +161,7 @@ class MediaPlayerActivity : AppCompatActivity(), Converter {
             .fitCenter()
             .transform(
                 RoundedCorners(
-                    dpToPx(8.0f, playerMain)
+                    Converter.dpToPx(8.0f, playerMain)
                 )
             )
             .into(albumImage)
@@ -171,9 +169,9 @@ class MediaPlayerActivity : AppCompatActivity(), Converter {
         titleText.text = currentTrack.trackName
         artistNameText.text = currentTrack.artistName
 
-        progressText.text = formatTime(0L)
+        progressText.text = Converter.formatTime(0L)
 
-        trackTimeText.text = formatTime(currentTrack.trackTime)
+        trackTimeText.text = Converter.formatTime(currentTrack.trackTime)
 
         if (currentTrack.albumName.isNullOrEmpty()) {
             trackAlbumGroup.visibility = View.GONE

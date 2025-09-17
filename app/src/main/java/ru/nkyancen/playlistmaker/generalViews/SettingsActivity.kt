@@ -8,7 +8,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.switchmaterial.SwitchMaterial
 import ru.nkyancen.playlistmaker.R
-import ru.nkyancen.playlistmaker.utils.App
+import ru.nkyancen.playlistmaker.common.App
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var backButton: MaterialToolbar
