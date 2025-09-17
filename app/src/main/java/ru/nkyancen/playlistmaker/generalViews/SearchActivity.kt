@@ -27,12 +27,6 @@ import ru.nkyancen.playlistmaker.searchResults.*
 
 
 class SearchActivity : AppCompatActivity() {
-    companion object {
-        const val SEARCH_REQUEST = "Search request"
-        const val SEARCH_STATE = "Search state"
-        const val EMPTY_TEXT = ""
-        private const val SEARCH_DEBOUNCE_DELAY = 2_000L
-    }
 
     private val searchRunnable = Runnable { searchTracks() }
     private val handler = Handler(Looper.getMainLooper())
@@ -335,6 +329,13 @@ class SearchActivity : AppCompatActivity() {
             SearchState.CLEAR -> {}
             else -> showSearchPlaceholder()
         }
+    }
+
+    companion object {
+        const val SEARCH_REQUEST = "Search request"
+        const val SEARCH_STATE = "Search state"
+        const val EMPTY_TEXT = ""
+        private const val SEARCH_DEBOUNCE_DELAY = 2_000L
     }
 
     private enum class SearchState {
