@@ -86,7 +86,6 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-
         handler.removeCallbacks(searchRunnable)
     }
 
