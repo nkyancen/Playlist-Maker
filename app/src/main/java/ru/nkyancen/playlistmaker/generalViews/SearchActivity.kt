@@ -90,6 +90,12 @@ class SearchActivity : AppCompatActivity() {
         refreshScreen()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+        handler.removeCallbacks(searchRunnable)
+    }
+
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         searchText = savedInstanceState.getString(SEARCH_REQUEST, EMPTY_TEXT)
