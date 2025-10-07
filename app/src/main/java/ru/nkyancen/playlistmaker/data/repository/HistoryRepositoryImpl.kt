@@ -28,17 +28,26 @@ class HistoryRepositoryImpl(
         )
 
         return TrackHistoryMapper().mapListToDomain(
-            gson.fromJson(history, Array<TrackHistory>::class.java).toList()
+            try {
+                gson.fromJson(history, Array<TrackHistory>::class.java).toList()
+            } catch (_: Exception) {
+                emptyList()
+            }
+
         )
     }
 
     override fun addSelectedTrackToHistory(newItem: Track) {
-        val history = gson.fromJson(
-            prefsClient.load(
-                ""
-            ),
-            Array<TrackHistory>::class.java
-        ).toMutableList()
+        val history = try {
+            gson.fromJson(
+                prefsClient.load(
+                    ""
+                ),
+                Array<TrackHistory>::class.java
+            ).toMutableList()
+        } catch (_: Exception) {
+            mutableListOf()
+        }
 
         var deletedIndex = -1
 
