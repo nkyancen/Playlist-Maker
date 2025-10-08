@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/LinearVertical"
     android:background="?attr/colorPrimary"
+    android:id="@+id/main"
     tools:context=".presentation.ui.settings.SettingsActivity">
 
 
