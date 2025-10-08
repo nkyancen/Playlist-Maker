@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:background="?attr/colorPrimary"
     android:orientation="vertical"
-    tools:context=".generalViews.MediaPlayerActivity">
+    android:id="@+id/main"
+    tools:context=".presentation.ui.player.MediaPlayerActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/playerHeader"
