@@ -1,5 +1,4 @@
-package ru.nkyancen.playlistmaker.data.sources
-
+package ru.nkyancen.playlistmaker.data.sources.remote
 
 import ru.nkyancen.playlistmaker.data.model.Request
 import ru.nkyancen.playlistmaker.data.model.Response

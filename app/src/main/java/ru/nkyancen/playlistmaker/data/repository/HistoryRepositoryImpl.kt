@@ -3,7 +3,7 @@ package ru.nkyancen.playlistmaker.data.repository
 import com.google.gson.Gson
 import ru.nkyancen.playlistmaker.data.mappers.TrackHistoryMapper
 import ru.nkyancen.playlistmaker.data.model.TrackHistory
-import ru.nkyancen.playlistmaker.data.sources.LocalPrefsClient
+import ru.nkyancen.playlistmaker.data.sources.local.prefs.LocalPrefsClient
 import ru.nkyancen.playlistmaker.domain.models.Track
 import ru.nkyancen.playlistmaker.domain.repository.track.HistoryRepository
 
@@ -80,4 +80,3 @@ class HistoryRepositoryImpl(
         const val HISTORY_LIMIT = 10
     }
 }
-

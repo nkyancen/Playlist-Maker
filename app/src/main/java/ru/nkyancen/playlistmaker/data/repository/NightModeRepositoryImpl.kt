@@ -3,7 +3,7 @@ package ru.nkyancen.playlistmaker.data.repository
 import android.content.Context
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
-import ru.nkyancen.playlistmaker.data.sources.LocalPrefsClient
+import ru.nkyancen.playlistmaker.data.sources.local.prefs.LocalPrefsClient
 import ru.nkyancen.playlistmaker.domain.repository.night_mode.NightModeRepository
 
 class NightModeRepositoryImpl(

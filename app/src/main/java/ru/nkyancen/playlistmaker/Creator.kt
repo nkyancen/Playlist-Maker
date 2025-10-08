@@ -4,12 +4,14 @@ import android.app.Application
 import android.content.Context
 import android.media.MediaPlayer
 import com.google.gson.Gson
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import ru.nkyancen.playlistmaker.data.repository.HistoryRepositoryImpl
 import ru.nkyancen.playlistmaker.data.repository.MediaPlayerRepositoryImpl
 import ru.nkyancen.playlistmaker.data.repository.NightModeRepositoryImpl
 import ru.nkyancen.playlistmaker.data.repository.TrackRepositoryImpl
-import ru.nkyancen.playlistmaker.data.sources.LocalPrefsClient
-import ru.nkyancen.playlistmaker.data.sources.RemoteClient
+import ru.nkyancen.playlistmaker.data.sources.local.prefs.LocalPrefsClient
+import ru.nkyancen.playlistmaker.data.sources.remote.RemoteClient
 import ru.nkyancen.playlistmaker.data.sources.local.prefs.HistoryPrefsClient
 import ru.nkyancen.playlistmaker.data.sources.local.prefs.NightModePrefsClient
 import ru.nkyancen.playlistmaker.data.sources.remote.RetrofitClient
@@ -24,6 +26,8 @@ import ru.nkyancen.playlistmaker.domain.use_case.NightModeInteractorImpl
 import ru.nkyancen.playlistmaker.domain.use_case.TrackInteractorImpl
 
 object Creator {
+    private const val SEARCH_TUNES_BASE_URL = "https://itunes.apple.com/"
+
     private lateinit var application: Application
 
     fun initApplication(application: Application) {
@@ -56,8 +60,12 @@ object Creator {
     fun providePlayerInteractor(): MediaPlayerInteractor =
         MediaPlayerInteractorImpl(getMediaPlayerRepository())
 
+    private fun createRetrofit(): Retrofit = Retrofit.Builder()
+        .baseUrl(SEARCH_TUNES_BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
 
-    private fun getRemoteClient(): RemoteClient = RetrofitClient
+    private fun getRemoteClient(): RemoteClient = RetrofitClient(createRetrofit())
 
     private fun getTrackRepository(): TrackRepository =
         TrackRepositoryImpl(getRemoteClient())
