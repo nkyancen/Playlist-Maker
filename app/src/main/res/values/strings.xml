@@ -9,15 +9,15 @@
     <string name="user_agreement">Пользовательское соглашение</string>
     <string name="back">Назад</string>
     <!--  Ссылка на курс  -->
-    <string name="share_text">https://practicum.yandex.ru/android-developer/</string>
+    <string name="share_text_url">https://practicum.yandex.ru/android-developer/</string>
     <!--  Письмо в поддержку  -->
-    <string-array name="email">
+    <string-array name="email_list">
         <item>nkyancen@yandex.ru</item>
     </string-array>
     <string name="mail_title">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="mail_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <!--  Ссылка на оферту  -->
-    <string name="oferta_url">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="offer_url">https://yandex.ru/legal/practicum_offer/</string>
     <!--  Плейсхолдер экрана поиска -->
     <string name="search_nothing_found">Ничего не нашлось</string>
     <string name="search_without_internet">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>

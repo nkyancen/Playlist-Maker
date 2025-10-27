@@ -2,10 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     style="@style/LinearVertical"
     android:background="?attr/colorSecondary"
-    tools:context=".presentation.ui.MainActivity">
+    tools:context=".ui.main.MainActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/mainHeader"
@@ -20,19 +19,19 @@
         android:padding="16dp">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/searchButton"
+            android:id="@+id/mainSearchButton"
             style="@style/Button.Main"
             android:text="@string/search"
             app:icon="@drawable/ic_search_24" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/mediaButton"
+            android:id="@+id/mainMediaButton"
             style="@style/Button.Main"
             android:text="@string/media"
             app:icon="@drawable/ic_media_24" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/settingsButton"
+            android:id="@+id/mainSettingsButton"
             style="@style/Button.Main"
             android:text="@string/settings"
             app:icon="@drawable/ic_settings_24" />
