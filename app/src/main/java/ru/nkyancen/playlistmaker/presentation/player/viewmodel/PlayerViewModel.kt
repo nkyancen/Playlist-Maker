@@ -10,10 +10,10 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import ru.nkyancen.playlistmaker.core.creator.Creator
 import ru.nkyancen.playlistmaker.core.utils.Converter
+import ru.nkyancen.playlistmaker.domain.player.api.MediaPlayerInteractor
 import ru.nkyancen.playlistmaker.presentation.player.model.PlayerState
 
-class PlayerViewModel(private val url: String) : ViewModel() {
-    private val mediaPlayerInteractor = Creator.providePlayerInteractor()
+class PlayerViewModel(private val url: String, private val mediaPlayerInteractor: MediaPlayerInteractor) : ViewModel() {
 
     private val playerStateLiveData = MutableLiveData<PlayerState>()
     fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
@@ -89,7 +89,8 @@ class PlayerViewModel(private val url: String) : ViewModel() {
 
         fun getFactory(url: String): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                PlayerViewModel(url)
+                val playerInteractor = Creator.providePlayerInteractor()
+                PlayerViewModel(url, playerInteractor)
             }
         }
     }

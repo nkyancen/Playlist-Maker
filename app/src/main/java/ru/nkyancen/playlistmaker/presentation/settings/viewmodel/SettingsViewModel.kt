@@ -7,14 +7,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import ru.nkyancen.playlistmaker.core.creator.Creator
+import ru.nkyancen.playlistmaker.domain.settings.api.NightModeInteractor
+import ru.nkyancen.playlistmaker.domain.sharing.api.SharingInteractor
 import ru.nkyancen.playlistmaker.presentation.settings.model.ExternalActionEventState
 import ru.nkyancen.playlistmaker.presentation.settings.model.NightModeState
 
-class SettingsViewModel : ViewModel() {
-    private val sharingInteractor = Creator.provideSharingInteractor()
-
-    private val themeInteractor = Creator.provideNightModeInteractor()
-
+class SettingsViewModel(
+    private val sharingInteractor: SharingInteractor,
+    private val themeInteractor: NightModeInteractor
+) : ViewModel() {
     private val nightModeLiveData = MutableLiveData<NightModeState>()
     fun observeNightMode(): LiveData<NightModeState> = nightModeLiveData
 
@@ -47,7 +48,9 @@ class SettingsViewModel : ViewModel() {
     companion object {
         fun getFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                SettingsViewModel()
+                val sharingInteractor = Creator.provideSharingInteractor()
+                val themeInteractor = Creator.provideNightModeInteractor()
+                SettingsViewModel(sharingInteractor, themeInteractor)
             }
         }
     }
