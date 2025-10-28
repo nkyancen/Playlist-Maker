@@ -5,14 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import ru.nkyancen.playlistmaker.R
 import ru.nkyancen.playlistmaker.core.creator.Creator
@@ -110,20 +109,12 @@ class SearchActivity : AppCompatActivity() {
 
         }
 
-        val searchTextWatcher = object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {}
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.searchRequestClearIcon.visibility = setClearButtonVisibility(s)
+        binding.searchRequestEdt.doOnTextChanged { s, _, _, _ ->
+            binding.searchRequestClearIcon.visibility = setClearButtonVisibility(s)
                 searchText = s?.toString() ?: EMPTY_TEXT
                 viewModel.searchDebounce(searchText)
                 historyVisibilityChange(binding.searchRequestEdt.hasFocus(), s)
-            }
         }
-
-        binding.searchRequestEdt.addTextChangedListener(searchTextWatcher)
     }
 
     private fun onTrackClick(track: TrackItem) {

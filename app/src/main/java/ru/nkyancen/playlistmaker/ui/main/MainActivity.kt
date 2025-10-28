@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import ru.nkyancen.playlistmaker.databinding.ActivityMainBinding
-import ru.nkyancen.playlistmaker.presentation.main.model.MainState
+import ru.nkyancen.playlistmaker.presentation.main.model.MainEvent
 import ru.nkyancen.playlistmaker.presentation.main.viewmodel.MainViewModel
 import ru.nkyancen.playlistmaker.ui.medialibrary.MediaLibraryActivity
 import ru.nkyancen.playlistmaker.ui.search.SearchActivity
@@ -37,31 +37,31 @@ class MainActivity : AppCompatActivity() {
 
         binding.apply {
             mainSearchButton.setOnClickListener {
-                viewModel.setState(MainState.TransitionToSearch)
+                viewModel.transitToSearch()
             }
 
             mainMediaButton.setOnClickListener {
-                viewModel.setState(MainState.TransitionToMediaLibrary)
+                viewModel.transitToMedia()
 
             }
 
             mainSettingsButton.setOnClickListener {
-                viewModel.setState(MainState.TransitionToSettings)
+                viewModel.transitToSettings()
             }
 
         }
     }
 
-    private fun transitToActivity(state: MainState) {
+    private fun transitToActivity(state: MainEvent) {
         val targetIntent = when (state) {
-            MainState.TransitionToMediaLibrary -> Intent(
+            MainEvent.TransitionToMediaLibrary -> Intent(
                 this@MainActivity,
                 MediaLibraryActivity::class.java
             )
 
-            MainState.TransitionToSearch -> Intent(this@MainActivity, SearchActivity::class.java)
+            MainEvent.TransitionToSearch -> Intent(this@MainActivity, SearchActivity::class.java)
 
-            MainState.TransitionToSettings -> Intent(
+            MainEvent.TransitionToSettings -> Intent(
                 this@MainActivity,
                 SettingsActivity::class.java
             )

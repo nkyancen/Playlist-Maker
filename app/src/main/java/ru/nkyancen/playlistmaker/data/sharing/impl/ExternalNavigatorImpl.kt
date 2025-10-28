@@ -26,11 +26,15 @@ class ExternalNavigatorImpl(
 
     override fun openEmail() {
         val supportIntent = Intent(Intent.ACTION_SENDTO)
-        val targetEmails = appContext.resources.getStringArray(R.array.email_list).joinToString()
+        val targetEmails = appContext.resources.getStringArray(R.array.email_list)
         val title = appContext.getString(R.string.mail_title)
         val content = appContext.getString(R.string.mail_text)
 
-        supportIntent.data = "mailto: $targetEmails".toUri()
+        supportIntent.data = "mailto:".toUri()
+        supportIntent.putExtra(
+            Intent.EXTRA_EMAIL,
+            targetEmails
+        )
         supportIntent.putExtra(
             Intent.EXTRA_SUBJECT,
             title
