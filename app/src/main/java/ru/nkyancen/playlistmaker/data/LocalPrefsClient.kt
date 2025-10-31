@@ -1,4 +1,4 @@
-package ru.nkyancen.playlistmaker.data.search.sources.local.prefs
+package ru.nkyancen.playlistmaker.data
 
 interface LocalPrefsClient<T> {
     fun saveData(data: T)

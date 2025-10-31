@@ -2,6 +2,7 @@ package ru.nkyancen.playlistmaker.data.search.sources.local.prefs
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import ru.nkyancen.playlistmaker.data.LocalPrefsClient
 
 class HistoryPrefsClient(
     private val sharedPrefs: SharedPreferences,

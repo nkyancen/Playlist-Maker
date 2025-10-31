@@ -5,15 +5,14 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import ru.nkyancen.playlistmaker.core.creator.Creator
 import ru.nkyancen.playlistmaker.core.utils.Converter
+import ru.nkyancen.playlistmaker.domain.player.api.MediaPlayerInteractor
 import ru.nkyancen.playlistmaker.presentation.player.model.PlayerState
 
-class PlayerViewModel(private val url: String) : ViewModel() {
-    private val mediaPlayerInteractor = Creator.providePlayerInteractor()
+class PlayerViewModel(
+    private val previewUrl: String,
+    private val mediaPlayerInteractor: MediaPlayerInteractor
+) : ViewModel() {
 
     private val playerStateLiveData = MutableLiveData<PlayerState>()
     fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
@@ -24,8 +23,13 @@ class PlayerViewModel(private val url: String) : ViewModel() {
     private val handler = Handler(Looper.getMainLooper())
 
     init {
-        mediaPlayerInteractor.prepare(url)
+        mediaPlayerInteractor.prepare(previewUrl)
         playerStateLiveData.postValue(PlayerState.Prepared)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        mediaPlayerInteractor.release()
     }
 
     fun onPlayButtonClicked() {
@@ -46,13 +50,8 @@ class PlayerViewModel(private val url: String) : ViewModel() {
         playerStateLiveData.postValue(PlayerState.Pause)
     }
 
-    fun onPause(){
+    fun onPause() {
         pausePlayer()
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        mediaPlayerInteractor.release()
     }
 
     private fun provideTimer() {
@@ -85,12 +84,6 @@ class PlayerViewModel(private val url: String) : ViewModel() {
     }
 
     companion object {
-        const val TIMER_UPDATE_DELAY = 200L
-
-        fun getFactory(url: String): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel(url)
-            }
-        }
+        private const val TIMER_UPDATE_DELAY = 200L
     }
 }

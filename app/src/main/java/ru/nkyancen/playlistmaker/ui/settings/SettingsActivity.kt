@@ -5,7 +5,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.nkyancen.playlistmaker.R
 import ru.nkyancen.playlistmaker.databinding.ActivitySettingBinding
 import ru.nkyancen.playlistmaker.presentation.settings.model.ExternalActionEventState
@@ -14,8 +14,7 @@ import ru.nkyancen.playlistmaker.presentation.settings.viewmodel.SettingsViewMod
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingBinding
 
-
-    private lateinit var viewModel: SettingsViewModel
+    private val viewModel: SettingsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,11 +27,6 @@ class SettingsActivity : AppCompatActivity() {
             view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        viewModel = ViewModelProvider(
-            this,
-            SettingsViewModel.getFactory()
-        ).get(SettingsViewModel::class.java)
 
         viewModel.observeNightMode().observe(this) {
             setSwitcherCheck(it.isNightMode)
@@ -81,5 +75,4 @@ class SettingsActivity : AppCompatActivity() {
     fun setSwitcherCheck(enabled: Boolean) {
         binding.settingsNightModeSwitcher.isChecked = enabled
     }
-
 }
