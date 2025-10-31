@@ -5,12 +5,14 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.nkyancen.playlistmaker.core.utils.Constants.TIMER_UPDATE_DELAY
 import ru.nkyancen.playlistmaker.core.utils.Converter
 import ru.nkyancen.playlistmaker.domain.player.api.MediaPlayerInteractor
 import ru.nkyancen.playlistmaker.presentation.player.model.PlayerState
 
-class PlayerViewModel(private val previewUrl: String, private val mediaPlayerInteractor: MediaPlayerInteractor) : ViewModel() {
+class PlayerViewModel(
+    private val previewUrl: String,
+    private val mediaPlayerInteractor: MediaPlayerInteractor
+) : ViewModel() {
 
     private val playerStateLiveData = MutableLiveData<PlayerState>()
     fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
@@ -48,7 +50,7 @@ class PlayerViewModel(private val previewUrl: String, private val mediaPlayerInt
         playerStateLiveData.postValue(PlayerState.Pause)
     }
 
-    fun onPause(){
+    fun onPause() {
         pausePlayer()
     }
 
@@ -79,5 +81,9 @@ class PlayerViewModel(private val previewUrl: String, private val mediaPlayerInt
             },
             TIMER_UPDATE_DELAY
         )
+    }
+
+    companion object {
+        private const val TIMER_UPDATE_DELAY = 200L
     }
 }

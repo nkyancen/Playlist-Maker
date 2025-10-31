@@ -28,13 +28,13 @@ import ru.nkyancen.playlistmaker.domain.sharing.api.SharingInteractor
 import ru.nkyancen.playlistmaker.domain.sharing.use_case.SharingInteractorImpl
 
 val repositoryModule = module {
-    single<ExternalNavigator> {
+    factory<ExternalNavigator> {
         ExternalNavigatorImpl(androidContext())
     }
 
-    single<NightModeRepository> {
+    factory<NightModeRepository> {
         NightModeRepositoryImpl(
-            get(named("nightModePrefsClient")),
+            get(named(NIGHT_MODE_PREFS_CLIENT)),
             androidContext())
     }
 
@@ -42,23 +42,23 @@ val repositoryModule = module {
         MediaPlayerRepositoryImpl(get())
     }
 
-    single<TrackMapper<TrackHistory>>(named("historyMapper")) {
+    factory<TrackMapper<TrackHistory>>(named("historyMapper")) {
         TrackHistoryMapper()
     }
 
-    single<TrackMapper<TrackData>>(named("searchMapper")) {
+    factory<TrackMapper<TrackData>>(named("searchMapper")) {
         TrackDataMapper()
     }
 
-    single<HistoryRepository> {
+    factory<HistoryRepository> {
         HistoryRepositoryImpl(
-            get(named("historyPrefsClient")),
+            get(named(HISTORY_PREFS_CLIENT)),
             get(named("historyMapper")),
             get()
         )
     }
 
-    single<TrackSearchRepository> {
+    factory<TrackSearchRepository> {
         TrackSearchRepositoryImpl(
             get(),
             get(named("searchMapper")))
@@ -66,11 +66,11 @@ val repositoryModule = module {
 }
 
 val interactorModule = module {
-    single<SharingInteractor> {
+    factory<SharingInteractor> {
         SharingInteractorImpl(get())
     }
 
-    single<NightModeInteractor> {
+    factory<NightModeInteractor> {
         NightModeInteractorImpl(get())
     }
 
@@ -78,7 +78,7 @@ val interactorModule = module {
         MediaPlayerInteractorImpl(get())
     }
 
-    single<TrackInteractor> {
+    factory<TrackInteractor> {
         TrackInteractorImpl(get(), get())
     }
 }

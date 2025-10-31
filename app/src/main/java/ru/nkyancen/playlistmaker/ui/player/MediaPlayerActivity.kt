@@ -12,12 +12,12 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.parametersOf
 import ru.nkyancen.playlistmaker.R
-import ru.nkyancen.playlistmaker.core.utils.Constants.CURRENT_TRACK_TAG
 import ru.nkyancen.playlistmaker.core.utils.Converter
 import ru.nkyancen.playlistmaker.databinding.ActivityMediaPlayerBinding
 import ru.nkyancen.playlistmaker.presentation.player.model.PlayerState
 import ru.nkyancen.playlistmaker.presentation.player.viewmodel.PlayerViewModel
 import ru.nkyancen.playlistmaker.presentation.search.model.TrackItem
+import ru.nkyancen.playlistmaker.ui.search.SearchActivity.Companion.CURRENT_TRACK_TAG
 
 class MediaPlayerActivity : AppCompatActivity(), KoinComponent {
     private lateinit var binding: ActivityMediaPlayerBinding

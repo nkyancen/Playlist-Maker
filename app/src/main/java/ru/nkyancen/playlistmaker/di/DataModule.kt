@@ -9,9 +9,6 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.nkyancen.playlistmaker.core.utils.Constants.IS_NIGHT_MODE_TAG
-import ru.nkyancen.playlistmaker.core.utils.Constants.SEARCH_HISTORY_TAG
-import ru.nkyancen.playlistmaker.core.utils.Constants.SEARCH_TUNES_BASE_URL
 import ru.nkyancen.playlistmaker.data.LocalPrefsClient
 import ru.nkyancen.playlistmaker.data.search.sources.local.prefs.HistoryPrefsClient
 import ru.nkyancen.playlistmaker.data.search.sources.remote.RemoteClient
@@ -19,27 +16,38 @@ import ru.nkyancen.playlistmaker.data.search.sources.remote.RetrofitClient
 import ru.nkyancen.playlistmaker.data.search.sources.remote.TunesApi
 import ru.nkyancen.playlistmaker.data.settings.sources.local.prefs.NightModePrefsClient
 
+private const val NIGHT_MODE_PREFS = "nightModePrefs"
+const val NIGHT_MODE_PREFS_CLIENT = "nightModePrefsClient"
+
+private const val HISTORY_PREFS = "historyPrefs"
+const val HISTORY_PREFS_CLIENT = "historyPrefsClient"
+
+private const val SEARCH_HISTORY_TAG = "Search History"
+private const val IS_NIGHT_MODE_TAG = "Is_Night_Mode_On"
+
+private const val SEARCH_TUNES_BASE_URL = "https://itunes.apple.com/"
+
 val dataModule = module {
-    single(named("nightModePrefs")) {
+    single(named(NIGHT_MODE_PREFS)) {
         androidContext().getSharedPreferences(
             IS_NIGHT_MODE_TAG,
             Context.MODE_PRIVATE
         )
     }
 
-    single(named("historyPrefs")) {
+    single(named(HISTORY_PREFS)) {
         androidContext().getSharedPreferences(
             SEARCH_HISTORY_TAG,
             Context.MODE_PRIVATE
         )
     }
 
-    single<LocalPrefsClient<Boolean>>(named("nightModePrefsClient")) {
-        NightModePrefsClient(get(named("nightModePrefs")), IS_NIGHT_MODE_TAG)
+    single<LocalPrefsClient<Boolean>>(named(NIGHT_MODE_PREFS_CLIENT)) {
+        NightModePrefsClient(get(named(NIGHT_MODE_PREFS)), IS_NIGHT_MODE_TAG)
     }
 
-    single<LocalPrefsClient<String>>(named("historyPrefsClient")) {
-        HistoryPrefsClient(get(named("historyPrefs")),SEARCH_HISTORY_TAG)
+    single<LocalPrefsClient<String>>(named(HISTORY_PREFS_CLIENT)) {
+        HistoryPrefsClient(get(named(HISTORY_PREFS)),SEARCH_HISTORY_TAG)
     }
 
     factory {

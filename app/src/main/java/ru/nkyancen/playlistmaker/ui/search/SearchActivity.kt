@@ -14,8 +14,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doOnTextChanged
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.nkyancen.playlistmaker.R
-import ru.nkyancen.playlistmaker.core.utils.Constants.CLICK_DEBOUNCE_DELAY
-import ru.nkyancen.playlistmaker.core.utils.Constants.CURRENT_TRACK_TAG
 import ru.nkyancen.playlistmaker.databinding.ActivitySearchBinding
 import ru.nkyancen.playlistmaker.presentation.search.model.TrackItem
 import ru.nkyancen.playlistmaker.presentation.search.model.TracksSearchState
@@ -110,9 +108,9 @@ class SearchActivity : AppCompatActivity() {
 
         binding.searchRequestEdt.doOnTextChanged { s, _, _, _ ->
             binding.searchRequestClearIcon.visibility = setClearButtonVisibility(s)
-                searchText = s?.toString() ?: ""
-                viewModel.searchDebounce(searchText)
-                historyVisibilityChange(binding.searchRequestEdt.hasFocus(), s)
+            searchText = s?.toString() ?: ""
+            viewModel.searchDebounce(searchText)
+            historyVisibilityChange(binding.searchRequestEdt.hasFocus(), s)
         }
     }
 
@@ -255,5 +253,10 @@ class SearchActivity : AppCompatActivity() {
             searchListRecycler.visibility = View.GONE
             searchRequestEdt.clearFocus()
         }
+    }
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 1_000L
+        const val CURRENT_TRACK_TAG = "Current Track"
     }
 }

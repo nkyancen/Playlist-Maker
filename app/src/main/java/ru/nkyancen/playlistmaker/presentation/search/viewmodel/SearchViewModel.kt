@@ -6,8 +6,6 @@ import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.nkyancen.playlistmaker.core.utils.Constants.SEARCH_DEBOUNCE_DELAY
-import ru.nkyancen.playlistmaker.core.utils.Constants.SEARCH_REQUEST_TOKEN
 import ru.nkyancen.playlistmaker.core.utils.TrackMapper
 import ru.nkyancen.playlistmaker.domain.search.api.TrackInteractor
 import ru.nkyancen.playlistmaker.domain.search.consumer.Consumer
@@ -117,5 +115,10 @@ class SearchViewModel(
     override fun onCleared() {
         super.onCleared()
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+    }
+
+    companion object{
+        private val SEARCH_REQUEST_TOKEN = Any()
+        private const val SEARCH_DEBOUNCE_DELAY = 2_000L
     }
 }
