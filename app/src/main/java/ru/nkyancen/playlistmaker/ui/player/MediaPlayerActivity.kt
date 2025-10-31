@@ -7,18 +7,19 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import org.koin.core.component.KoinComponent
+import org.koin.core.parameter.parametersOf
 import ru.nkyancen.playlistmaker.R
-import ru.nkyancen.playlistmaker.core.creator.Creator
+import ru.nkyancen.playlistmaker.core.utils.Constants.CURRENT_TRACK_TAG
 import ru.nkyancen.playlistmaker.core.utils.Converter
 import ru.nkyancen.playlistmaker.databinding.ActivityMediaPlayerBinding
 import ru.nkyancen.playlistmaker.presentation.player.model.PlayerState
 import ru.nkyancen.playlistmaker.presentation.player.viewmodel.PlayerViewModel
 import ru.nkyancen.playlistmaker.presentation.search.model.TrackItem
 
-class MediaPlayerActivity : AppCompatActivity() {
+class MediaPlayerActivity : AppCompatActivity(), KoinComponent {
     private lateinit var binding: ActivityMediaPlayerBinding
 
     private lateinit var viewModel: PlayerViewModel
@@ -35,7 +36,7 @@ class MediaPlayerActivity : AppCompatActivity() {
             insets
         }
 
-        val tag = Creator.CURRENT_TRACK_TAG
+        val tag = CURRENT_TRACK_TAG
         val currentTrack = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(tag, TrackItem::class.java)
         } else {
@@ -43,10 +44,9 @@ class MediaPlayerActivity : AppCompatActivity() {
             intent.getParcelableExtra(tag)
         }!!
 
-        viewModel =
-            ViewModelProvider.create(this, PlayerViewModel.getFactory(currentTrack.preview)).get(
-                PlayerViewModel::class.java
-            )
+        viewModel = getKoin().get {
+            parametersOf(currentTrack.preview)
+        }
 
         viewModel.observeProgressTime().observe(this) {
             binding.playerProgressTimeText.text = it

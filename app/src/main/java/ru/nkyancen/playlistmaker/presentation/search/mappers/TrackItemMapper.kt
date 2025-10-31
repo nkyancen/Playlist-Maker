@@ -1,10 +1,11 @@
 package ru.nkyancen.playlistmaker.presentation.search.mappers
 
+import ru.nkyancen.playlistmaker.core.utils.TrackMapper
 import ru.nkyancen.playlistmaker.domain.search.models.Track
 import ru.nkyancen.playlistmaker.presentation.search.model.TrackItem
 
-class TrackItemMapper {
-    fun mapToItem(model: Track) = TrackItem(
+class TrackItemMapper: TrackMapper<TrackItem> {
+    override fun mapFromDomain(model: Track) = TrackItem(
         id = model.id,
         trackName = model.trackName,
         artistName = model.artistName,
@@ -17,24 +18,16 @@ class TrackItemMapper {
         preview = model.preview
     )
 
-    fun mapListToItem(models: List<Track>) = models.map {
-        mapToItem(it)
-    }
-
-    fun mapToDomain(item: TrackItem) = Track(
-        id = item.id,
-        trackName = item.trackName,
-        artistName = item.artistName,
-        trackTime = item.trackTime,
-        albumPoster = item.albumPoster,
-        albumName = item.albumName,
-        releaseYear = item.releaseYear,
-        genre = item.genre,
-        country = item.country,
-        preview = item.preview
+    override fun mapToDomain(dto: TrackItem) = Track(
+        id = dto.id,
+        trackName = dto.trackName,
+        artistName = dto.artistName,
+        trackTime = dto.trackTime,
+        albumPoster = dto.albumPoster,
+        albumName = dto.albumName,
+        releaseYear = dto.releaseYear,
+        genre = dto.genre,
+        country = dto.country,
+        preview = dto.preview
     )
-
-    fun mapListToDomain(items: List<TrackItem>) = items.map {
-        mapToDomain(it)
-    }
 }

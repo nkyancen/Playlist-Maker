@@ -6,27 +6,28 @@ import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import ru.nkyancen.playlistmaker.core.creator.Creator
+import ru.nkyancen.playlistmaker.core.utils.Constants.SEARCH_DEBOUNCE_DELAY
+import ru.nkyancen.playlistmaker.core.utils.Constants.SEARCH_REQUEST_TOKEN
+import ru.nkyancen.playlistmaker.core.utils.TrackMapper
 import ru.nkyancen.playlistmaker.domain.search.api.TrackInteractor
 import ru.nkyancen.playlistmaker.domain.search.consumer.Consumer
 import ru.nkyancen.playlistmaker.domain.search.models.Resource
 import ru.nkyancen.playlistmaker.domain.search.models.Track
-import ru.nkyancen.playlistmaker.presentation.search.mappers.TrackItemMapper
 import ru.nkyancen.playlistmaker.presentation.search.model.TrackItem
 import ru.nkyancen.playlistmaker.presentation.search.model.TracksSearchState
 
-class SearchViewModel(private val trackInteractor: TrackInteractor) : ViewModel() {
+class SearchViewModel(
+    private val trackInteractor: TrackInteractor,
+    private val itemMapper: TrackMapper<TrackItem>
+) : ViewModel() {
 
     private val handler = Handler(Looper.getMainLooper())
 
-    private val itemMapper = TrackItemMapper()
-
     private var latestSearchText: String? = null
 
-    private val searchStateLiveData = MutableLiveData<TracksSearchState>(TracksSearchState.Default(false))
+    private val searchStateLiveData =
+        MutableLiveData<TracksSearchState>(TracksSearchState.Default(false))
+
     fun observeSearchState(): LiveData<TracksSearchState> = searchStateLiveData
 
 
@@ -66,7 +67,7 @@ class SearchViewModel(private val trackInteractor: TrackInteractor) : ViewModel(
                                 } else {
                                     renderState(
                                         TracksSearchState.ShowContent(
-                                            itemMapper.mapListToItem(tracksResponse.data)
+                                            itemMapper.mapListFromDomain(tracksResponse.data)
                                         )
                                     )
                                 }
@@ -92,7 +93,7 @@ class SearchViewModel(private val trackInteractor: TrackInteractor) : ViewModel(
         )
     }
 
-    private fun loadHistory(): List<TrackItem> = itemMapper.mapListToItem(
+    private fun loadHistory(): List<TrackItem> = itemMapper.mapListFromDomain(
         trackInteractor.loadHistoryOfPlayedTracks()
     )
 
@@ -104,7 +105,7 @@ class SearchViewModel(private val trackInteractor: TrackInteractor) : ViewModel(
     }
 
     fun addToHistory(item: TrackItem) {
-       trackInteractor.addSelectedTrackToHistory(
+        trackInteractor.addSelectedTrackToHistory(
             itemMapper.mapToDomain(item)
         )
     }
@@ -116,17 +117,5 @@ class SearchViewModel(private val trackInteractor: TrackInteractor) : ViewModel(
     override fun onCleared() {
         super.onCleared()
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-    }
-
-    companion object {
-        const val SEARCH_DEBOUNCE_DELAY = 2_000L
-        val SEARCH_REQUEST_TOKEN = Any()
-
-        fun getFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val trackInteractor = Creator.provideTrackInteractor()
-                SearchViewModel(trackInteractor)
-            }
-        }
     }
 }

@@ -1,31 +1,30 @@
 package ru.nkyancen.playlistmaker.data.search.impl
 
 import com.google.gson.Gson
+import ru.nkyancen.playlistmaker.core.utils.TrackMapper
+import ru.nkyancen.playlistmaker.data.LocalPrefsClient
 import ru.nkyancen.playlistmaker.data.search.dto.TrackHistory
-import ru.nkyancen.playlistmaker.data.search.mappers.TrackHistoryMapper
-import ru.nkyancen.playlistmaker.data.search.sources.local.prefs.LocalPrefsClient
 import ru.nkyancen.playlistmaker.domain.search.api.HistoryRepository
 import ru.nkyancen.playlistmaker.domain.search.models.Track
 
 class HistoryRepositoryImpl(
-    private val prefsClient: LocalPrefsClient<String>,
+    private val historyPrefsClient: LocalPrefsClient<String>,
+    private val historyMapper: TrackMapper<TrackHistory>,
     private val gson: Gson
 ) : HistoryRepository {
 
-    val mapper = TrackHistoryMapper()
-
     override fun clearTracksHistory() {
-        prefsClient.saveData(
+        historyPrefsClient.saveData(
             ""
         )
     }
 
     override fun loadTracksFromHistory(): List<Track> {
-        val history = prefsClient.loadData(
+        val history = historyPrefsClient.loadData(
             ""
         )
 
-        return mapper.mapListToDomain(
+        return historyMapper.mapListToDomain(
             try {
                 gson.fromJson(history, Array<TrackHistory>::class.java).toList()
             } catch (_: Exception) {
@@ -37,7 +36,7 @@ class HistoryRepositoryImpl(
     override fun addSelectedTrackToHistory(newItem: Track) {
         val history = try {
             gson.fromJson(
-                prefsClient.loadData(
+                historyPrefsClient.loadData(
                     ""
                 ),
                 Array<TrackHistory>::class.java
@@ -63,10 +62,10 @@ class HistoryRepositoryImpl(
         }
 
         if (deletedIndex != 0) {
-            history.add(0, mapper.mapToHistory(newItem))
+            history.add(0, historyMapper.mapFromDomain(newItem))
         }
 
-        prefsClient.saveData(
+        historyPrefsClient.saveData(
             gson.toJson(
                 history.toList()
             )

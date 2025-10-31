@@ -12,9 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.ViewModelProvider
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.nkyancen.playlistmaker.R
-import ru.nkyancen.playlistmaker.core.creator.Creator
+import ru.nkyancen.playlistmaker.core.utils.Constants.CLICK_DEBOUNCE_DELAY
+import ru.nkyancen.playlistmaker.core.utils.Constants.CURRENT_TRACK_TAG
 import ru.nkyancen.playlistmaker.databinding.ActivitySearchBinding
 import ru.nkyancen.playlistmaker.presentation.search.model.TrackItem
 import ru.nkyancen.playlistmaker.presentation.search.model.TracksSearchState
@@ -25,14 +26,14 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
     private val handler = Handler(Looper.getMainLooper())
 
-    private var searchText: String = EMPTY_TEXT
+    private var searchText = ""
 
     private lateinit var searchAdapter: SearchViewAdapter
     private lateinit var historyAdapter: SearchViewAdapter
 
     private var isClickAllowed = true
 
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel: SearchViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,8 +47,6 @@ class SearchActivity : AppCompatActivity() {
             insets
         }
 
-        viewModel = ViewModelProvider.create(this, SearchViewModel.getFactory())
-            .get(SearchViewModel::class.java)
         viewModel.observeSearchState().observe(this) {
             render(it)
         }
@@ -111,7 +110,7 @@ class SearchActivity : AppCompatActivity() {
 
         binding.searchRequestEdt.doOnTextChanged { s, _, _, _ ->
             binding.searchRequestClearIcon.visibility = setClearButtonVisibility(s)
-                searchText = s?.toString() ?: EMPTY_TEXT
+                searchText = s?.toString() ?: ""
                 viewModel.searchDebounce(searchText)
                 historyVisibilityChange(binding.searchRequestEdt.hasFocus(), s)
         }
@@ -120,7 +119,7 @@ class SearchActivity : AppCompatActivity() {
     private fun onTrackClick(track: TrackItem) {
         if (clickDebounce()) {
             val targetIntent = Intent(this, MediaPlayerActivity::class.java)
-            targetIntent.putExtra(Creator.CURRENT_TRACK_TAG, track)
+            targetIntent.putExtra(CURRENT_TRACK_TAG, track)
 
             viewModel.addToHistory(track)
             startActivity(targetIntent)
@@ -161,7 +160,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun clearSearchQuery() {
-        binding.searchRequestEdt.setText(EMPTY_TEXT)
+        binding.searchRequestEdt.setText("")
         hideKeyboard()
         binding.searchRequestEdt.requestFocus()
         viewModel.clearSearchQuery()
@@ -256,11 +255,5 @@ class SearchActivity : AppCompatActivity() {
             searchListRecycler.visibility = View.GONE
             searchRequestEdt.clearFocus()
         }
-    }
-
-    companion object {
-        const val EMPTY_TEXT = ""
-
-        const val CLICK_DEBOUNCE_DELAY = 1_000L
     }
 }

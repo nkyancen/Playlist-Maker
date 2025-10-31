@@ -1,7 +1,8 @@
-package ru.nkyancen.playlistmaker.data.search.sources.local.prefs
+package ru.nkyancen.playlistmaker.data.settings.sources.local.prefs
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import ru.nkyancen.playlistmaker.data.LocalPrefsClient
 
 class NightModePrefsClient(
     private val sharedPrefs: SharedPreferences,
