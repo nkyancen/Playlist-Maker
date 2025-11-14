@@ -35,4 +35,9 @@
     <string name="player_add_button_description">Add to playlist</string>
     <string name="player_favorites_button_description">Add to favorites</string>
     <string name="player_album_image_description">Album Image</string>
+    <string name="favorites_empty">Ваша медиатека пуста</string>
+    <string name="new_playlist">Новый плейлист</string>
+    <string name="no_playlists">Вы не создали\nни одного плейлиста</string>
+    <string name="favorites">Избранные треки</string>
+    <string name="playlists">Плейлисты</string>
 </resources>
