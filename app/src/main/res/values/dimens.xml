@@ -3,12 +3,13 @@
     <dimen name="settings_text_size">16sp</dimen>
     <dimen name="search_text_size">16sp</dimen>
     <dimen name="search_secondary_text_size">11sp</dimen>
-    <dimen name="search_errors_text_size">19sp</dimen>
-    <dimen name="search_errors_button_text_size">14sp</dimen>
+    <dimen name="placeholder_text_size">19sp</dimen>
+    <dimen name="placeholder_button_text_size">14sp</dimen>
     <dimen name="header_text_size">22sp</dimen>
     <dimen name="player_text_size">22sp</dimen>
     <dimen name="player_secondary_text_size">14sp</dimen>
     <dimen name="player_additional_text_size">13sp</dimen>
+    <dimen name="tabs_text_size">14sp</dimen>
 <!--    -->
     <dimen name="corner_radius">16dp</dimen>
     <dimen name="main_icon_padding">8dp</dimen>
@@ -29,12 +30,16 @@
     <dimen name="track_forward_size">24dp</dimen>
     <dimen name="track_margin_end">12dp</dimen>
 
-    <dimen name="search_placeholder_margin_horizontal">24dp</dimen>
     <dimen name="search_placeholder_margin_top">102dp</dimen>
-    <dimen name="search_placeholder_image_size">120dp</dimen>
-    <dimen name="search_placeholder_button_padding_horizontal">14dp</dimen>
-    <dimen name="search_placeholder_button_padding_vertical">10dp</dimen>
-    <dimen name="search_placeholder_button_corner_radius">54dp</dimen>
+
+    <dimen name="placeholder_image_margin_top">106dp</dimen>
+    <dimen name="placeholder_playlist_button_margin_top">24dp</dimen>
+
+    <dimen name="placeholder_margin_horizontal">24dp</dimen>
+    <dimen name="placeholder_image_size">120dp</dimen>
+    <dimen name="placeholder_button_padding_horizontal">14dp</dimen>
+    <dimen name="placeholder_button_padding_vertical">10dp</dimen>
+    <dimen name="placeholder_button_corner_radius">54dp</dimen>
 
     <dimen name="search_history_margin_top">24dp</dimen>
     <dimen name="search_history_title_padding_top">18dp</dimen>
@@ -49,4 +54,7 @@
     <dimen name="player_play_button_vertical_margin">30dp</dimen>
     <dimen name="player_play_button_size">100dp</dimen>
     <dimen name="search_progressbar_size">44dp</dimen>
+
+    <dimen name="tabs_padding_horizontal">16dp</dimen>
+    <dimen name="tabs_height">48dp</dimen>
 </resources>

@@ -74,37 +74,37 @@
 
         <LinearLayout
             android:id="@+id/searchPlaceholder"
-            style="@style/LinearVertical.SearchPlaceholder"
-            android:layout_marginHorizontal="@dimen/search_placeholder_margin_horizontal"
+            style="@style/LinearVertical.Placeholder"
+            android:layout_marginHorizontal="@dimen/placeholder_margin_horizontal"
             android:layout_marginTop="@dimen/search_placeholder_margin_top">
 
             <ImageView
                 android:id="@+id/searchPlaceholderImage"
-                android:layout_width="@dimen/search_placeholder_image_size"
-                android:layout_height="@dimen/search_placeholder_image_size"
+                android:layout_width="@dimen/placeholder_image_size"
+                android:layout_height="@dimen/placeholder_image_size"
                 android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/search"
                 android:src="@drawable/ic_placeholder_without_internet_120" />
 
             <TextView
                 android:id="@+id/searchPlaceholderText"
-                style="@style/TextViewPlaceholderSearch"
+                style="@style/TextViewPlaceholder"
                 android:layout_marginTop="@dimen/search_results_margin_top" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/searchPlaceholderButton"
-                style="@style/ButtonPlaceholderSearch"
+                style="@style/ButtonPlaceholder"
                 android:text="@string/search_refresh" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/searchHistoryLayout"
-            style="@style/LinearVertical.SearchPlaceholder"
+            style="@style/LinearVertical.Placeholder"
             android:layout_marginTop="@dimen/search_history_margin_top"
             android:visibility="gone">
 
             <TextView
-                style="@style/TextViewPlaceholderSearch"
+                style="@style/TextViewHistory"
                 android:paddingHorizontal="@dimen/search_history_title_padding_horizontal"
                 android:paddingTop="@dimen/search_history_title_padding_top"
                 android:paddingBottom="@dimen/search_history_title_padding_bottom"
@@ -117,7 +117,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/searchHistoryClearButton"
-                style="@style/ButtonPlaceholderSearch"
+                style="@style/ButtonPlaceholder"
                 android:text="@string/search_history_clear"/>
         </LinearLayout>
 
