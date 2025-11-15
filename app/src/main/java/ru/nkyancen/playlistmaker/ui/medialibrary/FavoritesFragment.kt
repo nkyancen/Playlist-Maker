@@ -33,8 +33,8 @@ class FavoritesFragment : Fragment() {
         }
     }
 
-    override fun onDetach() {
-        super.onDetach()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 

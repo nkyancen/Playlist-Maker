@@ -34,8 +34,8 @@ class PlaylistsFragment: Fragment() {
         }
     }
 
-    override fun onDetach() {
-        super.onDetach()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 
