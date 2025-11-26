@@ -50,7 +50,6 @@ class PlaylistsFragment: Fragment() {
             mediaPlaylistsList.visibility = View.GONE
             mediaPlaylistsPlaceHolder.visibility = View.VISIBLE
         }
-
     }
 
     companion object{

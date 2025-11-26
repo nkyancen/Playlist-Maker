@@ -1,7 +1,6 @@
 package ru.nkyancen.playlistmaker.ui
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -39,11 +38,7 @@ class RootActivity : AppCompatActivity() {
         binding.rootBottomNavMenu.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.mediaPlayerFragment ->
-                    binding.rootBottomNavMenu.visibility = View.GONE
-                else -> binding.rootBottomNavMenu.visibility = View.VISIBLE
-            }
+            binding.rootBottomNavMenu.isVisible = destination.id != R.id.mediaPlayerFragment
         }
     }
 }
