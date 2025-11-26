@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ru.nkyancen.playlistmaker.databinding.FragmentMediaFavoritesBinding
+import ru.nkyancen.playlistmaker.databinding.FragmentMediaLibraryFavoritesTabBinding
 import ru.nkyancen.playlistmaker.presentation.medialibrary.model.FavoritesState
 import ru.nkyancen.playlistmaker.presentation.medialibrary.viewmodel.FavoritesViewModel
 
 class FavoritesFragment : Fragment() {
-    private var _binding: FragmentMediaFavoritesBinding? = null
+    private var _binding: FragmentMediaLibraryFavoritesTabBinding? = null
     private val binding get() = _binding!!
 
     private val favoritesViewModel : FavoritesViewModel by viewModel()
@@ -21,7 +21,7 @@ class FavoritesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMediaFavoritesBinding.inflate(inflater, container, false)
+        _binding = FragmentMediaLibraryFavoritesTabBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -50,7 +50,6 @@ class FavoritesFragment : Fragment() {
             mediaFavoritesPlaceHolder.visibility = View.VISIBLE
         }
     }
-
 
     companion object {
         fun newInstance() = FavoritesFragment()

@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     android:background="?attr/colorPrimary"
     android:orientation="vertical"
-    tools:context=".ui.search.SearchActivity">
+    tools:context=".ui.search.SearchFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/searchHeader"
-        style="@style/ToolBar.General"
+        style="@style/ToolBar"
         app:title="@string/search" />
 
     <FrameLayout
@@ -70,7 +70,8 @@
             android:id="@+id/searchListRecycler"
             style="@style/SearchRecyclerView"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/search_results_margin_top" />
+            android:layout_marginTop="@dimen/search_results_margin_top"
+            tools:listitem="@layout/search_item_view"/>
 
         <LinearLayout
             android:id="@+id/searchPlaceholder"

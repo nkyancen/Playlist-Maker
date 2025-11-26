@@ -11,7 +11,7 @@ interface TrackMapper<T> {
 
     fun mapToDomain(dto: T): Track
 
-    fun mapListToDomain(dtos: List<T>) : List<Track> = dtos.map {
+    fun mapListToDomain(dtoList: List<T>) : List<Track> = dtoList.map {
         mapToDomain(it)
     }
 }

@@ -2,63 +2,64 @@ package ru.nkyancen.playlistmaker.ui.player
 
 import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.parametersOf
 import ru.nkyancen.playlistmaker.R
 import ru.nkyancen.playlistmaker.core.utils.Converter
-import ru.nkyancen.playlistmaker.databinding.ActivityMediaPlayerBinding
+import ru.nkyancen.playlistmaker.databinding.FragmentMediaPlayerBinding
 import ru.nkyancen.playlistmaker.presentation.player.model.PlayerState
 import ru.nkyancen.playlistmaker.presentation.player.viewmodel.PlayerViewModel
 import ru.nkyancen.playlistmaker.presentation.search.model.TrackItem
-import ru.nkyancen.playlistmaker.ui.search.SearchActivity.Companion.CURRENT_TRACK_TAG
 
-class MediaPlayerActivity : AppCompatActivity(), KoinComponent {
-    private lateinit var binding: ActivityMediaPlayerBinding
+class MediaPlayerFragment : Fragment(), KoinComponent {
+    private var _binding: FragmentMediaPlayerBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var viewModel: PlayerViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentMediaPlayerBinding.inflate(inflater, container, false)
 
-        binding = ActivityMediaPlayerBinding.inflate(layoutInflater)
-        enableEdgeToEdge()
-        setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        return binding.root
+    }
 
-        val tag = CURRENT_TRACK_TAG
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         val currentTrack = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra(tag, TrackItem::class.java)
+            arguments?.getParcelable(CURRENT_TRACK_TAG, TrackItem::class.java)
         } else {
             @Suppress("DEPRECATION")
-            intent.getParcelableExtra(tag)
+            arguments?.getParcelable(CURRENT_TRACK_TAG)
         }!!
 
         viewModel = getKoin().get {
             parametersOf(currentTrack.preview)
         }
 
-        viewModel.observeProgressTime().observe(this) {
+        viewModel.observeProgressTime().observe(viewLifecycleOwner) {
             binding.playerProgressTimeText.text = it
         }
 
-        viewModel.observePlayerState().observe(this) {
+        viewModel.observePlayerState().observe(viewLifecycleOwner) {
             setPlayButtonImage(it == PlayerState.Play)
         }
 
-        setContentToViews(currentTrack)
-
         setClickListeners()
+
+        setContentToViews(currentTrack)
     }
 
     override fun onPause() {
@@ -66,15 +67,20 @@ class MediaPlayerActivity : AppCompatActivity(), KoinComponent {
         viewModel.onPause()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun setClickListeners() {
         binding.apply {
             playerHeader.setNavigationOnClickListener {
-                finish()
+                findNavController().navigateUp()
             }
-        }
 
-        binding.playerPlayButton.setOnClickListener {
-            viewModel.onPlayButtonClicked()
+            playerPlayButton.setOnClickListener {
+                viewModel.onPlayButtonClicked()
+            }
         }
     }
 
@@ -129,5 +135,12 @@ class MediaPlayerActivity : AppCompatActivity(), KoinComponent {
 
             playerTrackCountryText.text = currentTrack.country
         }
+    }
+
+    companion object {
+        private const val CURRENT_TRACK_TAG = "Current Track"
+
+        fun createArgs(track: TrackItem): Bundle =
+            bundleOf(CURRENT_TRACK_TAG to track)
     }
 }

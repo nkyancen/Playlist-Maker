@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.medialibrary.MediaLibraryActivity"
+    tools:context=".ui.medialibrary.MediaLibraryFragment"
     android:background="?attr/colorPrimary">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/mediaLibraryHeader"
-        style="@style/ToolBar.General"
+        style="@style/ToolBar"
         app:title="@string/media" />
 
     <com.google.android.material.tabs.TabLayout
