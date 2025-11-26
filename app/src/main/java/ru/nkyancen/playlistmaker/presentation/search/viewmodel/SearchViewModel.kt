@@ -66,6 +66,7 @@ class SearchViewModel(
                                     renderState(
                                         TracksSearchState.ShowContent(
                                             itemMapper.mapListFromDomain(tracksResponse.data)
+                                                .filter { it.preview.isNotEmpty() }
                                         )
                                     )
                                 }
@@ -91,7 +92,7 @@ class SearchViewModel(
         )
     }
 
-    private fun loadHistory(): List<TrackItem> = itemMapper.mapListFromDomain(
+    fun loadHistory(): List<TrackItem> = itemMapper.mapListFromDomain(
         trackInteractor.loadHistoryOfPlayedTracks()
     )
 
@@ -117,7 +118,7 @@ class SearchViewModel(
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
     }
 
-    companion object{
+    companion object {
         private val SEARCH_REQUEST_TOKEN = Any()
         private const val SEARCH_DEBOUNCE_DELAY = 2_000L
     }

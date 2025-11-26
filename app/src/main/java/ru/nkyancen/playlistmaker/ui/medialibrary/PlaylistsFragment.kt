@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ru.nkyancen.playlistmaker.databinding.FragmentMediaPlaylistsBinding
+import ru.nkyancen.playlistmaker.databinding.FragmentMediaLibraryPlaylistsTabBinding
 import ru.nkyancen.playlistmaker.presentation.medialibrary.model.PlaylistsState
 import ru.nkyancen.playlistmaker.presentation.medialibrary.viewmodel.PlaylistsViewModel
 
 class PlaylistsFragment: Fragment() {
-    private var _binding: FragmentMediaPlaylistsBinding? = null
+    private var _binding: FragmentMediaLibraryPlaylistsTabBinding? = null
     private val binding get() = _binding!!
 
     private val playlistsViewModel: PlaylistsViewModel by viewModel()
@@ -21,7 +21,7 @@ class PlaylistsFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMediaPlaylistsBinding.inflate(inflater, container, false)
+        _binding = FragmentMediaLibraryPlaylistsTabBinding.inflate(inflater, container, false)
 
         return binding.root
     }

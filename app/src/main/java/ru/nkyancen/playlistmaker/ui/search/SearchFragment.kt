@@ -1,27 +1,29 @@
 package ru.nkyancen.playlistmaker.ui.search
 
 import android.annotation.SuppressLint
-import android.content.Intent
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.nkyancen.playlistmaker.R
-import ru.nkyancen.playlistmaker.databinding.ActivitySearchBinding
+import ru.nkyancen.playlistmaker.databinding.FragmentSearchBinding
 import ru.nkyancen.playlistmaker.presentation.search.model.TrackItem
 import ru.nkyancen.playlistmaker.presentation.search.model.TracksSearchState
 import ru.nkyancen.playlistmaker.presentation.search.viewmodel.SearchViewModel
-import ru.nkyancen.playlistmaker.ui.player.MediaPlayerActivity
+import ru.nkyancen.playlistmaker.ui.player.MediaPlayerFragment
 
-class SearchActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySearchBinding
+class SearchFragment : Fragment() {
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
+
     private val handler = Handler(Looper.getMainLooper())
 
     private var searchText = ""
@@ -33,19 +35,20 @@ class SearchActivity : AppCompatActivity() {
 
     private val viewModel: SearchViewModel by viewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        enableEdgeToEdge()
-        setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
 
-        viewModel.observeSearchState().observe(this) {
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.observeSearchState().observe(viewLifecycleOwner) {
             render(it)
         }
 
@@ -54,11 +57,20 @@ class SearchActivity : AppCompatActivity() {
         setClickListeners()
 
         setSearchEditListeners()
+
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
-        binding.searchRequestEdt.setText(searchText)
+
+        historyAdapter.setData(viewModel.loadHistory())
+        historyAdapter.notifyDataSetChanged()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun render(state: TracksSearchState) {
@@ -82,9 +94,6 @@ class SearchActivity : AppCompatActivity() {
 
     private fun setClickListeners() {
         binding.apply {
-            searchHeader.setNavigationOnClickListener {
-                finish()
-            }
 
             searchRequestClearIcon.setOnClickListener {
                 clearSearchQuery()
@@ -103,7 +112,6 @@ class SearchActivity : AppCompatActivity() {
     private fun setSearchEditListeners() {
         binding.searchRequestEdt.setOnFocusChangeListener { _, hasFocus ->
             historyVisibilityChange(hasFocus, searchText)
-
         }
 
         binding.searchRequestEdt.doOnTextChanged { s, _, _, _ ->
@@ -115,12 +123,13 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun onTrackClick(track: TrackItem) {
-        if (clickDebounce()) {
-            val targetIntent = Intent(this, MediaPlayerActivity::class.java)
-            targetIntent.putExtra(CURRENT_TRACK_TAG, track)
-
+        if (clickDebounce() && track.preview.isNotEmpty()) {
             viewModel.addToHistory(track)
-            startActivity(targetIntent)
+
+            findNavController().navigate(
+                R.id.action_searchFragment_to_mediaPlayerFragment,
+                MediaPlayerFragment.createArgs(track)
+            )
         }
     }
 
@@ -130,7 +139,6 @@ class SearchActivity : AppCompatActivity() {
             isClickAllowed = false
             handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
         }
-
         return current
     }
 
@@ -153,7 +161,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun hideKeyboard() {
-        val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
+        val inputMethodManager =
+            requireContext().getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(binding.searchRequestEdt.windowToken, 0)
     }
 
@@ -257,6 +266,5 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 1_000L
-        const val CURRENT_TRACK_TAG = "Current Track"
     }
 }

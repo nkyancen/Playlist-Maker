@@ -1,48 +1,52 @@
 package ru.nkyancen.playlistmaker.ui.settings
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.nkyancen.playlistmaker.R
-import ru.nkyancen.playlistmaker.databinding.ActivitySettingBinding
+import ru.nkyancen.playlistmaker.databinding.FragmentSettingBinding
 import ru.nkyancen.playlistmaker.presentation.settings.model.ExternalActionEventState
 import ru.nkyancen.playlistmaker.presentation.settings.viewmodel.SettingsViewModel
 
-class SettingsActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySettingBinding
+class SettingsFragment : Fragment() {
+    private var _binding: FragmentSettingBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel: SettingsViewModel by viewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSettingBinding.inflate(inflater, container, false)
 
-        binding = ActivitySettingBinding.inflate(layoutInflater)
-        enableEdgeToEdge()
-        setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        return binding.root
+    }
 
-        viewModel.observeNightMode().observe(this) {
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        viewModel.observeNightMode().observe(viewLifecycleOwner) {
             setSwitcherCheck(it.isNightMode)
         }
 
         binding.apply {
-            settingsHeader.setNavigationOnClickListener {
-                finish()
-            }
 
             settingsNightModeSwitcher.setOnClickListener {
                 viewModel.switchNightMode(
                     binding.settingsNightModeSwitcher.isChecked
                 )
             }
-
 
             settingsShareButton.setOnClickListener {
                 viewModel.executeExternalNavigation(
@@ -55,7 +59,6 @@ class SettingsActivity : AppCompatActivity() {
                     ExternalActionEventState.Support
                 )
             }
-
 
             settingsUserAgreementButton.setOnClickListener {
                 viewModel.executeExternalNavigation(

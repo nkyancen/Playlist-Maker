@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/LinearVertical"
     android:background="?attr/colorSecondary"
-    tools:context=".ui.main.MainActivity">
+    tools:context=".ui.main.MainFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/mainHeader"
