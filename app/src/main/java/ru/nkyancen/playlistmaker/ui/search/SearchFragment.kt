@@ -123,7 +123,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun onTrackClick(track: TrackItem) {
-        if (clickDebounce() && track.preview.isNotEmpty()) {
+        if (clickDebounce()) {
             viewModel.addToHistory(track)
 
             findNavController().navigate(
