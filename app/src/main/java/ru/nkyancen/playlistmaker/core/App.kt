@@ -9,16 +9,21 @@ import ru.nkyancen.playlistmaker.di.dataModule
 import ru.nkyancen.playlistmaker.di.interactorModule
 import ru.nkyancen.playlistmaker.di.repositoryModule
 import ru.nkyancen.playlistmaker.di.viewModelModule
-import ru.nkyancen.playlistmaker.domain.settings.api.NightModeInteractor
+import ru.nkyancen.playlistmaker.settings.domain.api.NightModeInteractor
 
 class App : Application() {
-    private val themeManager : NightModeInteractor by inject()
+    private val themeManager: NightModeInteractor by inject()
 
     override fun onCreate() {
         super.onCreate()
         startKoin {
             androidContext(this@App)
-            modules(viewModelModule, repositoryModule, interactorModule, dataModule)
+            modules(
+                viewModelModule,
+                repositoryModule,
+                interactorModule,
+                dataModule
+            )
         }
 
         themeManager.setNightMode()

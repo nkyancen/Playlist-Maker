@@ -1,6 +1,6 @@
 package ru.nkyancen.playlistmaker.core.utils
 
-import ru.nkyancen.playlistmaker.domain.search.models.Track
+import ru.nkyancen.playlistmaker.search.domain.models.Track
 
 interface TrackMapper<T> {
     fun mapFromDomain(model: Track): T
