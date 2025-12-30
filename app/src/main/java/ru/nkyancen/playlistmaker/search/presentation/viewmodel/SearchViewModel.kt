@@ -1,14 +1,13 @@
 package ru.nkyancen.playlistmaker.search.presentation.viewmodel
 
-import android.os.Handler
-import android.os.Looper
-import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import ru.nkyancen.playlistmaker.core.utils.TrackMapper
+import ru.nkyancen.playlistmaker.core.utils.debounce
 import ru.nkyancen.playlistmaker.search.domain.api.TrackInteractor
-import ru.nkyancen.playlistmaker.search.domain.api.Consumer
 import ru.nkyancen.playlistmaker.search.domain.models.Resource
 import ru.nkyancen.playlistmaker.search.domain.models.Track
 import ru.nkyancen.playlistmaker.search.presentation.model.TrackItem
@@ -19,9 +18,15 @@ class SearchViewModel(
     private val itemMapper: TrackMapper<TrackItem>
 ) : ViewModel() {
 
-    private val handler = Handler(Looper.getMainLooper())
-
     private var latestSearchText: String? = null
+
+    private val movieSearchDebounce = debounce<String>(
+        SEARCH_DEBOUNCE_DELAY,
+        viewModelScope,
+        true
+    ) { changedText ->
+        searchRequest(changedText)
+    }
 
     private val searchStateLiveData =
         MutableLiveData<TracksSearchState>(TracksSearchState.Default(false))
@@ -34,18 +39,7 @@ class SearchViewModel(
             return
         }
 
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-
-        val searchRunnable = Runnable {
-            searchRequest(currentSearchText)
-        }
-
-        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
-        handler.postAtTime(
-            searchRunnable,
-            SEARCH_REQUEST_TOKEN,
-            postTime
-        )
+        movieSearchDebounce(currentSearchText)
     }
 
     fun searchRequest(searchText: String) {
@@ -53,38 +47,38 @@ class SearchViewModel(
             this.latestSearchText = searchText
             renderState(TracksSearchState.Loading)
 
-            trackInteractor.searchTracks(
-                searchText,
-                object : Consumer {
-                    override fun consume(tracksResponse: Resource<List<Track>?>) {
-
-                        handler.post {
-                            if (tracksResponse.data != null && tracksResponse.expression == searchText) {
-                                if (tracksResponse.data.isEmpty()) {
-                                    renderState(TracksSearchState.EmptyResponse)
-                                } else {
-                                    renderState(
-                                        TracksSearchState.ShowContent(
-                                            itemMapper.mapListFromDomain(tracksResponse.data)
-                                                .filter { it.preview.isNotEmpty() }
-                                        )
-                                    )
-                                }
-                            } else if (tracksResponse.data == null) {
-                                renderState(TracksSearchState.ErrorResponse)
-                            } else {
-                                handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-                            }
-                        }
+            viewModelScope.launch {
+                trackInteractor
+                    .searchTracks(searchText)
+                    .collect { response ->
+                        processResult(response, searchText)
                     }
-                }
-            )
+            }
+        }
+    }
+
+    private fun processResult(
+        response: Resource<List<Track>?>,
+        searchText: String
+    ) {
+        if (response.data != null && response.expression == searchText) {
+            if (response.data.isEmpty()) {
+                renderState(TracksSearchState.EmptyResponse)
+            } else {
+                renderState(
+                    TracksSearchState.ShowContent(
+                        itemMapper.mapListFromDomain(response.data)
+                            .filter { it.preview.isNotEmpty() }
+                    )
+                )
+            }
+        } else if (response.data == null) {
+            renderState(TracksSearchState.ErrorResponse)
         }
     }
 
 
     fun clearSearchQuery() {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
         renderState(
             TracksSearchState.Clear(
                 loadHistory()
@@ -113,13 +107,7 @@ class SearchViewModel(
         searchStateLiveData.postValue(state)
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-    }
-
     companion object {
-        private val SEARCH_REQUEST_TOKEN = Any()
         private const val SEARCH_DEBOUNCE_DELAY = 2_000L
     }
 }

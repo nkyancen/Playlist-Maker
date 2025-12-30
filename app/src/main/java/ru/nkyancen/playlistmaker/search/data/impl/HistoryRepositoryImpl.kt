@@ -1,8 +1,8 @@
 package ru.nkyancen.playlistmaker.search.data.impl
 
 import com.google.gson.Gson
-import ru.nkyancen.playlistmaker.core.utils.TrackMapper
 import ru.nkyancen.playlistmaker.core.utils.LocalPrefsClient
+import ru.nkyancen.playlistmaker.core.utils.TrackMapper
 import ru.nkyancen.playlistmaker.search.data.dto.TrackHistory
 import ru.nkyancen.playlistmaker.search.domain.api.HistoryRepository
 import ru.nkyancen.playlistmaker.search.domain.models.Track

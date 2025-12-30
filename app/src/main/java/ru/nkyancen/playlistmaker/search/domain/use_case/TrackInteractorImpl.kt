@@ -1,11 +1,11 @@
 package ru.nkyancen.playlistmaker.search.domain.use_case
 
+import kotlinx.coroutines.flow.Flow
 import ru.nkyancen.playlistmaker.search.domain.api.HistoryRepository
 import ru.nkyancen.playlistmaker.search.domain.api.TrackInteractor
 import ru.nkyancen.playlistmaker.search.domain.api.TrackSearchRepository
-import ru.nkyancen.playlistmaker.search.domain.api.Consumer
+import ru.nkyancen.playlistmaker.search.domain.models.Resource
 import ru.nkyancen.playlistmaker.search.domain.models.Track
-import java.util.concurrent.Executors
 
 class TrackInteractorImpl(
     private val trackSearchRepository: TrackSearchRepository,
@@ -21,17 +21,11 @@ class TrackInteractorImpl(
     override fun addSelectedTrackToHistory(newItem: Track) =
         historyRepository.addSelectedTrackToHistory(newItem)
 
-    private val executor = Executors.newCachedThreadPool()
-
     override fun searchTracks(
-        expression: String,
-        consumer: Consumer
-    ) {
-        executor.execute {
-            consumer.consume(
-                trackSearchRepository.searchTracks(expression)
-            )
-        }
-    }
+        expression: String
+    ): Flow<Resource<List<Track>?>> =
+        trackSearchRepository.searchTracks(expression)
 
 }
+
+

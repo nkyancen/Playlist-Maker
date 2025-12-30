@@ -5,26 +5,26 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import ru.nkyancen.playlistmaker.core.utils.TrackMapper
 import ru.nkyancen.playlistmaker.player.data.impl.MediaPlayerRepositoryImpl
+import ru.nkyancen.playlistmaker.player.domain.api.MediaPlayerInteractor
+import ru.nkyancen.playlistmaker.player.domain.api.MediaPlayerRepository
+import ru.nkyancen.playlistmaker.player.domain.use_case.MediaPlayerInteractorImpl
 import ru.nkyancen.playlistmaker.search.data.dto.TrackData
 import ru.nkyancen.playlistmaker.search.data.dto.TrackHistory
 import ru.nkyancen.playlistmaker.search.data.impl.HistoryRepositoryImpl
 import ru.nkyancen.playlistmaker.search.data.impl.TrackSearchRepositoryImpl
 import ru.nkyancen.playlistmaker.search.data.mappers.TrackDataMapper
 import ru.nkyancen.playlistmaker.search.data.mappers.TrackHistoryMapper
-import ru.nkyancen.playlistmaker.settings.data.impl.NightModeRepositoryImpl
-import ru.nkyancen.playlistmaker.settings.data.impl.ExternalNavigatorImpl
-import ru.nkyancen.playlistmaker.player.domain.api.MediaPlayerInteractor
-import ru.nkyancen.playlistmaker.player.domain.api.MediaPlayerRepository
-import ru.nkyancen.playlistmaker.player.domain.use_case.MediaPlayerInteractorImpl
 import ru.nkyancen.playlistmaker.search.domain.api.HistoryRepository
 import ru.nkyancen.playlistmaker.search.domain.api.TrackInteractor
 import ru.nkyancen.playlistmaker.search.domain.api.TrackSearchRepository
 import ru.nkyancen.playlistmaker.search.domain.use_case.TrackInteractorImpl
+import ru.nkyancen.playlistmaker.settings.data.impl.ExternalNavigatorImpl
+import ru.nkyancen.playlistmaker.settings.data.impl.NightModeRepositoryImpl
+import ru.nkyancen.playlistmaker.settings.domain.api.ExternalNavigator
 import ru.nkyancen.playlistmaker.settings.domain.api.NightModeInteractor
 import ru.nkyancen.playlistmaker.settings.domain.api.NightModeRepository
-import ru.nkyancen.playlistmaker.settings.domain.use_case.NightModeInteractorImpl
-import ru.nkyancen.playlistmaker.settings.domain.api.ExternalNavigator
 import ru.nkyancen.playlistmaker.settings.domain.api.SharingInteractor
+import ru.nkyancen.playlistmaker.settings.domain.use_case.NightModeInteractorImpl
 import ru.nkyancen.playlistmaker.settings.domain.use_case.SharingInteractorImpl
 
 val repositoryModule = module {

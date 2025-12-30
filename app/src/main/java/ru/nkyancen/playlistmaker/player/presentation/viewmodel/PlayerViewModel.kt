@@ -1,10 +1,12 @@
 package ru.nkyancen.playlistmaker.player.presentation.viewmodel
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ru.nkyancen.playlistmaker.core.utils.Converter
 import ru.nkyancen.playlistmaker.player.domain.api.MediaPlayerInteractor
 import ru.nkyancen.playlistmaker.player.presentation.model.PlayerState
@@ -17,7 +19,7 @@ class PlayerViewModel(
     private val playerStateLiveData = MutableLiveData<PlayerState>()
     fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
 
-    private val handler = Handler(Looper.getMainLooper())
+    private var timeJob: Job? = null
 
     init {
         mediaPlayerInteractor.prepare(previewUrl)
@@ -43,6 +45,7 @@ class PlayerViewModel(
 
     private fun pausePlayer() {
         mediaPlayerInteractor.pause()
+        timeJob?.cancel()
         playerStateLiveData.postValue(
             PlayerState.Pause(
                 Converter.formatTime(
@@ -57,40 +60,29 @@ class PlayerViewModel(
     }
 
     private fun provideTimer() {
-        handler.postDelayed(
-            object : Runnable {
-                override fun run() {
-                    if (mediaPlayerInteractor.isPlaying()) {
-                        playerStateLiveData.postValue(
-                            PlayerState.Play(
-                                Converter.formatTime(
-                                    mediaPlayerInteractor.getCurrentPosition().toLong()
-                                )
-                            )
+        timeJob = viewModelScope.launch {
+            while (mediaPlayerInteractor.isPlaying()) {
+                delay(TIMER_UPDATE_DELAY)
+                playerStateLiveData.postValue(
+                    PlayerState.Play(
+                        Converter.formatTime(
+                            mediaPlayerInteractor.getCurrentPosition().toLong()
                         )
+                    )
+                )
+            }
 
-                        handler.postDelayed(
-                            this,
-                            TIMER_UPDATE_DELAY
-                        )
-                    } else {
-                        handler.removeCallbacks(this)
-
-                        if (mediaPlayerInteractor.isPrepared()) {
-                            playerStateLiveData.postValue(
-                                PlayerState.Prepared(
-                                    Converter.formatTime(0L)
-                                )
-                            )
-                        }
-                    }
-                }
-            },
-            TIMER_UPDATE_DELAY
-        )
+            if (mediaPlayerInteractor.isPrepared()) {
+                playerStateLiveData.postValue(
+                    PlayerState.Pause(
+                        Converter.formatTime(0L)
+                    )
+                )
+            }
+        }
     }
 
     companion object {
-        private const val TIMER_UPDATE_DELAY = 500L
+        private const val TIMER_UPDATE_DELAY = 300L
     }
 }

@@ -3,35 +3,33 @@ package ru.nkyancen.playlistmaker.search.presentation.fragment
 import android.annotation.SuppressLint
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.nkyancen.playlistmaker.R
+import ru.nkyancen.playlistmaker.core.utils.debounce
 import ru.nkyancen.playlistmaker.databinding.FragmentSearchBinding
+import ru.nkyancen.playlistmaker.player.presentation.fragment.MediaPlayerFragment
 import ru.nkyancen.playlistmaker.search.presentation.model.TrackItem
 import ru.nkyancen.playlistmaker.search.presentation.model.TracksSearchState
 import ru.nkyancen.playlistmaker.search.presentation.viewmodel.SearchViewModel
-import ru.nkyancen.playlistmaker.player.presentation.fragment.MediaPlayerFragment
 
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
-    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var onTrackClickDebounce: (TrackItem) -> Unit
 
     private var searchText = ""
 
     private lateinit var searchAdapter: SearchViewAdapter
     private lateinit var historyAdapter: SearchViewAdapter
-
-    private var isClickAllowed = true
 
     private val viewModel: SearchViewModel by viewModel()
 
@@ -50,6 +48,19 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.observeSearchState().observe(viewLifecycleOwner) {
             render(it)
+        }
+
+        onTrackClickDebounce = debounce<TrackItem>(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { track ->
+            viewModel.addToHistory(track)
+
+            findNavController().navigate(
+                R.id.action_searchFragment_to_mediaPlayerFragment,
+                MediaPlayerFragment.createArgs(track)
+            )
         }
 
         setRecyclersAdapters()
@@ -85,10 +96,10 @@ class SearchFragment : Fragment() {
     }
 
     private fun setRecyclersAdapters() {
-        searchAdapter = SearchViewAdapter { onTrackClick(it) }
+        searchAdapter = SearchViewAdapter { onTrackClickDebounce(it) }
         binding.searchListRecycler.adapter = searchAdapter
 
-        historyAdapter = SearchViewAdapter { onTrackClick(it) }
+        historyAdapter = SearchViewAdapter { onTrackClickDebounce(it) }
         binding.searchHistoryRecycler.adapter = historyAdapter
     }
 
@@ -120,26 +131,6 @@ class SearchFragment : Fragment() {
             viewModel.searchDebounce(searchText)
             historyVisibilityChange(binding.searchRequestEdt.hasFocus(), s)
         }
-    }
-
-    private fun onTrackClick(track: TrackItem) {
-        if (clickDebounce()) {
-            viewModel.addToHistory(track)
-
-            findNavController().navigate(
-                R.id.action_searchFragment_to_mediaPlayerFragment,
-                MediaPlayerFragment.createArgs(track)
-            )
-        }
-    }
-
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
     }
 
     private fun historyVisibilityChange(hasFocus: Boolean, s: CharSequence?) {

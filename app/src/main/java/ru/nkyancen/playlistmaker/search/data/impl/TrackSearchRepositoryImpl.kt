@@ -1,5 +1,7 @@
 package ru.nkyancen.playlistmaker.search.data.impl
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import ru.nkyancen.playlistmaker.core.utils.TrackMapper
 import ru.nkyancen.playlistmaker.search.data.dto.TrackData
 import ru.nkyancen.playlistmaker.search.data.dto.TrackSearchRequest
@@ -13,10 +15,10 @@ class TrackSearchRepositoryImpl(
     private val remoteClient: RemoteClient,
     private val dataMapper: TrackMapper<TrackData>
 ) : TrackSearchRepository {
-    override fun searchTracks(expression: String): Resource<List<Track>?> {
+    override fun searchTracks(expression: String): Flow<Resource<List<Track>?>> = flow {
         val response = remoteClient.doRequest(TrackSearchRequest(expression))
 
-        return if (response.isSuccess()) {
+        emit(if (response.isSuccess()) {
             Resource(
                 expression,
                 dataMapper.mapListToDomain(
@@ -28,7 +30,7 @@ class TrackSearchRepositoryImpl(
                 expression,
                 null
             )
-        }
+        })
     }
 }
 

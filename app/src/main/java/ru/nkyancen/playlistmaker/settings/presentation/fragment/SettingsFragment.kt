@@ -41,7 +41,6 @@ class SettingsFragment : Fragment() {
         }
 
         binding.apply {
-
             settingsNightModeSwitcher.setOnClickListener {
                 viewModel.switchNightMode(
                     binding.settingsNightModeSwitcher.isChecked
