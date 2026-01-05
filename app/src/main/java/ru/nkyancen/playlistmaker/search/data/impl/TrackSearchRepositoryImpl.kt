@@ -15,22 +15,17 @@ class TrackSearchRepositoryImpl(
     private val remoteClient: RemoteClient,
     private val dataMapper: TrackMapper<TrackData>
 ) : TrackSearchRepository {
-    override fun searchTracks(expression: String): Flow<Resource<List<Track>?>> = flow {
+    override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = remoteClient.doRequest(TrackSearchRequest(expression))
 
-        emit(if (response.isSuccess()) {
+        emit(
             Resource(
                 expression,
                 dataMapper.mapListToDomain(
                     (response as TrackSearchResponse).tracks
                 )
             )
-        } else {
-            Resource(
-                expression,
-                null
-            )
-        })
+        )
     }
 }
 

@@ -5,7 +5,7 @@ import ru.nkyancen.playlistmaker.search.domain.models.Resource
 import ru.nkyancen.playlistmaker.search.domain.models.Track
 
 interface TrackInteractor {
-    fun searchTracks(expression: String): Flow<Resource<List<Track>?>>
+    fun searchTracks(expression: String): Flow<Resource<List<Track>>>
 
     fun clearTracksHistory()
 

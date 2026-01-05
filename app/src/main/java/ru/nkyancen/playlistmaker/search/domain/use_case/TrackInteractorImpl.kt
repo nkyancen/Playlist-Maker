@@ -23,7 +23,7 @@ class TrackInteractorImpl(
 
     override fun searchTracks(
         expression: String
-    ): Flow<Resource<List<Track>?>> =
+    ): Flow<Resource<List<Track>>> =
         trackSearchRepository.searchTracks(expression)
 
 }

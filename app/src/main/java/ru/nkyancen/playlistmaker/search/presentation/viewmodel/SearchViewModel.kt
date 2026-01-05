@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import ru.nkyancen.playlistmaker.core.utils.TrackMapper
 import ru.nkyancen.playlistmaker.core.utils.debounce
@@ -38,30 +39,32 @@ class SearchViewModel(
         if (latestSearchText == currentSearchText) {
             return
         }
-
-        movieSearchDebounce(currentSearchText)
+        if (currentSearchText.isNotEmpty()) {
+            this.latestSearchText = currentSearchText
+            movieSearchDebounce(currentSearchText)
+        }
     }
 
     fun searchRequest(searchText: String) {
-        if (searchText.isNotEmpty()) {
-            this.latestSearchText = searchText
-            renderState(TracksSearchState.Loading)
+        renderState(TracksSearchState.Loading)
 
-            viewModelScope.launch {
-                trackInteractor
-                    .searchTracks(searchText)
-                    .collect { response ->
-                        processResult(response, searchText)
-                    }
-            }
+        val handler = CoroutineExceptionHandler { _, _ ->
+            renderState(TracksSearchState.ErrorResponse)
+        }
+
+        viewModelScope.launch(handler) {
+            trackInteractor
+                .searchTracks(searchText)
+                .collect { response ->
+                    processResult(response)
+                }
         }
     }
 
     private fun processResult(
-        response: Resource<List<Track>?>,
-        searchText: String
+        response: Resource<List<Track>>
     ) {
-        if (response.data != null && response.expression == searchText) {
+        if (response.expression == this.latestSearchText) {
             if (response.data.isEmpty()) {
                 renderState(TracksSearchState.EmptyResponse)
             } else {
@@ -72,8 +75,6 @@ class SearchViewModel(
                     )
                 )
             }
-        } else if (response.data == null) {
-            renderState(TracksSearchState.ErrorResponse)
         }
     }
 
