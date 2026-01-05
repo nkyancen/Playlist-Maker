@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="?attr/colorPrimary"
     android:orientation="vertical"
-    tools:context=".ui.player.MediaPlayerFragment">
+    tools:context=".player.presentation.fragment.MediaPlayerFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/playerHeader"

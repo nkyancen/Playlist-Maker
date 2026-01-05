@@ -9,12 +9,12 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.nkyancen.playlistmaker.data.LocalPrefsClient
-import ru.nkyancen.playlistmaker.data.search.sources.local.prefs.HistoryPrefsClient
-import ru.nkyancen.playlistmaker.data.search.sources.remote.RemoteClient
-import ru.nkyancen.playlistmaker.data.search.sources.remote.RetrofitClient
-import ru.nkyancen.playlistmaker.data.search.sources.remote.TunesApi
-import ru.nkyancen.playlistmaker.data.settings.sources.local.prefs.NightModePrefsClient
+import ru.nkyancen.playlistmaker.core.utils.LocalPrefsClient
+import ru.nkyancen.playlistmaker.search.data.sources.local.prefs.HistoryPrefsClient
+import ru.nkyancen.playlistmaker.search.data.sources.remote.RemoteClient
+import ru.nkyancen.playlistmaker.search.data.sources.remote.RetrofitClient
+import ru.nkyancen.playlistmaker.search.data.sources.remote.TunesApi
+import ru.nkyancen.playlistmaker.settings.data.source.local.prefs.NightModePrefsClient
 
 private const val NIGHT_MODE_PREFS = "nightModePrefs"
 const val NIGHT_MODE_PREFS_CLIENT = "nightModePrefsClient"
