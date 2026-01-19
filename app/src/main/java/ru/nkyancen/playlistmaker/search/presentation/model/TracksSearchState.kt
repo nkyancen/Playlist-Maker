@@ -2,7 +2,7 @@ package ru.nkyancen.playlistmaker.search.presentation.model
 
 sealed interface TracksSearchState {
 
-    data class ShowContent(
+    data class Content(
         val tracks: List<TrackItem>
     ) : TracksSearchState
 

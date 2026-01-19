@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/mediaFavoritesPlaceHolder"
@@ -24,6 +25,7 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
+            android:id="@+id/mediaFavoritesPlaceHolderMessage"
             style="@style/TextViewPlaceholder"
             android:layout_marginTop="@dimen/search_results_margin_top"
             android:text="@string/favorites_empty"
@@ -35,8 +37,17 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mediaFavoritesList"
-        android:layout_width="match_parent"
+        style="@style/FavoritesRecyclerView"
         android:layout_height="wrap_content"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:listitem="@layout/favorites_item_view"/>
+
+    <ProgressBar
+        android:id="@+id/mediaFavoritesProgressBar"
+        android:layout_width="@dimen/search_progressbar_size"
+        android:layout_height="@dimen/search_progressbar_size"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/blue"
+        android:visibility="gone"/>
 
 </FrameLayout>

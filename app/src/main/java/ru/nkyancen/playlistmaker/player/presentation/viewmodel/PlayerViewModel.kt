@@ -8,12 +8,18 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.nkyancen.playlistmaker.core.utils.Converter
+import ru.nkyancen.playlistmaker.core.utils.TrackMapper
+import ru.nkyancen.playlistmaker.medialibrary.favorites.domain.api.FavoritesInteractor
 import ru.nkyancen.playlistmaker.player.domain.api.MediaPlayerInteractor
 import ru.nkyancen.playlistmaker.player.presentation.model.PlayerState
+import ru.nkyancen.playlistmaker.search.presentation.model.TrackItem
 
 class PlayerViewModel(
     previewUrl: String,
-    private val mediaPlayerInteractor: MediaPlayerInteractor
+    private val mediaPlayerInteractor: MediaPlayerInteractor,
+    isTrackFavorites: Boolean,
+    private val favoritesInteractor: FavoritesInteractor,
+    private val itemMapper: TrackMapper<TrackItem>
 ) : ViewModel() {
 
     private val playerStateLiveData = MutableLiveData<PlayerState>()
@@ -21,9 +27,16 @@ class PlayerViewModel(
 
     private var timeJob: Job? = null
 
+    private var isFavorites: Boolean = isTrackFavorites
+
     init {
         mediaPlayerInteractor.prepare(previewUrl)
-        playerStateLiveData.postValue(PlayerState.Prepared(Converter.formatTime(0L)))
+        playerStateLiveData.postValue(
+            PlayerState.Prepared(
+                Converter.formatTime(0L),
+                this.isFavorites
+            )
+        )
     }
 
     override fun onCleared() {
@@ -50,7 +63,8 @@ class PlayerViewModel(
             PlayerState.Pause(
                 Converter.formatTime(
                     mediaPlayerInteractor.getCurrentPosition().toLong()
-                )
+                ),
+                isFavorites
             )
         )
     }
@@ -68,7 +82,8 @@ class PlayerViewModel(
                     PlayerState.Play(
                         Converter.formatTime(
                             mediaPlayerInteractor.getCurrentPosition().toLong()
-                        )
+                        ),
+                        isFavorites
                     )
                 )
             }
@@ -76,10 +91,42 @@ class PlayerViewModel(
             if (mediaPlayerInteractor.isPrepared()) {
                 playerStateLiveData.postValue(
                     PlayerState.Pause(
-                        Converter.formatTime(0L)
+                        Converter.formatTime(0L),
+                        isFavorites
                     )
                 )
             }
+        }
+    }
+
+    fun onFavoriteButtonClicked(track: TrackItem) {
+        if (isFavorites) {
+            deleteFromFavorites(track)
+
+        } else {
+            addToFavorites(track)
+        }
+    }
+
+    fun isFavorites(): Boolean = isFavorites
+
+    private fun addToFavorites(track: TrackItem) {
+        isFavorites = true
+
+        viewModelScope.launch {
+            favoritesInteractor.insertTrackToFavorites(
+                itemMapper.mapToDomain(track)
+            )
+        }
+    }
+
+    private fun deleteFromFavorites(track: TrackItem) {
+        isFavorites = false
+
+        viewModelScope.launch {
+            favoritesInteractor.deleteTrackFromFavorites(
+                itemMapper.mapToDomain(track)
+            )
         }
     }
 

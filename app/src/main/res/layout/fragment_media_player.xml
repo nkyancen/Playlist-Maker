@@ -122,7 +122,7 @@
                 android:id="@+id/playerAddToFavorites"
                 style="@style/ImageButtonPlayer"
                 android:contentDescription="@string/player_favorites_button_description"
-                android:src="@drawable/ic_player_not_favorite_24"
+                tools:src="@drawable/ic_player_not_favorite_24"
                 app:layout_constraintBottom_toBottomOf="@id/playerPlayButton"
                 app:layout_constraintEnd_toStartOf="@id/playerEndBaseLine"
                 app:layout_constraintTop_toTopOf="@id/playerPlayButton" />

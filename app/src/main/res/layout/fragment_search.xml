@@ -113,7 +113,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/searchHistoryRecycler"
-                style="@style/SearchRecyclerView"
+                style="@style/HistoryRecyclerView"
                 android:layout_marginTop="@dimen/search_history_recycler_margin_top" />
 
             <com.google.android.material.button.MaterialButton

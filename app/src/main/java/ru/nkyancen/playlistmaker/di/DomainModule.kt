@@ -4,6 +4,12 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import ru.nkyancen.playlistmaker.core.utils.TrackMapper
+import ru.nkyancen.playlistmaker.medialibrary.favorites.data.entity.TrackEntity
+import ru.nkyancen.playlistmaker.medialibrary.favorites.data.impl.FavoritesRepositoryImpl
+import ru.nkyancen.playlistmaker.medialibrary.favorites.data.mappers.TrackEntityMapper
+import ru.nkyancen.playlistmaker.medialibrary.favorites.domain.api.FavoritesInteractor
+import ru.nkyancen.playlistmaker.medialibrary.favorites.domain.api.FavoritesRepository
+import ru.nkyancen.playlistmaker.medialibrary.favorites.domain.impl.FavoritesInteractorImpl
 import ru.nkyancen.playlistmaker.player.data.impl.MediaPlayerRepositoryImpl
 import ru.nkyancen.playlistmaker.player.domain.api.MediaPlayerInteractor
 import ru.nkyancen.playlistmaker.player.domain.api.MediaPlayerRepository
@@ -42,26 +48,39 @@ val repositoryModule = module {
         MediaPlayerRepositoryImpl(get())
     }
 
-    factory<TrackMapper<TrackHistory>>(named("historyMapper")) {
+    single<TrackMapper<TrackHistory>>(named("historyMapper")) {
         TrackHistoryMapper()
-    }
-
-    factory<TrackMapper<TrackData>>(named("searchMapper")) {
-        TrackDataMapper()
     }
 
     factory<HistoryRepository> {
         HistoryRepositoryImpl(
             get(named(HISTORY_PREFS_CLIENT)),
             get(named("historyMapper")),
+            get(),
             get()
         )
+    }
+
+    single<TrackMapper<TrackData>>(named("searchMapper")) {
+        TrackDataMapper()
     }
 
     factory<TrackSearchRepository> {
         TrackSearchRepositoryImpl(
             get(),
-            get(named("searchMapper")))
+            get(named("searchMapper")),
+            get())
+    }
+
+    single<TrackMapper<TrackEntity>>(named("entityMapper")) {
+        TrackEntityMapper()
+    }
+
+    factory<FavoritesRepository> {
+        FavoritesRepositoryImpl(
+            get(),
+            get(named("entityMapper"))
+        )
     }
 }
 
@@ -80,5 +99,9 @@ val interactorModule = module {
 
     factory<TrackInteractor> {
         TrackInteractorImpl(get(), get())
+    }
+
+    factory<FavoritesInteractor> {
+        FavoritesInteractorImpl(get())
     }
 }

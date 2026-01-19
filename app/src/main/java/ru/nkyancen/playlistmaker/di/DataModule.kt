@@ -2,6 +2,7 @@ package ru.nkyancen.playlistmaker.di
 
 import android.content.Context
 import android.media.MediaPlayer
+import androidx.room.Room
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.singleOf
@@ -10,6 +11,7 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.nkyancen.playlistmaker.core.utils.LocalPrefsClient
+import ru.nkyancen.playlistmaker.medialibrary.favorites.data.sources.local.db.AppDatabase
 import ru.nkyancen.playlistmaker.search.data.sources.local.prefs.HistoryPrefsClient
 import ru.nkyancen.playlistmaker.search.data.sources.remote.RemoteClient
 import ru.nkyancen.playlistmaker.search.data.sources.remote.RetrofitClient
@@ -66,5 +68,11 @@ val dataModule = module {
 
     single<RemoteClient> {
         RetrofitClient(get())
+    }
+
+    single {
+        Room.databaseBuilder(
+            androidContext(), AppDatabase::class.java, "database.db"
+        ).build()
     }
 }

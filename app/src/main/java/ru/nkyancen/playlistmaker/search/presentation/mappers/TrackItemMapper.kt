@@ -15,7 +15,8 @@ class TrackItemMapper: TrackMapper<TrackItem> {
         releaseYear = model.releaseYear,
         genre = model.genre,
         country = model.country,
-        preview = model.preview
+        preview = model.preview,
+        isFavorite = model.isFavorite
     )
 
     override fun mapToDomain(dto: TrackItem) = Track(
@@ -28,6 +29,7 @@ class TrackItemMapper: TrackMapper<TrackItem> {
         releaseYear = dto.releaseYear,
         genre = dto.genre,
         country = dto.country,
-        preview = dto.preview
+        preview = dto.preview,
+        isFavorite = dto.isFavorite
     )
 }

@@ -1,9 +1,9 @@
-package ru.nkyancen.playlistmaker.medialibrary.presentation.viewmodel
+package ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.nkyancen.playlistmaker.medialibrary.presentation.model.PlaylistsState
+import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.PlaylistsState
 
 class PlaylistsViewModel: ViewModel() {
 

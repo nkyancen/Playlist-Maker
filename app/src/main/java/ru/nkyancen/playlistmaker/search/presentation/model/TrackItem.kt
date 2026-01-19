@@ -14,7 +14,8 @@ data class TrackItem(
     val releaseYear: String,
     val genre: String,
     val country: String,
-    val preview: String
+    val preview: String,
+    var isFavorite: Boolean
 ) : Parcelable {
     fun getPlayerAlbumPoster() = albumPoster.replaceAfterLast('/', "512x512bb.jpg")
 }

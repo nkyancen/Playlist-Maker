@@ -1,8 +1,11 @@
 package ru.nkyancen.playlistmaker.search.data.impl
 
 import com.google.gson.Gson
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import ru.nkyancen.playlistmaker.core.utils.LocalPrefsClient
 import ru.nkyancen.playlistmaker.core.utils.TrackMapper
+import ru.nkyancen.playlistmaker.medialibrary.favorites.data.sources.local.db.AppDatabase
 import ru.nkyancen.playlistmaker.search.data.dto.TrackHistory
 import ru.nkyancen.playlistmaker.search.domain.api.HistoryRepository
 import ru.nkyancen.playlistmaker.search.domain.models.Track
@@ -10,7 +13,8 @@ import ru.nkyancen.playlistmaker.search.domain.models.Track
 class HistoryRepositoryImpl(
     private val historyPrefsClient: LocalPrefsClient<String>,
     private val historyMapper: TrackMapper<TrackHistory>,
-    private val gson: Gson
+    private val gson: Gson,
+    private val appDatabase: AppDatabase
 ) : HistoryRepository {
 
     override fun clearTracksHistory() {
@@ -19,18 +23,27 @@ class HistoryRepositoryImpl(
         )
     }
 
-    override fun loadTracksFromHistory(): List<Track> {
-        val history = historyPrefsClient.loadData(
+    override fun loadTracksFromHistory(): Flow<List<Track>> = flow {
+        val historyString = historyPrefsClient.loadData(
             ""
         )
 
-        return historyMapper.mapListToDomain(
-            try {
-                gson.fromJson(history, Array<TrackHistory>::class.java).toList()
-            } catch (_: Exception) {
-                emptyList()
+        val history = try {
+            gson.fromJson(historyString, Array<TrackHistory>::class.java).toList()
+        } catch (_: Exception) {
+            emptyList()
+        }
+
+        val tracksId = appDatabase.favoritesDao().getTracksId()
+
+        emit(
+            history.map { dto ->
+                historyMapper.mapToDomain(dto).apply {
+                    isFavorite = dto.id in tracksId
+                }
             }
         )
+
     }
 
     override fun addSelectedTrackToHistory(newItem: Track) {

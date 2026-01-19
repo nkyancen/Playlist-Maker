@@ -16,6 +16,8 @@ import ru.nkyancen.playlistmaker.R
 import ru.nkyancen.playlistmaker.core.utils.debounce
 import ru.nkyancen.playlistmaker.databinding.FragmentSearchBinding
 import ru.nkyancen.playlistmaker.player.presentation.fragment.MediaPlayerFragment
+import ru.nkyancen.playlistmaker.search.presentation.fragment.history.HistoryViewAdapter
+import ru.nkyancen.playlistmaker.search.presentation.fragment.search.SearchViewAdapter
 import ru.nkyancen.playlistmaker.search.presentation.model.TrackItem
 import ru.nkyancen.playlistmaker.search.presentation.model.TracksSearchState
 import ru.nkyancen.playlistmaker.search.presentation.viewmodel.SearchViewModel
@@ -29,7 +31,7 @@ class SearchFragment : Fragment() {
     private var searchText = ""
 
     private lateinit var searchAdapter: SearchViewAdapter
-    private lateinit var historyAdapter: SearchViewAdapter
+    private lateinit var historyAdapter: HistoryViewAdapter
 
     private val viewModel: SearchViewModel by viewModel()
 
@@ -75,8 +77,7 @@ class SearchFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        historyAdapter.setData(viewModel.loadHistory())
-        historyAdapter.notifyDataSetChanged()
+        historyVisibilityChange(binding.searchRequestEdt.hasFocus(), searchText)
     }
 
     override fun onDestroyView() {
@@ -87,7 +88,7 @@ class SearchFragment : Fragment() {
     private fun render(state: TracksSearchState) {
         when (state) {
             is TracksSearchState.Default -> showDefault(state.hasFocus)
-            is TracksSearchState.ShowContent -> showContent(state.tracks)
+            is TracksSearchState.Content -> showContent(state.tracks)
             is TracksSearchState.Clear -> clearView(state.history)
             TracksSearchState.EmptyResponse -> showEmpty()
             TracksSearchState.ErrorResponse -> showError()
@@ -99,7 +100,7 @@ class SearchFragment : Fragment() {
         searchAdapter = SearchViewAdapter { onTrackClickDebounce(it) }
         binding.searchListRecycler.adapter = searchAdapter
 
-        historyAdapter = SearchViewAdapter { onTrackClickDebounce(it) }
+        historyAdapter = HistoryViewAdapter { onTrackClickDebounce(it) }
         binding.searchHistoryRecycler.adapter = historyAdapter
     }
 
@@ -137,7 +138,7 @@ class SearchFragment : Fragment() {
         if (hasFocus
             && s?.isEmpty() == true
         ) {
-            viewModel.clearSearchQuery()
+            viewModel.loadHistory()
         } else {
             binding.searchHistoryLayout.visibility = View.GONE
         }
@@ -161,7 +162,7 @@ class SearchFragment : Fragment() {
         binding.searchRequestEdt.setText("")
         hideKeyboard()
         binding.searchRequestEdt.requestFocus()
-        viewModel.clearSearchQuery()
+        viewModel.loadHistory()
     }
 
     private fun showDefault(hasFocus: Boolean) {
