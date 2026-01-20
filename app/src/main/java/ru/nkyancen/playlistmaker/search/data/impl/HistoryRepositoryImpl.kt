@@ -5,7 +5,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.nkyancen.playlistmaker.core.utils.LocalPrefsClient
 import ru.nkyancen.playlistmaker.core.utils.TrackMapper
-import ru.nkyancen.playlistmaker.medialibrary.favorites.data.sources.local.db.AppDatabase
 import ru.nkyancen.playlistmaker.search.data.dto.TrackHistory
 import ru.nkyancen.playlistmaker.search.domain.api.HistoryRepository
 import ru.nkyancen.playlistmaker.search.domain.models.Track
@@ -13,8 +12,7 @@ import ru.nkyancen.playlistmaker.search.domain.models.Track
 class HistoryRepositoryImpl(
     private val historyPrefsClient: LocalPrefsClient<String>,
     private val historyMapper: TrackMapper<TrackHistory>,
-    private val gson: Gson,
-    private val appDatabase: AppDatabase
+    private val gson: Gson
 ) : HistoryRepository {
 
     override fun clearTracksHistory() {
@@ -34,13 +32,9 @@ class HistoryRepositoryImpl(
             emptyList()
         }
 
-        val tracksId = appDatabase.favoritesDao().getTracksId()
-
         emit(
             history.map { dto ->
-                historyMapper.mapToDomain(dto).apply {
-                    isFavorite = dto.id in tracksId
-                }
+                historyMapper.mapToDomain(dto)
             }
         )
 

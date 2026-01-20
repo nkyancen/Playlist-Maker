@@ -15,9 +15,9 @@ import ru.nkyancen.playlistmaker.player.presentation.model.PlayerState
 import ru.nkyancen.playlistmaker.search.presentation.model.TrackItem
 
 class PlayerViewModel(
+    private val trackId: Long,
     previewUrl: String,
     private val mediaPlayerInteractor: MediaPlayerInteractor,
-    isTrackFavorites: Boolean,
     private val favoritesInteractor: FavoritesInteractor,
     private val itemMapper: TrackMapper<TrackItem>
 ) : ViewModel() {
@@ -25,18 +25,26 @@ class PlayerViewModel(
     private val playerStateLiveData = MutableLiveData<PlayerState>()
     fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
 
-    private var timeJob: Job? = null
+    private val tracksId = mutableListOf<Long>()
 
-    private var isFavorites: Boolean = isTrackFavorites
+    private var timeJob: Job? = null
 
     init {
         mediaPlayerInteractor.prepare(previewUrl)
-        playerStateLiveData.postValue(
-            PlayerState.Prepared(
-                Converter.formatTime(0L),
-                this.isFavorites
+        viewModelScope.launch {
+            favoritesInteractor
+                .getFavoriteTracksId()
+                .collect {
+                    tracksId.addAll(it)
+                }
+
+            renderState(
+                PlayerState.Prepared(
+                    Converter.formatTime(0L),
+                    isFavorites()
+                )
             )
-        )
+        }
     }
 
     override fun onCleared() {
@@ -59,12 +67,12 @@ class PlayerViewModel(
     private fun pausePlayer() {
         mediaPlayerInteractor.pause()
         timeJob?.cancel()
-        playerStateLiveData.postValue(
+        renderState(
             PlayerState.Pause(
                 Converter.formatTime(
                     mediaPlayerInteractor.getCurrentPosition().toLong()
                 ),
-                isFavorites
+                isFavorites()
             )
         )
     }
@@ -78,21 +86,21 @@ class PlayerViewModel(
         timeJob = viewModelScope.launch {
             while (mediaPlayerInteractor.isPlaying()) {
                 delay(TIMER_UPDATE_DELAY)
-                playerStateLiveData.postValue(
+                renderState(
                     PlayerState.Play(
                         Converter.formatTime(
                             mediaPlayerInteractor.getCurrentPosition().toLong()
                         ),
-                        isFavorites
+                        isFavorites()
                     )
                 )
             }
 
             if (mediaPlayerInteractor.isPrepared()) {
-                playerStateLiveData.postValue(
+                renderState(
                     PlayerState.Pause(
                         Converter.formatTime(0L),
-                        isFavorites
+                        isFavorites()
                     )
                 )
             }
@@ -100,34 +108,49 @@ class PlayerViewModel(
     }
 
     fun onFavoriteButtonClicked(track: TrackItem) {
-        if (isFavorites) {
+        if (playerStateLiveData.value?.isFavorites!!) {
             deleteFromFavorites(track)
-
         } else {
             addToFavorites(track)
         }
     }
 
-    fun isFavorites(): Boolean = isFavorites
+    fun isFavorites(): Boolean = tracksId.contains(trackId)
 
     private fun addToFavorites(track: TrackItem) {
-        isFavorites = true
+        tracksId.add(trackId)
 
         viewModelScope.launch {
             favoritesInteractor.insertTrackToFavorites(
                 itemMapper.mapToDomain(track)
             )
+
+            renderState(
+                playerStateLiveData.value!!.apply {
+                    isFavorites = true
+                }
+            )
         }
     }
 
     private fun deleteFromFavorites(track: TrackItem) {
-        isFavorites = false
+        tracksId.remove(trackId)
 
         viewModelScope.launch {
             favoritesInteractor.deleteTrackFromFavorites(
                 itemMapper.mapToDomain(track)
             )
+
+            renderState(
+                playerStateLiveData.value!!.apply {
+                    isFavorites = false
+                }
+            )
         }
+    }
+
+    private fun renderState(state: PlayerState) {
+        playerStateLiveData.postValue(state)
     }
 
     companion object {

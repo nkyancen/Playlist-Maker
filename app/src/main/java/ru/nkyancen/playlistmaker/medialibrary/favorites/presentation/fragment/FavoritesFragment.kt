@@ -60,12 +60,6 @@ class FavoritesFragment : Fragment() {
         favoritesViewModel.showFavorites()
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        favoritesViewModel.showFavorites()
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

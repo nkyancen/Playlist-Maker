@@ -75,4 +75,9 @@ val dataModule = module {
             androidContext(), AppDatabase::class.java, "database.db"
         ).build()
     }
+
+    single {
+        get<AppDatabase>().favoritesDao()
+    }
+
 }

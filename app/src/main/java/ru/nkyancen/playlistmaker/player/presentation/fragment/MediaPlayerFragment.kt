@@ -46,7 +46,7 @@ class MediaPlayerFragment : Fragment(), KoinComponent {
         }!!
 
         viewModel = getKoin().get {
-            parametersOf(currentTrack.preview, currentTrack.isFavorite)
+            parametersOf(currentTrack.id, currentTrack.preview)
         }
 
         viewModel.observePlayerState().observe(viewLifecycleOwner) {
@@ -82,7 +82,6 @@ class MediaPlayerFragment : Fragment(), KoinComponent {
 
             playerAddToFavorites.setOnClickListener {
                 viewModel.onFavoriteButtonClicked(track)
-                setFavoriteButtonImage(viewModel.isFavorites())
             }
         }
     }

@@ -9,4 +9,6 @@ interface FavoritesRepository {
     suspend fun deleteTrackFromFavorites(track: Track)
 
     fun getFavoritesTracks() : Flow<List<Track>>
+
+    fun getFavoritesTracksId() : Flow<List<Long>>
 }

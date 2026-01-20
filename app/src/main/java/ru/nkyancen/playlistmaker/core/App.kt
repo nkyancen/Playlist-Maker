@@ -7,6 +7,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import ru.nkyancen.playlistmaker.di.dataModule
 import ru.nkyancen.playlistmaker.di.interactorModule
+import ru.nkyancen.playlistmaker.di.mapperModule
 import ru.nkyancen.playlistmaker.di.repositoryModule
 import ru.nkyancen.playlistmaker.di.viewModelModule
 import ru.nkyancen.playlistmaker.settings.domain.api.NightModeInteractor
@@ -22,7 +23,8 @@ class App : Application() {
                 viewModelModule,
                 repositoryModule,
                 interactorModule,
-                dataModule
+                dataModule,
+                mapperModule
             )
         }
 
