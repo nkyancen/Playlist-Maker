@@ -69,7 +69,7 @@ class SearchViewModel(
                 renderState(TracksSearchState.EmptyResponse)
             } else {
                 renderState(
-                    TracksSearchState.ShowContent(
+                    TracksSearchState.Content(
                         itemMapper.mapListFromDomain(response.data)
                             .filter { it.preview.isNotEmpty() }
                     )
@@ -78,18 +78,19 @@ class SearchViewModel(
         }
     }
 
-
-    fun clearSearchQuery() {
-        renderState(
-            TracksSearchState.Clear(
-                loadHistory()
-            )
-        )
+    fun loadHistory() {
+        viewModelScope.launch {
+            trackInteractor
+                .loadHistoryOfPlayedTracks()
+                .collect { history ->
+                    renderState(
+                        TracksSearchState.Clear(
+                            itemMapper.mapListFromDomain(history)
+                        )
+                    )
+                }
+        }
     }
-
-    fun loadHistory(): List<TrackItem> = itemMapper.mapListFromDomain(
-        trackInteractor.loadHistoryOfPlayedTracks()
-    )
 
     fun clearHistory() {
         trackInteractor.clearTracksHistory()

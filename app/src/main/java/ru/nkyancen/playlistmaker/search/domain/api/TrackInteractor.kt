@@ -9,7 +9,7 @@ interface TrackInteractor {
 
     fun clearTracksHistory()
 
-    fun loadHistoryOfPlayedTracks(): List<Track>
+    fun loadHistoryOfPlayedTracks(): Flow<List<Track>>
 
     fun addSelectedTrackToHistory(newItem: Track)
 }

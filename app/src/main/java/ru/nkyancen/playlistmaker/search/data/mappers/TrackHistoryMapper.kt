@@ -31,5 +31,4 @@ class TrackHistoryMapper: TrackMapper<TrackHistory> {
         country = dto.country,
         preview = dto.preview
     )
-
 }

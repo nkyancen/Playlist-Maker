@@ -46,15 +46,16 @@ class MediaPlayerFragment : Fragment(), KoinComponent {
         }!!
 
         viewModel = getKoin().get {
-            parametersOf(currentTrack.preview)
+            parametersOf(currentTrack.id, currentTrack.preview)
         }
 
         viewModel.observePlayerState().observe(viewLifecycleOwner) {
             setPlayButtonImage(it is PlayerState.Play)
+            setFavoriteButtonImage(it.isFavorites)
             binding.playerProgressTimeText.text = it.progressTime
         }
 
-        setClickListeners()
+        setClickListeners(currentTrack)
 
         setContentToViews(currentTrack)
     }
@@ -69,7 +70,7 @@ class MediaPlayerFragment : Fragment(), KoinComponent {
         _binding = null
     }
 
-    private fun setClickListeners() {
+    private fun setClickListeners(track: TrackItem) {
         binding.apply {
             playerHeader.setNavigationOnClickListener {
                 findNavController().navigateUp()
@@ -77,6 +78,10 @@ class MediaPlayerFragment : Fragment(), KoinComponent {
 
             playerPlayButton.setOnClickListener {
                 viewModel.onPlayButtonClicked()
+            }
+
+            playerAddToFavorites.setOnClickListener {
+                viewModel.onFavoriteButtonClicked(track)
             }
         }
     }
@@ -86,6 +91,14 @@ class MediaPlayerFragment : Fragment(), KoinComponent {
             binding.playerPlayButton.setImageResource(R.drawable.player_pause_button_100)
         } else {
             binding.playerPlayButton.setImageResource(R.drawable.player_play_button_100)
+        }
+    }
+
+    private fun setFavoriteButtonImage(isFavorites: Boolean) {
+        if (isFavorites) {
+            binding.playerAddToFavorites.setImageResource(R.drawable.ic_player_favorite_24)
+        } else {
+            binding.playerAddToFavorites.setImageResource(R.drawable.ic_player_not_favorite_24)
         }
     }
 

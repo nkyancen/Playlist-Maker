@@ -7,9 +7,14 @@
 
     <fragment
         android:id="@+id/mediaLibraryFragment"
-        android:name="ru.nkyancen.playlistmaker.medialibrary.presentation.fragment.MediaLibraryFragment"
+        android:name="ru.nkyancen.playlistmaker.medialibrary.MediaLibraryFragment"
         android:label="fragment_media_library"
-        tools:layout="@layout/fragment_media_library" />
+        tools:layout="@layout/fragment_media_library" >
+        <action
+            android:id="@+id/action_mediaLibraryFragment_to_mediaPlayerFragment"
+            app:destination="@id/mediaPlayerFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/searchFragment"
         android:name="ru.nkyancen.playlistmaker.search.presentation.fragment.SearchFragment"
@@ -19,11 +24,13 @@
             android:id="@+id/action_searchFragment_to_mediaPlayerFragment"
             app:destination="@id/mediaPlayerFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/settingsFragment"
         android:name="ru.nkyancen.playlistmaker.settings.presentation.fragment.SettingsFragment"
         android:label="fragment_setting"
         tools:layout="@layout/fragment_setting" />
+
     <fragment
         android:id="@+id/mediaPlayerFragment"
         android:name="ru.nkyancen.playlistmaker.player.presentation.fragment.MediaPlayerFragment"

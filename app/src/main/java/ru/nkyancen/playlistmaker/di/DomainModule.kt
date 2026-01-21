@@ -3,17 +3,16 @@ package ru.nkyancen.playlistmaker.di
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import ru.nkyancen.playlistmaker.core.utils.TrackMapper
+import ru.nkyancen.playlistmaker.medialibrary.favorites.data.impl.FavoritesRepositoryImpl
+import ru.nkyancen.playlistmaker.medialibrary.favorites.domain.api.FavoritesInteractor
+import ru.nkyancen.playlistmaker.medialibrary.favorites.domain.api.FavoritesRepository
+import ru.nkyancen.playlistmaker.medialibrary.favorites.domain.impl.FavoritesInteractorImpl
 import ru.nkyancen.playlistmaker.player.data.impl.MediaPlayerRepositoryImpl
 import ru.nkyancen.playlistmaker.player.domain.api.MediaPlayerInteractor
 import ru.nkyancen.playlistmaker.player.domain.api.MediaPlayerRepository
 import ru.nkyancen.playlistmaker.player.domain.use_case.MediaPlayerInteractorImpl
-import ru.nkyancen.playlistmaker.search.data.dto.TrackData
-import ru.nkyancen.playlistmaker.search.data.dto.TrackHistory
 import ru.nkyancen.playlistmaker.search.data.impl.HistoryRepositoryImpl
 import ru.nkyancen.playlistmaker.search.data.impl.TrackSearchRepositoryImpl
-import ru.nkyancen.playlistmaker.search.data.mappers.TrackDataMapper
-import ru.nkyancen.playlistmaker.search.data.mappers.TrackHistoryMapper
 import ru.nkyancen.playlistmaker.search.domain.api.HistoryRepository
 import ru.nkyancen.playlistmaker.search.domain.api.TrackInteractor
 import ru.nkyancen.playlistmaker.search.domain.api.TrackSearchRepository
@@ -42,18 +41,10 @@ val repositoryModule = module {
         MediaPlayerRepositoryImpl(get())
     }
 
-    factory<TrackMapper<TrackHistory>>(named("historyMapper")) {
-        TrackHistoryMapper()
-    }
-
-    factory<TrackMapper<TrackData>>(named("searchMapper")) {
-        TrackDataMapper()
-    }
-
     factory<HistoryRepository> {
         HistoryRepositoryImpl(
             get(named(HISTORY_PREFS_CLIENT)),
-            get(named("historyMapper")),
+            get(named(HISTORY_MAPPER)),
             get()
         )
     }
@@ -61,7 +52,14 @@ val repositoryModule = module {
     factory<TrackSearchRepository> {
         TrackSearchRepositoryImpl(
             get(),
-            get(named("searchMapper")))
+            get(named(SEARCH_MAPPER)))
+    }
+
+    factory<FavoritesRepository> {
+        FavoritesRepositoryImpl(
+            get(),
+            get(named(ENTITY_MAPPER))
+        )
     }
 }
 
@@ -80,5 +78,9 @@ val interactorModule = module {
 
     factory<TrackInteractor> {
         TrackInteractorImpl(get(), get())
+    }
+
+    factory<FavoritesInteractor> {
+        FavoritesInteractorImpl(get())
     }
 }

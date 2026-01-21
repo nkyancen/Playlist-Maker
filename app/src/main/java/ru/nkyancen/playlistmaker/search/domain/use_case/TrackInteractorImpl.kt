@@ -12,7 +12,7 @@ class TrackInteractorImpl(
     private val historyRepository: HistoryRepository
 ) : TrackInteractor {
 
-    override fun loadHistoryOfPlayedTracks(): List<Track> =
+    override fun loadHistoryOfPlayedTracks(): Flow<List<Track>> =
         historyRepository.loadTracksFromHistory()
 
     override fun clearTracksHistory() =
@@ -25,7 +25,6 @@ class TrackInteractorImpl(
         expression: String
     ): Flow<Resource<List<Track>>> =
         trackSearchRepository.searchTracks(expression)
-
 }
 
 

@@ -1,4 +1,4 @@
-package ru.nkyancen.playlistmaker.medialibrary.presentation.fragment
+package ru.nkyancen.playlistmaker.medialibrary
 
 import android.os.Bundle
 import android.view.LayoutInflater

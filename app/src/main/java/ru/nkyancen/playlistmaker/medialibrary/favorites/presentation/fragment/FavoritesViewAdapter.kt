@@ -1,12 +1,12 @@
-package ru.nkyancen.playlistmaker.search.presentation.fragment
+package ru.nkyancen.playlistmaker.medialibrary.favorites.presentation.fragment
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.nkyancen.playlistmaker.search.presentation.model.TrackItem
 
-class SearchViewAdapter(
+class FavoritesViewAdapter(
     private val clickListener: TrackClickListener
-) : RecyclerView.Adapter<SearchViewHolder>() {
+) : RecyclerView.Adapter<FavoritesViewHolder>() {
 
     private var tracks = mutableListOf<TrackItem>()
 
@@ -18,12 +18,12 @@ class SearchViewAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): SearchViewHolder {
-        return SearchViewHolder.from(parent)
+    ): FavoritesViewHolder {
+        return FavoritesViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(
-        holder: SearchViewHolder,
+        holder: FavoritesViewHolder,
         position: Int
     ) {
         holder.bind(tracks[position])

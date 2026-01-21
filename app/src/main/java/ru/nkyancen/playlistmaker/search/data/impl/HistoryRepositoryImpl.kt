@@ -1,6 +1,8 @@
 package ru.nkyancen.playlistmaker.search.data.impl
 
 import com.google.gson.Gson
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import ru.nkyancen.playlistmaker.core.utils.LocalPrefsClient
 import ru.nkyancen.playlistmaker.core.utils.TrackMapper
 import ru.nkyancen.playlistmaker.search.data.dto.TrackHistory
@@ -19,18 +21,23 @@ class HistoryRepositoryImpl(
         )
     }
 
-    override fun loadTracksFromHistory(): List<Track> {
-        val history = historyPrefsClient.loadData(
+    override fun loadTracksFromHistory(): Flow<List<Track>> = flow {
+        val historyString = historyPrefsClient.loadData(
             ""
         )
 
-        return historyMapper.mapListToDomain(
-            try {
-                gson.fromJson(history, Array<TrackHistory>::class.java).toList()
-            } catch (_: Exception) {
-                emptyList()
+        val history = try {
+            gson.fromJson(historyString, Array<TrackHistory>::class.java).toList()
+        } catch (_: Exception) {
+            emptyList()
+        }
+
+        emit(
+            history.map { dto ->
+                historyMapper.mapToDomain(dto)
             }
         )
+
     }
 
     override fun addSelectedTrackToHistory(newItem: Track) {

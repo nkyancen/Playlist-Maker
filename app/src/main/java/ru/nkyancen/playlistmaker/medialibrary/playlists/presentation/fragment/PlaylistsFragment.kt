@@ -1,4 +1,4 @@
-package ru.nkyancen.playlistmaker.medialibrary.presentation.fragment
+package ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.nkyancen.playlistmaker.databinding.FragmentMediaLibraryPlaylistsTabBinding
-import ru.nkyancen.playlistmaker.medialibrary.presentation.model.PlaylistsState
-import ru.nkyancen.playlistmaker.medialibrary.presentation.viewmodel.PlaylistsViewModel
+import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.PlaylistsState
+import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.viewmodel.PlaylistsViewModel
 
 class PlaylistsFragment: Fragment() {
     private var _binding: FragmentMediaLibraryPlaylistsTabBinding? = null

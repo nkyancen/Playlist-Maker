@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".medialibrary.presentation.fragment.MediaLibraryFragment"
+    tools:context=".medialibrary.MediaLibraryFragment"
     android:background="?attr/colorPrimary">
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -26,6 +26,7 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/mediaLibraryViewPager"
         android:layout_width="match_parent"
+        android:layout_marginTop="16dp"
         android:layout_height="match_parent"/>
 
 </LinearLayout>
