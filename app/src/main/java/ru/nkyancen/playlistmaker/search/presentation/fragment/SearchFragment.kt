@@ -11,6 +11,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.nkyancen.playlistmaker.R
 import ru.nkyancen.playlistmaker.core.utils.debounce
@@ -97,9 +98,11 @@ class SearchFragment : Fragment() {
     }
 
     private fun setRecyclersAdapters() {
+        binding.searchListRecycler.layoutManager = LinearLayoutManager(requireContext())
         searchAdapter = SearchViewAdapter { onTrackClickDebounce(it) }
         binding.searchListRecycler.adapter = searchAdapter
 
+        binding.searchHistoryRecycler.layoutManager = LinearLayoutManager(requireContext())
         historyAdapter = HistoryViewAdapter { onTrackClickDebounce(it) }
         binding.searchHistoryRecycler.adapter = historyAdapter
     }

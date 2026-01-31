@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.nkyancen.playlistmaker.R
 import ru.nkyancen.playlistmaker.core.utils.debounce
@@ -54,6 +55,7 @@ class FavoritesFragment : Fragment() {
             )
         }
 
+        binding.mediaFavoritesList.layoutManager = LinearLayoutManager(requireContext())
         favoritesAdapter = FavoritesViewAdapter { onTrackClickDebounce(it) }
         binding.mediaFavoritesList.adapter = favoritesAdapter
 

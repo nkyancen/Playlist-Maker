@@ -1,0 +1,13 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <size android:height="160dp" android:width="160dp"/>
+            <solid android:color="@color/no_color"/>
+        </shape>
+    </item>
+    <item
+        android:gravity="center"
+        android:width="100dp"
+        android:height="100dp"
+        android:drawable="@drawable/ic_placeholder_100"/>
+</layer-list>

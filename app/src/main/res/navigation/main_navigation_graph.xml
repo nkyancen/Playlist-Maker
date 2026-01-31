@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_mediaLibraryFragment_to_mediaPlayerFragment"
             app:destination="@id/mediaPlayerFragment" />
+        <action
+            android:id="@+id/action_mediaLibraryFragment_to_newPlaylistFragment"
+            app:destination="@id/newPlaylistFragment" />
     </fragment>
 
     <fragment
@@ -35,5 +38,15 @@
         android:id="@+id/mediaPlayerFragment"
         android:name="ru.nkyancen.playlistmaker.player.presentation.fragment.MediaPlayerFragment"
         android:label="fragment_media_player"
-        tools:layout="@layout/fragment_media_player" />
+        tools:layout="@layout/fragment_media_player" >
+        <action
+            android:id="@+id/action_mediaPlayerFragment_to_newPlaylistFragment"
+            app:destination="@id/newPlaylistFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/newPlaylistFragment"
+        android:name="ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.fragment.CreatePlaylistFragment"
+        android:label="fragment_new_playlist"
+        tools:layout="@layout/fragment_new_playlist" />
 </navigation>
