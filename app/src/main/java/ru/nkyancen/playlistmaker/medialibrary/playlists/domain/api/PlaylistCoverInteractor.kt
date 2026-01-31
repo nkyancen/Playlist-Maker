@@ -2,7 +2,7 @@ package ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api
 
 import android.net.Uri
 
-interface ExternalStorageInteractor {
+interface PlaylistCoverInteractor {
 
     fun saveImageToStorage(imageUri: Uri, imageTitle: String)
 

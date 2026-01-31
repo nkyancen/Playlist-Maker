@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.nkyancen.playlistmaker.core.utils.PlaylistMapper
-import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.ExternalStorageInteractor
+import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.PlaylistCoverInteractor
 import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.PlaylistInteractor
 import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.PlaylistItem
 import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.PlaylistsState
@@ -15,7 +15,7 @@ import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.Playl
 class PlaylistsViewModel(
     private val playlistInteractor: PlaylistInteractor,
     private val playlistMapper: PlaylistMapper<PlaylistItem>,
-    private val externalStorageInteractor: ExternalStorageInteractor
+    private val playlistCoverInteractor: PlaylistCoverInteractor
 ) : ViewModel() {
 
     private val playlistsStateLiveData = MutableLiveData<PlaylistsState>(PlaylistsState.Loading)
@@ -37,7 +37,7 @@ class PlaylistsViewModel(
 
     fun getUriForCover(coverName: String): Uri? =
         if (coverName.isNotEmpty()) {
-            externalStorageInteractor.loadImageFromStorage(coverName)
+            playlistCoverInteractor.loadImageFromStorage(coverName)
         } else {
             null
         }

@@ -9,7 +9,7 @@ import ru.nkyancen.playlistmaker.medialibrary.favorites.domain.api.FavoritesRepo
 import ru.nkyancen.playlistmaker.medialibrary.favorites.domain.impl.FavoritesInteractorImpl
 import ru.nkyancen.playlistmaker.medialibrary.playlists.data.impl.ExternalStorageRepositoryImpl
 import ru.nkyancen.playlistmaker.medialibrary.playlists.data.impl.PlaylistRepositoryImpl
-import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.ExternalStorageInteractor
+import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.PlaylistCoverInteractor
 import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.ExternalStorageRepository
 import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.PlaylistInteractor
 import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.PlaylistRepository
@@ -110,7 +110,7 @@ val interactorModule = module {
         PlaylistInteractorImpl(get())
     }
 
-    factory<ExternalStorageInteractor> {
+    factory<PlaylistCoverInteractor> {
         ExternalStorageInteractorImpl(get())
     }
 }

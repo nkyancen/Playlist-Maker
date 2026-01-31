@@ -1,12 +1,12 @@
 package ru.nkyancen.playlistmaker.medialibrary.playlists.domain.impl
 
 import android.net.Uri
-import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.ExternalStorageInteractor
+import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.PlaylistCoverInteractor
 import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.ExternalStorageRepository
 
 class ExternalStorageInteractorImpl(
     private val externalStorageRepository: ExternalStorageRepository
-): ExternalStorageInteractor {
+): PlaylistCoverInteractor {
     override fun saveImageToStorage(imageUri: Uri, imageTitle: String) {
         externalStorageRepository.saveImageToStorage(imageUri, imageTitle)
     }

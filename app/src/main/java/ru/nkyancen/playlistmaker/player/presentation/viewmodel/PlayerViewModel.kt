@@ -13,7 +13,7 @@ import ru.nkyancen.playlistmaker.core.utils.PlaylistMapper
 import ru.nkyancen.playlistmaker.core.utils.SingleLiveEvent
 import ru.nkyancen.playlistmaker.core.utils.TrackMapper
 import ru.nkyancen.playlistmaker.medialibrary.favorites.domain.api.FavoritesInteractor
-import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.ExternalStorageInteractor
+import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.PlaylistCoverInteractor
 import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.PlaylistInteractor
 import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.PlaylistItem
 import ru.nkyancen.playlistmaker.player.domain.api.MediaPlayerInteractor
@@ -29,7 +29,7 @@ class PlayerViewModel(
     private val itemMapper: TrackMapper<TrackItem>,
     private val playlistInteractor: PlaylistInteractor,
     private val playlistItemMapper: PlaylistMapper<PlaylistItem>,
-    private val externalStorageInteractor: ExternalStorageInteractor
+    private val playlistCoverInteractor: PlaylistCoverInteractor
 ) : ViewModel() {
 
     private val playerStateLiveData = MutableLiveData<PlayerState>()
@@ -142,10 +142,18 @@ class PlayerViewModel(
             )
 
             renderState(
-                playerStateLiveData.value!!.apply {
-                    isFavorites = true
-                }
+                processFavorites(true)
             )
+        }
+    }
+
+    private fun processFavorites(isFavorites: Boolean): PlayerState {
+        val currentProgressTime = playerStateLiveData.value!!.progressTime
+
+        return when (playerStateLiveData.value!!) {
+            is PlayerState.Pause -> PlayerState.Pause(currentProgressTime, isFavorites)
+            is PlayerState.Play -> PlayerState.Pause(currentProgressTime, isFavorites)
+            is PlayerState.Prepared -> PlayerState.Pause(currentProgressTime, isFavorites)
         }
     }
 
@@ -158,16 +166,14 @@ class PlayerViewModel(
             )
 
             renderState(
-                playerStateLiveData.value!!.apply {
-                    isFavorites = false
-                }
+                processFavorites(false)
             )
         }
     }
 
     fun getUriForCover(coverName: String): Uri? =
         if (coverName.isNotEmpty()) {
-            externalStorageInteractor.loadImageFromStorage(coverName)
+            playlistCoverInteractor.loadImageFromStorage(coverName)
         } else {
             null
         }

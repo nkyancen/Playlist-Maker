@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.nkyancen.playlistmaker.core.utils.PlaylistMapper
 import ru.nkyancen.playlistmaker.core.utils.SingleLiveEvent
-import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.ExternalStorageInteractor
+import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.PlaylistCoverInteractor
 import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.PlaylistInteractor
 import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.NewPlaylistState
 import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.PlaylistItem
@@ -16,7 +16,7 @@ import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.Playl
 class CreatePlaylistViewModel(
     private val playlistInteractor: PlaylistInteractor,
     private val playlistMapper: PlaylistMapper<PlaylistItem>,
-    private val externalStorageInteractor: ExternalStorageInteractor
+    private val playlistCoverInteractor: PlaylistCoverInteractor
 ) : ViewModel() {
 
     private val createPlaylistStateLiveData =
@@ -33,17 +33,18 @@ class CreatePlaylistViewModel(
 
     fun setCreateButtonEnable(isEnabled: Boolean) {
         renderState(
-            createPlaylistStateLiveData.value!!.apply {
-                isButtonEnable = isEnabled
-            }
+            NewPlaylistState.Content(
+                isEnabled,
+                createPlaylistStateLiveData.value!!.imageUri)
         )
     }
 
     fun setImageUri(uri: Uri?) {
         renderState(
-            createPlaylistStateLiveData.value!!.apply {
-                imageUri = uri
-            }
+            NewPlaylistState.Content(
+                createPlaylistStateLiveData.value!!.isButtonEnable,
+                uri
+            )
         )
     }
 
@@ -82,7 +83,7 @@ class CreatePlaylistViewModel(
     }
 
     private fun saveCoverToStorage(coverName: String){
-        externalStorageInteractor.saveImageToStorage(
+        playlistCoverInteractor.saveImageToStorage(
             createPlaylistStateLiveData.value!!.imageUri!!,
             coverName
         )
