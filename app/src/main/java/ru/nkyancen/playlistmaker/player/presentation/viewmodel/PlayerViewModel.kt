@@ -1,5 +1,6 @@
 package ru.nkyancen.playlistmaker.player.presentation.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,9 +9,15 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.nkyancen.playlistmaker.core.utils.Converter
+import ru.nkyancen.playlistmaker.core.utils.PlaylistMapper
+import ru.nkyancen.playlistmaker.core.utils.SingleLiveEvent
 import ru.nkyancen.playlistmaker.core.utils.TrackMapper
 import ru.nkyancen.playlistmaker.medialibrary.favorites.domain.api.FavoritesInteractor
+import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.ExternalStorageInteractor
+import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.PlaylistInteractor
+import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.PlaylistItem
 import ru.nkyancen.playlistmaker.player.domain.api.MediaPlayerInteractor
+import ru.nkyancen.playlistmaker.player.presentation.model.BottomSheetState
 import ru.nkyancen.playlistmaker.player.presentation.model.PlayerState
 import ru.nkyancen.playlistmaker.search.presentation.model.TrackItem
 
@@ -19,13 +26,22 @@ class PlayerViewModel(
     previewUrl: String,
     private val mediaPlayerInteractor: MediaPlayerInteractor,
     private val favoritesInteractor: FavoritesInteractor,
-    private val itemMapper: TrackMapper<TrackItem>
+    private val itemMapper: TrackMapper<TrackItem>,
+    private val playlistInteractor: PlaylistInteractor,
+    private val playlistItemMapper: PlaylistMapper<PlaylistItem>,
+    private val externalStorageInteractor: ExternalStorageInteractor
 ) : ViewModel() {
 
     private val playerStateLiveData = MutableLiveData<PlayerState>()
     fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
 
-    private val tracksId = mutableListOf<Long>()
+    private val bottomSheetLiveData = MutableLiveData<BottomSheetState>(BottomSheetState.Hide)
+    fun observeBottomSheetState(): LiveData<BottomSheetState> = bottomSheetLiveData
+
+    private val showMessageLiveData = SingleLiveEvent<Pair<String, Boolean>>()
+    fun observeShowMessage(): LiveData<Pair<String, Boolean>> = showMessageLiveData
+
+    private val favoritesTracksId = mutableListOf<Long>()
 
     private var timeJob: Job? = null
 
@@ -35,7 +51,7 @@ class PlayerViewModel(
             favoritesInteractor
                 .getFavoriteTracksId()
                 .collect {
-                    tracksId.addAll(it)
+                    favoritesTracksId.addAll(it)
                 }
 
             renderState(
@@ -115,10 +131,10 @@ class PlayerViewModel(
         }
     }
 
-    fun isFavorites(): Boolean = tracksId.contains(trackId)
+    fun isFavorites(): Boolean = favoritesTracksId.contains(trackId)
 
     private fun addToFavorites(track: TrackItem) {
-        tracksId.add(trackId)
+        favoritesTracksId.add(trackId)
 
         viewModelScope.launch {
             favoritesInteractor.insertTrackToFavorites(
@@ -134,7 +150,7 @@ class PlayerViewModel(
     }
 
     private fun deleteFromFavorites(track: TrackItem) {
-        tracksId.remove(trackId)
+        favoritesTracksId.remove(trackId)
 
         viewModelScope.launch {
             favoritesInteractor.deleteTrackFromFavorites(
@@ -149,8 +165,59 @@ class PlayerViewModel(
         }
     }
 
+    fun getUriForCover(coverName: String): Uri? =
+        if (coverName.isNotEmpty()) {
+            externalStorageInteractor.loadImageFromStorage(coverName)
+        } else {
+            null
+        }
+
+    fun onPlaylistClick(trackId: Long, playlist: PlaylistItem) {
+        val tracksIdList = playlistInteractor.getTracksIdFromPlaylist(
+            playlistItemMapper.mapToDomain(playlist)
+        )
+
+        if (trackId in tracksIdList) {
+            showMessageLiveData.postValue(Pair(playlist.title, false))
+        } else {
+
+            viewModelScope.launch {
+                playlistInteractor.addTrackIdToPlaylist(trackId, playlist.id)
+            }
+
+            showMessageLiveData.postValue(Pair(playlist.title, true))
+
+        renderBottomSheetState(BottomSheetState.Hide)
+        }
+
+    }
+
+    fun showBottomSheet() {
+        viewModelScope.launch {
+            playlistInteractor
+                .getAllPlaylists()
+                .collect { playlists ->
+                    renderBottomSheetState(
+                        BottomSheetState.Show(
+                            playlistItemMapper.mapListFromDomain(
+                                playlists
+                            )
+                        )
+                    )
+                }
+        }
+    }
+
+    fun hideBottomSheet() {
+        renderBottomSheetState(BottomSheetState.Hide)
+    }
+
     private fun renderState(state: PlayerState) {
         playerStateLiveData.postValue(state)
+    }
+
+    private fun renderBottomSheetState(state: BottomSheetState) {
+        bottomSheetLiveData.postValue(state)
     }
 
     companion object {

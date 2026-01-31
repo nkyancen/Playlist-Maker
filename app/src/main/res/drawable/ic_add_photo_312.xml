@@ -1,0 +1,13 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <size android:height="312dp" android:width="312dp"/>
+            <solid android:color="@color/no_color"/>
+        </shape>
+    </item>
+    <item
+        android:gravity="center"
+        android:width="100dp"
+        android:height="100dp"
+        android:drawable="@drawable/ic_add_photo_100"/>
+</layer-list>

@@ -8,7 +8,7 @@
         <item name="colorOnPrimarySurface">@color/white_tr</item>
 
         <!-- Secondary colors -->
-        <item name="colorSecondary">@color/dark_gray</item>
+        <item name="colorSecondary">@color/light_gray</item>
         <item name="colorOnSecondary">@color/dark_gray</item>
         <item name="colorSecondaryVariant">@color/white</item>
     </style>

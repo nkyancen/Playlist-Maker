@@ -13,4 +13,5 @@
 
     <color name="dark_gray_tr">#401A1B22</color>
     <color name="white_tr">#40FFFFFF</color>
+    <color name="dark_gray_50">#801A1B22</color>
 </resources>

@@ -7,6 +7,14 @@ import ru.nkyancen.playlistmaker.medialibrary.favorites.data.impl.FavoritesRepos
 import ru.nkyancen.playlistmaker.medialibrary.favorites.domain.api.FavoritesInteractor
 import ru.nkyancen.playlistmaker.medialibrary.favorites.domain.api.FavoritesRepository
 import ru.nkyancen.playlistmaker.medialibrary.favorites.domain.impl.FavoritesInteractorImpl
+import ru.nkyancen.playlistmaker.medialibrary.playlists.data.impl.ExternalStorageRepositoryImpl
+import ru.nkyancen.playlistmaker.medialibrary.playlists.data.impl.PlaylistRepositoryImpl
+import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.ExternalStorageInteractor
+import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.ExternalStorageRepository
+import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.PlaylistInteractor
+import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.PlaylistRepository
+import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.impl.ExternalStorageInteractorImpl
+import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.impl.PlaylistInteractorImpl
 import ru.nkyancen.playlistmaker.player.data.impl.MediaPlayerRepositoryImpl
 import ru.nkyancen.playlistmaker.player.domain.api.MediaPlayerInteractor
 import ru.nkyancen.playlistmaker.player.domain.api.MediaPlayerRepository
@@ -61,6 +69,20 @@ val repositoryModule = module {
             get(named(ENTITY_MAPPER))
         )
     }
+
+    factory<PlaylistRepository> {
+        PlaylistRepositoryImpl(
+            get(),
+            get(named(PLAYLIST_ENTITY_MAPPER)),
+            get()
+        )
+    }
+
+    factory<ExternalStorageRepository> {
+        ExternalStorageRepositoryImpl(
+            androidContext()
+        )
+    }
 }
 
 val interactorModule = module {
@@ -82,5 +104,13 @@ val interactorModule = module {
 
     factory<FavoritesInteractor> {
         FavoritesInteractorImpl(get())
+    }
+
+    factory<PlaylistInteractor> {
+        PlaylistInteractorImpl(get())
+    }
+
+    factory<ExternalStorageInteractor> {
+        ExternalStorageInteractorImpl(get())
     }
 }

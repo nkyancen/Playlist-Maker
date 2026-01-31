@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="4dp"
+    android:paddingVertical="8dp">
+
+    <ImageView
+        android:id="@+id/playlistItemGridCover"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:background="@drawable/rounded_image"
+        android:clipToOutline="true"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/ic_placeholder_160" />
+
+    <TextView
+        android:id="@+id/playlistItemGridTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/ys_display_regular"
+        android:maxLines="1"
+        android:padding="1dp"
+        android:textColor="?attr/colorOnPrimary"
+        android:textSize="12sp"
+        tools:text="Какое-то название" />
+
+    <TextView
+        android:id="@+id/playlistItemGridTracksAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:fontFamily="@font/ys_display_regular"
+        android:maxLines="1"
+        android:padding="1dp"
+        android:textColor="?attr/colorOnPrimary"
+        android:textSize="12sp"
+        tools:text="100500 треков" />
+
+</LinearLayout>

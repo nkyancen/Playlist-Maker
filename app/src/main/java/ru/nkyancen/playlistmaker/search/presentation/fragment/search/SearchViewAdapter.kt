@@ -8,7 +8,7 @@ class SearchViewAdapter(
     private val clickListener: TrackClickListener
 ) : RecyclerView.Adapter<SearchViewHolder>() {
 
-    private var tracks = mutableListOf<TrackItem>()
+    private val tracks = mutableListOf<TrackItem>()
 
     fun setData(tracks: List<TrackItem>) {
         this.tracks.clear()

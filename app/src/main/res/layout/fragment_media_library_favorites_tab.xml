@@ -37,7 +37,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mediaFavoritesList"
-        style="@style/FavoritesRecyclerView"
+        style="@style/VerticalRecyclerView.Favorites"
         android:layout_height="wrap_content"
         android:visibility="gone"
         tools:listitem="@layout/favorites_item_view"/>

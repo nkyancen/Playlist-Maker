@@ -1,20 +1,28 @@
 package ru.nkyancen.playlistmaker.player.presentation.fragment
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.parametersOf
 import ru.nkyancen.playlistmaker.R
 import ru.nkyancen.playlistmaker.core.utils.Converter
 import ru.nkyancen.playlistmaker.databinding.FragmentMediaPlayerBinding
+import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.PlaylistItem
+import ru.nkyancen.playlistmaker.player.presentation.fragment.playlists.PlayerPlaylistViewAdapter
+import ru.nkyancen.playlistmaker.player.presentation.model.BottomSheetState
 import ru.nkyancen.playlistmaker.player.presentation.model.PlayerState
 import ru.nkyancen.playlistmaker.player.presentation.viewmodel.PlayerViewModel
 import ru.nkyancen.playlistmaker.search.presentation.model.TrackItem
@@ -24,6 +32,10 @@ class MediaPlayerFragment : Fragment(), KoinComponent {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: PlayerViewModel
+
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
+
+    private lateinit var playlistAdapter: PlayerPlaylistViewAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,10 +67,88 @@ class MediaPlayerFragment : Fragment(), KoinComponent {
             binding.playerProgressTimeText.text = it.progressTime
         }
 
+        viewModel.observeBottomSheetState().observe(viewLifecycleOwner) {
+            renderBottomSheet(it)
+        }
+
+        viewModel.observeShowMessage().observe(viewLifecycleOwner) {
+            val message = if (it.second) {
+                getString(R.string.message_add_to_playlist, it.first)
+            } else {
+                getString(R.string.message_track_already_in_playlist, it.first)
+            }
+            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+        }
+
+        val playlistClickListener = PlayerPlaylistViewAdapter.PlaylistClickListener { playlist ->
+            viewModel.onPlaylistClick(currentTrack.id, playlist)
+        }
+
+        val externalInteractor = PlayerPlaylistViewAdapter.ExternalInteractor { coverName ->
+            viewModel.getUriForCover(coverName)
+        }
+
+        binding.playerPlaylistRecycler.layoutManager = LinearLayoutManager(requireContext())
+        playlistAdapter = PlayerPlaylistViewAdapter(
+            externalInteractor,
+            playlistClickListener
+        )
+        binding.playerPlaylistRecycler.adapter = playlistAdapter
+
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.playerBottomSheetContainer)
+
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                if (slideOffset >= -0.85) {
+                    binding.playerBlackOut.visibility = View.VISIBLE
+                } else {
+                    binding.playerBlackOut.visibility = View.GONE
+                }
+            }
+
+        })
+
         setClickListeners(currentTrack)
 
         setContentToViews(currentTrack)
     }
+
+    private fun renderBottomSheet(state: BottomSheetState) {
+        when (state) {
+            BottomSheetState.Hide -> hideBottomSheet()
+            is BottomSheetState.Show -> showBottomSheet(state.playlists)
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun showBottomSheet(playlists: List<PlaylistItem>) {
+        bottomSheetBehavior.apply {
+            state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+        binding.playerBlackOut.apply {
+            isClickable = true
+            isEnabled = true
+        }
+
+        playlistAdapter.setData(playlists)
+        playlistAdapter.notifyDataSetChanged()
+    }
+
+    private fun hideBottomSheet() {
+        bottomSheetBehavior.apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
+        binding.playerBlackOut.apply {
+            isClickable = false
+            isEnabled = false
+        }
+    }
+
 
     override fun onPause() {
         super.onPause()
@@ -82,6 +172,20 @@ class MediaPlayerFragment : Fragment(), KoinComponent {
 
             playerAddToFavorites.setOnClickListener {
                 viewModel.onFavoriteButtonClicked(track)
+            }
+
+            playerAddToPlayList.setOnClickListener {
+                viewModel.showBottomSheet()
+            }
+
+            playerBlackOut.setOnClickListener {
+                viewModel.hideBottomSheet()
+            }
+
+            playerCreateNewPlaylistButton.setOnClickListener {
+                findNavController().navigate(
+                    R.id.action_mediaPlayerFragment_to_newPlaylistFragment
+                )
             }
         }
     }

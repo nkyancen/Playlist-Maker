@@ -4,6 +4,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import ru.nkyancen.playlistmaker.medialibrary.favorites.presentation.viewmodel.FavoritesViewModel
+import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.viewmodel.CreatePlaylistViewModel
 import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.viewmodel.PlaylistsViewModel
 import ru.nkyancen.playlistmaker.player.presentation.viewmodel.PlayerViewModel
 import ru.nkyancen.playlistmaker.search.presentation.viewmodel.SearchViewModel
@@ -25,7 +26,10 @@ val viewModelModule = module {
             url,
             get(),
             get(),
-            get(named(ITEM_MAPPER))
+            get(named(ITEM_MAPPER)),
+            get(),
+            get(named(PLAYLIST_ITEM_MAPPER)),
+            get()
         )
     }
 
@@ -44,6 +48,18 @@ val viewModelModule = module {
     }
 
     viewModel {
-        PlaylistsViewModel()
+        PlaylistsViewModel(
+            get(),
+            get(named(PLAYLIST_ITEM_MAPPER)),
+            get()
+        )
+    }
+
+    viewModel {
+        CreatePlaylistViewModel(
+            get(),
+            get(named(PLAYLIST_ITEM_MAPPER)),
+            get()
+        )
     }
 }

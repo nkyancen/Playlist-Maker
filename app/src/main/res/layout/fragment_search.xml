@@ -68,7 +68,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/searchListRecycler"
-            style="@style/SearchRecyclerView"
+            style="@style/VerticalRecyclerView.Search"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/search_results_margin_top"
             tools:listitem="@layout/search_item_view"/>
@@ -113,7 +113,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/searchHistoryRecycler"
-                style="@style/HistoryRecyclerView"
+                style="@style/VerticalRecyclerView.History"
                 android:layout_marginTop="@dimen/search_history_recycler_margin_top" />
 
             <com.google.android.material.button.MaterialButton

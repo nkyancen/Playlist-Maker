@@ -8,7 +8,7 @@ class HistoryViewAdapter(
     private val clickListener: TrackClickListener
 ) : RecyclerView.Adapter<HistoryViewHolder>() {
 
-    private var tracks = mutableListOf<TrackItem>()
+    private val tracks = mutableListOf<TrackItem>()
 
     fun setData(tracks: List<TrackItem>) {
         this.tracks.clear()

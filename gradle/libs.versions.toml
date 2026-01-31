@@ -20,6 +20,7 @@ lifecycleKtx = "2.10.0"
 fragmentKtx = "1.8.9"
 navigationFragmentKtx = "2.9.6"
 room = "2.8.4"
+legacySupportV4 = "1.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -46,6 +47,7 @@ gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 room-runtime = {group = "androidx.room", name = "room-runtime",version.ref = "room"}
 room-ktx = {group = "androidx.room", name = "room-ktx", version.ref = "room"}
 room-compiler = {group = "androidx.room", name = "room-compiler", version.ref = "room"}
+androidx-legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
 
 
 [plugins]
