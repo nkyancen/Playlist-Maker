@@ -12,7 +12,6 @@ import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.mappers.Pla
 import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.PlaylistItem
 import ru.nkyancen.playlistmaker.playlist_detail.data.entity.TrackEntity
 import ru.nkyancen.playlistmaker.playlist_detail.data.mappers.TrackEntityMapper
-import ru.nkyancen.playlistmaker.playlist_detail.presentation.mappers.PlaylistInfoItemMapper
 import ru.nkyancen.playlistmaker.search.data.dto.TrackData
 import ru.nkyancen.playlistmaker.search.data.dto.TrackHistory
 import ru.nkyancen.playlistmaker.search.data.mappers.TrackDataMapper
@@ -29,7 +28,6 @@ const val PLAYLIST_ENTITY_MAPPER = "playlistEntityMapper"
 
 const val ITEM_MAPPER = "itemMapper"
 const val PLAYLIST_ITEM_MAPPER = "playlistItemMapper"
-const val PLAYLIST_INFO_ITEM_MAPPER = "playlistInfoItemMapper"
 
 val mapperModule = module {
 
@@ -59,9 +57,5 @@ val mapperModule = module {
 
     single<PlaylistMapper<PlaylistItem>>(named(PLAYLIST_ITEM_MAPPER)) {
         PlaylistItemMapper()
-    }
-
-    single (named(PLAYLIST_INFO_ITEM_MAPPER)) {
-        PlaylistInfoItemMapper()
     }
 }

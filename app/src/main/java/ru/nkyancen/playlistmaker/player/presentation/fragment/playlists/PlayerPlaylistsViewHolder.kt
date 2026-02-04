@@ -8,7 +8,8 @@ import ru.nkyancen.playlistmaker.R
 import ru.nkyancen.playlistmaker.databinding.PlaylistItemViewBinding
 import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.PlaylistItem
 
-class PlayerPlaylistsViewHolder(private val binding: PlaylistItemViewBinding) : RecyclerView.ViewHolder(binding.root) {
+class PlayerPlaylistsViewHolder(private val binding: PlaylistItemViewBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
     fun bind(model: PlaylistItem, coverUri: Uri?) {
         val context = binding.root.context
@@ -29,7 +30,7 @@ class PlayerPlaylistsViewHolder(private val binding: PlaylistItemViewBinding) : 
         }
     }
 
-    companion object{
+    companion object {
         fun from(parent: ViewGroup): PlayerPlaylistsViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = PlaylistItemViewBinding.inflate(inflater, parent, false)

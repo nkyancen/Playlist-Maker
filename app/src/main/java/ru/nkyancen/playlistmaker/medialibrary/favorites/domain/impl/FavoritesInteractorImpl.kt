@@ -7,7 +7,7 @@ import ru.nkyancen.playlistmaker.search.domain.models.Track
 
 class FavoritesInteractorImpl(
     private val favoritesRepository: FavoritesRepository
-): FavoritesInteractor {
+) : FavoritesInteractor {
     override suspend fun insertTrackToFavorites(track: Track) {
         favoritesRepository.insertTrackToFavorites(track)
     }
@@ -18,5 +18,6 @@ class FavoritesInteractorImpl(
 
     override fun getFavoritesTracks(): Flow<List<Track>> = favoritesRepository.getFavoritesTracks()
 
-    override fun getFavoriteTracksId(): Flow<List<Long>> = favoritesRepository.getFavoritesTracksId()
+    override fun getFavoriteTracksId(): Flow<List<Long>> =
+        favoritesRepository.getFavoritesTracksId()
 }

@@ -5,9 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import ru.nkyancen.playlistmaker.core.utils.PlaylistMapper
 import ru.nkyancen.playlistmaker.core.utils.SingleLiveEvent
 import ru.nkyancen.playlistmaker.core.utils.TrackMapper
@@ -108,19 +107,16 @@ class PlaylistDetailsViewModel(
         renderState(PlaylistDetailsState.Loading)
         renderBottomSheetState(PlaylistDetailsBottomSheetState.Loading)
 
-        runBlocking {
+        viewModelScope.launch {
             playlistInteractor
                 .getPlaylistById(playlistId)
                 .collect { playlist ->
                     playlistInteractor.deleteTrackFromPlaylist(
                         track.id,
                         playlist
-                    )
+                    ).single()
                 }
 
-        }
-
-        viewModelScope.launch {
             playlistInteractor
                 .getPlaylistById(playlistId)
                 .collect { playlist ->
@@ -135,22 +131,23 @@ class PlaylistDetailsViewModel(
         }
     }
 
-    fun deletePlaylist(playlistId: Long) {
-        runBlocking {
-            playlistInteractor.deletePlaylistById(playlistId)
+    fun deletePlaylist(playlistId: Long, coroutineExec: CompletedCoroutineExec) {
+        viewModelScope.launch {
+            coroutineExec.afterCompletion(
+                playlistInteractor.deletePlaylistById(playlistId).single()
+            )
         }
     }
 
     fun sharePlaylist(playlistId: Long) {
+        hideMenu()
+
         viewModelScope.launch {
-            hideMenu()
 
-            val playlist = async { playlistInteractor.getPlaylistById(playlistId) }
-
-            playlist.await()
+            playlistInteractor.getPlaylistById(playlistId)
                 .collect { playlist ->
                     if (playlist.tracksAmount == 0) {
-                        showMessageLiveData.postValue(null)
+                        showMessageLiveData.setValue(null)
                     } else {
                         playlistDetailInteractor
                             .getPlaylistContent(playlist)
@@ -183,6 +180,10 @@ class PlaylistDetailsViewModel(
     }
 
     private fun renderMenuBottomSheetState(state: PlaylistDetailsMenuBottomSheetState) {
-        playlistDetailsMenuBottomSheetLiveData.postValue(state)
+        playlistDetailsMenuBottomSheetLiveData.setValue(state)
+    }
+
+    fun interface CompletedCoroutineExec {
+        fun afterCompletion(result: Any)
     }
 }

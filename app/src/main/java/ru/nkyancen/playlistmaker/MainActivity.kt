@@ -40,8 +40,7 @@ class MainActivity : AppCompatActivity() {
             binding.rootBottomNavMenu.isVisible =
                 (destination.id != R.id.mediaPlayerFragment &&
                         destination.id != R.id.newPlaylistFragment &&
-                        destination.id != R.id.playlistDetailsFragment &&
-                        destination.id != R.id.playlistEditorFragment)
+                        destination.id != R.id.playlistDetailsFragment)
 
         }
     }

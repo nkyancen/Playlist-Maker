@@ -41,7 +41,7 @@
     <string name="no_playlists">Вы не создали\nни одного плейлиста</string>
     <string name="favorites">Избранные треки</string>
     <string name="playlists">Плейлисты</string>
-    <string name="create_new_playlist">Создать</string>
+    <string name="create_playlist">Создать</string>
     <string name="new_playlist_title">Название*</string>
     <string name="new_playlist_description">Описание</string>
     <string name="new_playlist_exit_dialog_title">Завершить создание плейлиста?</string>

@@ -4,7 +4,7 @@ import ru.nkyancen.playlistmaker.core.utils.PlaylistMapper
 import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.model.Playlist
 import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.PlaylistItem
 
-class PlaylistItemMapper: PlaylistMapper<PlaylistItem> {
+class PlaylistItemMapper : PlaylistMapper<PlaylistItem> {
     override fun mapFromDomain(model: Playlist) = PlaylistItem(
         id = model.id,
         title = model.title,

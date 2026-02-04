@@ -8,10 +8,9 @@ import ru.nkyancen.playlistmaker.search.domain.models.Track
 
 class PlaylistInteractorImpl(
     private val playlistRepository: PlaylistRepository
-): PlaylistInteractor {
-    override suspend fun savePlaylistToStorage(playlist: Playlist) {
+) : PlaylistInteractor {
+    override fun savePlaylistToStorage(playlist: Playlist): Flow<Boolean> =
         playlistRepository.savePlaylistToStorage(playlist)
-    }
 
     override fun getAllPlaylists(): Flow<List<Playlist>> =
         playlistRepository.getAllPlaylists()
@@ -22,18 +21,17 @@ class PlaylistInteractorImpl(
     override fun getTracksIdFromPlaylist(playlist: Playlist): List<Long> =
         playlistRepository.getTracksIdList(playlist)
 
-    override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist) {
+    override fun addTrackToPlaylist(track: Track, playlist: Playlist) =
         playlistRepository.addTrackToPlaylist(track, playlist)
-    }
 
-    override suspend fun deleteTrackFromPlaylist(
+    override fun deleteTrackFromPlaylist(
         trackId: Long,
         playlist: Playlist
-    ) {
-        playlistRepository.deleteTrackFromPlaylist(trackId, playlist)
-    }
+    ): Flow<Boolean> = playlistRepository.deleteTrackFromPlaylist(trackId, playlist)
 
-    override suspend fun deletePlaylistById(playlistId: Long) {
+    override fun deletePlaylistById(playlistId: Long): Flow<Boolean> =
         playlistRepository.deletePlaylistById(playlistId)
-    }
+
+    override fun savePlaylistUpdate(playlistInfo: Playlist): Flow<Boolean> =
+        playlistRepository.updatePlaylistInfo(playlistInfo)
 }

@@ -49,7 +49,7 @@ val dataModule = module {
     }
 
     single<LocalPrefsClient<String>>(named(HISTORY_PREFS_CLIENT)) {
-        HistoryPrefsClient(get(named(HISTORY_PREFS)),SEARCH_HISTORY_TAG)
+        HistoryPrefsClient(get(named(HISTORY_PREFS)), SEARCH_HISTORY_TAG)
     }
 
     factory {

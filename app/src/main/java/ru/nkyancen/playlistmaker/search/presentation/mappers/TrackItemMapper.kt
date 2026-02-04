@@ -4,7 +4,7 @@ import ru.nkyancen.playlistmaker.core.utils.TrackMapper
 import ru.nkyancen.playlistmaker.search.domain.models.Track
 import ru.nkyancen.playlistmaker.search.presentation.model.TrackItem
 
-class TrackItemMapper: TrackMapper<TrackItem> {
+class TrackItemMapper : TrackMapper<TrackItem> {
     override fun mapFromDomain(model: Track) = TrackItem(
         id = model.id,
         trackName = model.trackName,

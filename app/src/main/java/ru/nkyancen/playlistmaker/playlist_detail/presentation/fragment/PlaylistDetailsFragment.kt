@@ -17,6 +17,7 @@ import org.koin.android.ext.android.getKoin
 import org.koin.core.parameter.parametersOf
 import ru.nkyancen.playlistmaker.R
 import ru.nkyancen.playlistmaker.databinding.FragmentPlaylistDetailsBinding
+import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.fragment.create.CreatePlaylistFragment
 import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.PlaylistItem
 import ru.nkyancen.playlistmaker.player.presentation.fragment.MediaPlayerFragment
 import ru.nkyancen.playlistmaker.playlist_detail.presentation.model.PlaylistDetailsBottomSheetState
@@ -121,19 +122,20 @@ class PlaylistDetailsFragment : Fragment() {
         menuBottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> binding.playlistDetailsBlackOut.visibility =
+                        View.GONE
+
+                    else -> binding.playlistDetailsBlackOut.visibility = View.VISIBLE
+                }
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                if (slideOffset >= -0.85) {
-                    binding.playlistDetailsBlackOut.visibility = View.VISIBLE
-                } else {
-                    binding.playlistDetailsBlackOut.visibility = View.GONE
-                }
             }
         })
     }
 
-    private fun setDeleteTrackDialog(track: TrackItem) {
+    private fun showDeleteTrackDialog(track: TrackItem) {
         deleteTrackDialog = MaterialAlertDialogBuilder(requireContext(), R.style.DialogTheme)
             .setTitle(getString(R.string.delete_track_confirmation))
             .setNegativeButton(getString(R.string.delete_track_confirmation_negative), null)
@@ -149,9 +151,9 @@ class PlaylistDetailsFragment : Fragment() {
             .setNegativeButton(getString(R.string.delete_playlist_confirmation_negative), null)
             .setPositiveButton(getString(R.string.delete_playlist_confirmation_positive)) { _, _ ->
 
-                viewModel.deletePlaylist(playlistId)
-
-                findNavController().navigateUp()
+                viewModel.deletePlaylist(playlistId) { _ ->
+                    findNavController().navigateUp()
+                }
             }
     }
 
@@ -164,7 +166,7 @@ class PlaylistDetailsFragment : Fragment() {
                 MediaPlayerFragment.createArgs(track)
             )
         }, { track ->
-            setDeleteTrackDialog(track)
+            showDeleteTrackDialog(track)
             deleteTrackDialog.show()
         })
         binding.playlistDetailsTracksBottomSheetRecycler.adapter = playlistDetailsAdapter
@@ -199,8 +201,8 @@ class PlaylistDetailsFragment : Fragment() {
 
             playlistDetailsMenuEditButton.setOnClickListener {
                 findNavController().navigate(
-                    R.id.action_playlistDetailsFragment_to_playlistEditorFragment,
-                    PlaylistEditorFragment.createArgs(playlistId)
+                    R.id.action_playlistDetailsFragment_to_newPlaylistFragment,
+                    CreatePlaylistFragment.createArgs(playlistId)
                 )
             }
         }

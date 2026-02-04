@@ -73,6 +73,6 @@ class PlaylistDetailsRepositoryImpl(
         convertTracksIdStringToList(listOfTracksByString)
             .reversed()
             .map { id ->
-            playlistTracksDao.getTrackById(id)
-        }
+                playlistTracksDao.getTrackById(id)
+            }
 }

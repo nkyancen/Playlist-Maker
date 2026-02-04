@@ -4,7 +4,7 @@ import ru.nkyancen.playlistmaker.core.utils.TrackMapper
 import ru.nkyancen.playlistmaker.search.data.dto.TrackHistory
 import ru.nkyancen.playlistmaker.search.domain.models.Track
 
-class TrackHistoryMapper: TrackMapper<TrackHistory> {
+class TrackHistoryMapper : TrackMapper<TrackHistory> {
     override fun mapFromDomain(model: Track) =
         TrackHistory(
             id = model.id,

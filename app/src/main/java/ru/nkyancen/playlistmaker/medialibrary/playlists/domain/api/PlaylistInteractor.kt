@@ -5,7 +5,7 @@ import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.model.Playlist
 import ru.nkyancen.playlistmaker.search.domain.models.Track
 
 interface PlaylistInteractor {
-    suspend fun savePlaylistToStorage(playlist: Playlist)
+    fun savePlaylistToStorage(playlist: Playlist): Flow<Boolean>
 
     fun getAllPlaylists(): Flow<List<Playlist>>
 
@@ -13,9 +13,11 @@ interface PlaylistInteractor {
 
     fun getPlaylistById(playlistId: Long): Flow<Playlist>
 
-    suspend fun addTrackToPlaylist(track: Track, playlist: Playlist)
+    fun addTrackToPlaylist(track: Track, playlist: Playlist): Flow<Boolean>
 
-    suspend fun deleteTrackFromPlaylist(trackId: Long, playlist: Playlist)
+    fun deleteTrackFromPlaylist(trackId: Long, playlist: Playlist): Flow<Boolean>
 
-    suspend fun deletePlaylistById(playlistId: Long)
+    fun deletePlaylistById(playlistId: Long): Flow<Boolean>
+
+    fun savePlaylistUpdate(playlistInfo: Playlist): Flow<Boolean>
 }

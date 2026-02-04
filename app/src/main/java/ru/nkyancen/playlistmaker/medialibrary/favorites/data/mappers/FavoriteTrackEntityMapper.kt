@@ -4,7 +4,7 @@ import ru.nkyancen.playlistmaker.core.utils.TrackMapper
 import ru.nkyancen.playlistmaker.medialibrary.favorites.data.entity.FavoriteTrackEntity
 import ru.nkyancen.playlistmaker.search.domain.models.Track
 
-class FavoriteTrackEntityMapper: TrackMapper<FavoriteTrackEntity> {
+class FavoriteTrackEntityMapper : TrackMapper<FavoriteTrackEntity> {
     override fun mapFromDomain(model: Track) =
         FavoriteTrackEntity(
             id = model.id,

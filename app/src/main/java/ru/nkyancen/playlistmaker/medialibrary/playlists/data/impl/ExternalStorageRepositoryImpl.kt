@@ -13,7 +13,7 @@ import java.io.FileOutputStream
 
 class ExternalStorageRepositoryImpl(
     private val appContext: Context
-): ExternalStorageRepository {
+) : ExternalStorageRepository {
     override fun loadImageFromStorage(imageTitle: String): Uri {
         val filePath = File(
             appContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
@@ -55,7 +55,7 @@ class ExternalStorageRepositoryImpl(
         }
     }
 
-    companion object{
+    companion object {
         const val PLAYLIST_COVERS_FOLDER = "playlist_covers"
     }
 }

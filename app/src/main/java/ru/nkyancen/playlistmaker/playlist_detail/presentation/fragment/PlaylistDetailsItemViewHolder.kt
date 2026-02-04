@@ -10,7 +10,8 @@ import ru.nkyancen.playlistmaker.core.utils.Converter
 import ru.nkyancen.playlistmaker.databinding.PlaylistDetailsItemViewBinding
 import ru.nkyancen.playlistmaker.search.presentation.model.TrackItem
 
-class PlaylistDetailsItemViewHolder(private val binding: PlaylistDetailsItemViewBinding) : RecyclerView.ViewHolder(binding.root) {
+class PlaylistDetailsItemViewHolder(private val binding: PlaylistDetailsItemViewBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
     fun bind(model: TrackItem) {
 
@@ -35,7 +36,8 @@ class PlaylistDetailsItemViewHolder(private val binding: PlaylistDetailsItemView
             playlistDetailsItemTrackTime.text = Converter.formatTime(model.trackTime)
         }
     }
-//
+
+    //
     companion object {
         fun from(parent: ViewGroup): PlaylistDetailsItemViewHolder {
             val inflater = LayoutInflater.from(parent.context)

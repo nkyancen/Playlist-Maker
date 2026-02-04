@@ -20,8 +20,12 @@ class PlaylistRepositoryImpl(
     private val trackEntityMapper: TrackMapper<TrackEntity>,
     private val gson: Gson
 ) : PlaylistRepository {
-    override suspend fun savePlaylistToStorage(playlist: Playlist) {
+    override fun savePlaylistToStorage(playlist: Playlist): Flow<Boolean> = flow {
         playlistDao.addPlaylistToTable(playlistEntityMapper.mapFromDomain(playlist))
+
+        emit(
+            true
+        )
     }
 
     override fun getAllPlaylists(): Flow<List<Playlist>> = flow {
@@ -48,7 +52,7 @@ class PlaylistRepositoryImpl(
         )
     }
 
-    override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist) {
+    override fun addTrackToPlaylist(track: Track, playlist: Playlist): Flow<Boolean> = flow {
 
         val listOfTracksId = try {
             gson.fromJson(playlist.listOfTracks, Array<Long>::class.java).toMutableList()
@@ -56,34 +60,37 @@ class PlaylistRepositoryImpl(
             mutableListOf()
         }
 
-        listOfTracksId.add(track.id)
-
-        playlistDao.updatePlaylistContent(
-            playlist.id,
-            gson.toJson(listOfTracksId.toList()),
-            playlist.tracksAmount + 1
-        )
-
         playlistTracksDao.addTrackToTable(
             trackEntityMapper.mapFromDomain(track)
         )
+
+        listOfTracksId.add(track.id)
+
+        playlistDao.updatePlaylistContent(
+            playlist.id, gson.toJson(listOfTracksId.toList()), playlist.tracksAmount + 1
+        )
+
+        emit(
+            true
+        )
     }
 
-    override suspend fun deleteTrackFromPlaylist(
-        trackId: Long,
-        playlist: Playlist
-    ) {
+    override fun deleteTrackFromPlaylist(
+        trackId: Long, playlist: Playlist
+    ): Flow<Boolean> = flow {
         val listOfTracksId = getTracksIdList(playlist).toMutableList()
 
         listOfTracksId.remove(trackId)
 
         playlistDao.updatePlaylistContent(
-            playlist.id,
-            gson.toJson(listOfTracksId.toList()),
-            playlist.tracksAmount - 1
+            playlist.id, gson.toJson(listOfTracksId.toList()), playlist.tracksAmount - 1
         )
 
         deleteTracksWithoutPlaylist(trackId)
+
+        emit(
+            true
+        )
     }
 
     private suspend fun deleteTracksWithoutPlaylist(trackId: Long) {
@@ -95,16 +102,14 @@ class PlaylistRepositoryImpl(
     }
 
     private fun isTrackInSomePlaylist(
-        trackId: Long,
-        listOfPlaylists: List<PlaylistEntity>
-    ): Boolean =
-        listOfPlaylists.any {
-            trackId in getTracksIdList(
-                playlistEntityMapper.mapToDomain(it)
-            )
-        }
+        trackId: Long, listOfPlaylists: List<PlaylistEntity>
+    ): Boolean = listOfPlaylists.any {
+        trackId in getTracksIdList(
+            playlistEntityMapper.mapToDomain(it)
+        )
+    }
 
-    override suspend fun deletePlaylistById(playlistId: Long) {
+    override fun deletePlaylistById(playlistId: Long): Flow<Boolean> = flow {
         val playlist = playlistEntityMapper.mapToDomain(playlistDao.getPlaylistsById(playlistId))
 
         val tracksIdList = getTracksIdList(
@@ -116,5 +121,22 @@ class PlaylistRepositoryImpl(
         tracksIdList.map { trackId ->
             deleteTracksWithoutPlaylist(trackId)
         }
+
+        emit(
+            true
+        )
+    }
+
+    override fun updatePlaylistInfo(playlistInfo: Playlist): Flow<Boolean> = flow {
+        playlistDao.updatePlaylistInfo(
+            playlistInfo.id,
+            playlistInfo.title,
+            playlistInfo.coverImage,
+            playlistInfo.description
+        )
+
+        emit(
+            true
+        )
     }
 }

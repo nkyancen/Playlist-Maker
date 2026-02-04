@@ -6,7 +6,7 @@ import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.PlaylistCover
 
 class PlaylistCoverInteractorImpl(
     private val externalStorageRepository: ExternalStorageRepository
-): PlaylistCoverInteractor {
+) : PlaylistCoverInteractor {
     override fun saveImageToStorage(imageUri: Uri, imageTitle: String) {
         externalStorageRepository.saveImageToStorage(imageUri, imageTitle)
     }

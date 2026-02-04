@@ -71,7 +71,7 @@
     <dimen name="tabs_padding_horizontal">16dp</dimen>
     <dimen name="tabs_height">48dp</dimen>
 
-    <dimen name="new_playlist_padding">24dp</dimen>
+    <dimen name="create_playlist_padding">24dp</dimen>
     <dimen name="new_playlist_additional_padding">16dp</dimen>
     <dimen name="new_playlist_text_corner_radius">4dp</dimen>
     <dimen name="image_dash_width">30dp</dimen>

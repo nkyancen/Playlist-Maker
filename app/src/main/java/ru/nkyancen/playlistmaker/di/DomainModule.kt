@@ -20,13 +20,9 @@ import ru.nkyancen.playlistmaker.player.domain.api.MediaPlayerInteractor
 import ru.nkyancen.playlistmaker.player.domain.api.MediaPlayerRepository
 import ru.nkyancen.playlistmaker.player.domain.use_case.MediaPlayerInteractorImpl
 import ru.nkyancen.playlistmaker.playlist_detail.data.impl.PlaylistDetailsRepositoryImpl
-import ru.nkyancen.playlistmaker.playlist_detail.data.impl.PlaylistEditorRepositoryImpl
 import ru.nkyancen.playlistmaker.playlist_detail.domain.api.PlaylistDetailInteractor
 import ru.nkyancen.playlistmaker.playlist_detail.domain.api.PlaylistDetailsRepository
-import ru.nkyancen.playlistmaker.playlist_detail.domain.api.PlaylistEditorInteractor
-import ru.nkyancen.playlistmaker.playlist_detail.domain.api.PlaylistEditorRepository
 import ru.nkyancen.playlistmaker.playlist_detail.domain.impl.PlaylistDetailsInteractorImpl
-import ru.nkyancen.playlistmaker.playlist_detail.domain.impl.PlaylistEditorInteractorImpl
 import ru.nkyancen.playlistmaker.search.data.impl.HistoryRepositoryImpl
 import ru.nkyancen.playlistmaker.search.data.impl.TrackSearchRepositoryImpl
 import ru.nkyancen.playlistmaker.search.domain.api.HistoryRepository
@@ -50,7 +46,8 @@ val repositoryModule = module {
     factory<NightModeRepository> {
         NightModeRepositoryImpl(
             get(named(NIGHT_MODE_PREFS_CLIENT)),
-            androidContext())
+            androidContext()
+        )
     }
 
     factory<MediaPlayerRepository> {
@@ -68,7 +65,8 @@ val repositoryModule = module {
     factory<TrackSearchRepository> {
         TrackSearchRepositoryImpl(
             get(),
-            get(named(SEARCH_MAPPER)))
+            get(named(SEARCH_MAPPER))
+        )
     }
 
     factory<FavoritesRepository> {
@@ -100,12 +98,6 @@ val repositoryModule = module {
             get(named(TRACK_ENTITY_MAPPER)),
             get(),
             androidContext()
-        )
-    }
-
-    factory<PlaylistEditorRepository> {
-        PlaylistEditorRepositoryImpl(
-            get()
         )
     }
 }
@@ -143,9 +135,4 @@ val interactorModule = module {
         PlaylistDetailsInteractorImpl(get())
     }
 
-    factory<PlaylistEditorInteractor> {
-        PlaylistEditorInteractorImpl(
-            get()
-        )
-    }
 }
