@@ -6,7 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.PlaylistItem
 
 class PlaylistViewAdapter(
-    private val externalInteractor: ExternalInteractor
+    private val playlistItemCoverInteractor: PlaylistItemCoverInteractor,
+    private val clickListener: PlaylistClickListener
 ) : RecyclerView.Adapter<PlaylistsViewHolder>() {
 
     private val playlists = mutableListOf<PlaylistItem>()
@@ -29,13 +30,21 @@ class PlaylistViewAdapter(
     ) {
         holder.bind(
             playlists[position],
-            externalInteractor.getUriByCoverName(playlists[position].coverImage)
+            playlistItemCoverInteractor.getUriByCoverName(playlists[position].coverImage)
         )
+
+        holder.itemView.setOnClickListener {
+            clickListener.onClickListener(playlists[position])
+        }
     }
 
     override fun getItemCount(): Int = playlists.size
 
-    fun interface ExternalInteractor {
+    fun interface PlaylistItemCoverInteractor {
         fun getUriByCoverName(coverName: String): Uri?
+    }
+
+    fun interface PlaylistClickListener {
+        fun onClickListener(playlistItem: PlaylistItem)
     }
 }

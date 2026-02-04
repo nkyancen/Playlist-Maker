@@ -14,6 +14,7 @@ import ru.nkyancen.playlistmaker.databinding.FragmentMediaLibraryPlaylistsTabBin
 import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.PlaylistItem
 import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.PlaylistsState
 import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.viewmodel.PlaylistsViewModel
+import ru.nkyancen.playlistmaker.playlist_detail.presentation.fragment.PlaylistDetailsFragment
 
 class PlaylistsFragment : Fragment() {
     private var _binding: FragmentMediaLibraryPlaylistsTabBinding? = null
@@ -47,9 +48,19 @@ class PlaylistsFragment : Fragment() {
         }
 
         binding.mediaPlaylistsList.layoutManager = GridLayoutManager(requireContext(), 2)
-        playlistsAdapter = PlaylistViewAdapter() {
-            playlistsViewModel.getUriForCover(it)
-        }
+
+        playlistsAdapter = PlaylistViewAdapter(
+            {
+                playlistsViewModel.getUriForCover(it)
+            },
+            {
+                findNavController().navigate(
+                    R.id.action_mediaLibraryFragment_to_playlistDetailsFragment,
+                    PlaylistDetailsFragment.createArgs(it.id)
+                )
+            }
+        )
+
         binding.mediaPlaylistsList.adapter = playlistsAdapter
 
         playlistsViewModel.showPlaylists()

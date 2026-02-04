@@ -9,13 +9,12 @@ import ru.nkyancen.playlistmaker.settings.domain.api.ExternalNavigator
 class ExternalNavigatorImpl(
     private val appContext: Context
 ) : ExternalNavigator {
-    override fun shareLink() {
-        val shareUrl = appContext.getString(R.string.share_text_url)
+    override fun shareText(sharedText: String) {
         val shareIntent = Intent(Intent.ACTION_SEND)
         shareIntent.type = "plain/text"
         shareIntent.putExtra(
             Intent.EXTRA_TEXT,
-            shareUrl
+            sharedText
         )
 
         appContext.startActivity(

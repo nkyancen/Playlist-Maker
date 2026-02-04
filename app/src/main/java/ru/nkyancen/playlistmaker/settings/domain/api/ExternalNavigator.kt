@@ -1,7 +1,7 @@
 package ru.nkyancen.playlistmaker.settings.domain.api
 
 interface ExternalNavigator {
-    fun shareLink()
+    fun shareText(sharedText: String)
 
     fun openEmail()
 

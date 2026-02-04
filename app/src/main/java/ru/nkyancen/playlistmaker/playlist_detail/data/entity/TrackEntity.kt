@@ -1,9 +1,9 @@
-package ru.nkyancen.playlistmaker.medialibrary.favorites.data.entity
+package ru.nkyancen.playlistmaker.playlist_detail.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "favorites_table")
+@Entity(tableName = "tracks_table")
 data class TrackEntity(
     @PrimaryKey
     val id: Long,
@@ -15,6 +15,5 @@ data class TrackEntity(
     val releaseYear: String,
     val genre: String,
     val country: String,
-    val preview: String,
-    val createdTime: Long = System.currentTimeMillis()
+    val preview: String
 )

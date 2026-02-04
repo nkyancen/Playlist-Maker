@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_mediaLibraryFragment_to_newPlaylistFragment"
             app:destination="@id/newPlaylistFragment" />
+        <action
+            android:id="@+id/action_mediaLibraryFragment_to_playlistDetailsFragment"
+            app:destination="@id/playlistDetailsFragment" />
     </fragment>
 
     <fragment
@@ -46,7 +49,24 @@
 
     <fragment
         android:id="@+id/newPlaylistFragment"
-        android:name="ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.fragment.CreatePlaylistFragment"
+        android:name="ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.fragment.create.CreatePlaylistFragment"
         android:label="fragment_new_playlist"
         tools:layout="@layout/fragment_new_playlist" />
+    <fragment
+        android:id="@+id/playlistDetailsFragment"
+        android:name="ru.nkyancen.playlistmaker.playlist_detail.presentation.fragment.PlaylistDetailsFragment"
+        android:label="fragment_playlist_details"
+        tools:layout="@layout/fragment_playlist_details" >
+        <action
+            android:id="@+id/action_playlistDetailsFragment_to_mediaPlayerFragment"
+            app:destination="@id/mediaPlayerFragment" />
+        <action
+            android:id="@+id/action_playlistDetailsFragment_to_playlistEditorFragment"
+            app:destination="@id/playlistEditorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/playlistEditorFragment"
+        android:name="ru.nkyancen.playlistmaker.playlist_detail.presentation.fragment.PlaylistEditorFragment"
+        android:label="PlaylistEditorFragment"
+        tools:layout="@layout/fragment_editor_playlist"/>
 </navigation>

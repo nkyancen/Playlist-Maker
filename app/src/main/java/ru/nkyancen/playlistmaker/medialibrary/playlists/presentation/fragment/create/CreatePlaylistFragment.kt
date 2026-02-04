@@ -1,4 +1,4 @@
-package ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.fragment
+package ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.fragment.create
 
 import android.net.Uri
 import android.os.Bundle
@@ -19,7 +19,6 @@ import ru.nkyancen.playlistmaker.R
 import ru.nkyancen.playlistmaker.databinding.FragmentNewPlaylistBinding
 import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.NewPlaylistState
 import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.viewmodel.CreatePlaylistViewModel
-
 
 class CreatePlaylistFragment : Fragment() {
 
@@ -52,7 +51,7 @@ class CreatePlaylistFragment : Fragment() {
         exitDialog = MaterialAlertDialogBuilder(requireContext(), R.style.DialogTheme)
             .setTitle(getString(R.string.new_playlist_exit_dialog_title))
             .setMessage(getString(R.string.new_playlist_exit_dialog_description))
-            .setNeutralButton(getString(R.string.cansel)) { _, _ -> }
+            .setNeutralButton(getString(R.string.cansel), null)
             .setPositiveButton(getString(R.string.complete)) { _, _ ->
                 findNavController().navigateUp()
             }

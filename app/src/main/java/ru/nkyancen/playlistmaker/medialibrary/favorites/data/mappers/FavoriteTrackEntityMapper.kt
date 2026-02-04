@@ -1,12 +1,12 @@
 package ru.nkyancen.playlistmaker.medialibrary.favorites.data.mappers
 
 import ru.nkyancen.playlistmaker.core.utils.TrackMapper
-import ru.nkyancen.playlistmaker.medialibrary.favorites.data.entity.TrackEntity
+import ru.nkyancen.playlistmaker.medialibrary.favorites.data.entity.FavoriteTrackEntity
 import ru.nkyancen.playlistmaker.search.domain.models.Track
 
-class TrackEntityMapper: TrackMapper<TrackEntity> {
+class FavoriteTrackEntityMapper: TrackMapper<FavoriteTrackEntity> {
     override fun mapFromDomain(model: Track) =
-        TrackEntity(
+        FavoriteTrackEntity(
             id = model.id,
             trackName = model.trackName,
             artistName = model.artistName,
@@ -19,7 +19,7 @@ class TrackEntityMapper: TrackMapper<TrackEntity> {
             preview = model.preview
         )
 
-    override fun mapToDomain(dto: TrackEntity) = Track(
+    override fun mapToDomain(dto: FavoriteTrackEntity) = Track(
         id = dto.id,
         trackName = dto.trackName,
         artistName = dto.artistName,

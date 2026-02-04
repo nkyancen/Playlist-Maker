@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.nkyancen.playlistmaker.R
 import ru.nkyancen.playlistmaker.databinding.FragmentSettingBinding
-import ru.nkyancen.playlistmaker.settings.presentation.model.ExternalActionEventState
+import ru.nkyancen.playlistmaker.settings.presentation.model.NightModeState
 import ru.nkyancen.playlistmaker.settings.presentation.viewmodel.SettingsViewModel
 
 class SettingsFragment : Fragment() {
@@ -36,8 +36,8 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        viewModel.observeNightMode().observe(viewLifecycleOwner) {
-            setSwitcherCheck(it.isNightMode)
+        viewModel.observeNightMode().observe(viewLifecycleOwner) { state ->
+            setSwitcherCheck(state is NightModeState.Night)
         }
 
         binding.apply {
@@ -48,23 +48,17 @@ class SettingsFragment : Fragment() {
             }
 
             settingsShareButton.setOnClickListener {
-                viewModel.executeExternalNavigation(
-                    ExternalActionEventState.Share
+                viewModel.shareApp(
+                    getString(R.string.share_text_url)
                 )
             }
 
             settingsSupportButton.setOnClickListener {
-                viewModel.executeExternalNavigation(
-                    ExternalActionEventState.Support
-                )
+                viewModel.sendMailToSupport()
             }
 
             settingsUserAgreementButton.setOnClickListener {
-                viewModel.executeExternalNavigation(
-                    ExternalActionEventState.Terms(
-                        getString(R.string.offer_url)
-                    )
-                )
+                viewModel.openTerms()
             }
         }
     }

@@ -22,7 +22,7 @@ import ru.nkyancen.playlistmaker.core.utils.Converter
 import ru.nkyancen.playlistmaker.databinding.FragmentMediaPlayerBinding
 import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.PlaylistItem
 import ru.nkyancen.playlistmaker.player.presentation.fragment.playlists.PlayerPlaylistViewAdapter
-import ru.nkyancen.playlistmaker.player.presentation.model.BottomSheetState
+import ru.nkyancen.playlistmaker.player.presentation.model.PlayerBottomSheetState
 import ru.nkyancen.playlistmaker.player.presentation.model.PlayerState
 import ru.nkyancen.playlistmaker.player.presentation.viewmodel.PlayerViewModel
 import ru.nkyancen.playlistmaker.search.presentation.model.TrackItem
@@ -80,18 +80,14 @@ class MediaPlayerFragment : Fragment(), KoinComponent {
             Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
         }
 
-        val playlistClickListener = PlayerPlaylistViewAdapter.PlaylistClickListener { playlist ->
-            viewModel.onPlaylistClick(currentTrack.id, playlist)
-        }
-
-        val externalInteractor = PlayerPlaylistViewAdapter.ExternalInteractor { coverName ->
-            viewModel.getUriForCover(coverName)
-        }
-
         binding.playerPlaylistRecycler.layoutManager = LinearLayoutManager(requireContext())
         playlistAdapter = PlayerPlaylistViewAdapter(
-            externalInteractor,
-            playlistClickListener
+            { coverName ->
+                viewModel.getUriForCover(coverName)
+            },
+            { playlist ->
+                viewModel.onPlaylistClick(currentTrack, playlist)
+            }
         )
         binding.playerPlaylistRecycler.adapter = playlistAdapter
 
@@ -100,7 +96,6 @@ class MediaPlayerFragment : Fragment(), KoinComponent {
         bottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
@@ -110,7 +105,6 @@ class MediaPlayerFragment : Fragment(), KoinComponent {
                     binding.playerBlackOut.visibility = View.GONE
                 }
             }
-
         })
 
         setClickListeners(currentTrack)
@@ -118,10 +112,10 @@ class MediaPlayerFragment : Fragment(), KoinComponent {
         setContentToViews(currentTrack)
     }
 
-    private fun renderBottomSheet(state: BottomSheetState) {
+    private fun renderBottomSheet(state: PlayerBottomSheetState) {
         when (state) {
-            BottomSheetState.Hide -> hideBottomSheet()
-            is BottomSheetState.Show -> showBottomSheet(state.playlists)
+            PlayerBottomSheetState.Hide -> hideBottomSheet()
+            is PlayerBottomSheetState.Show -> showBottomSheet(state.playlists)
         }
     }
 

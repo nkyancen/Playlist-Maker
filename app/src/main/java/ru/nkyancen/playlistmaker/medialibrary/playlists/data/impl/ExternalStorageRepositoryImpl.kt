@@ -43,6 +43,18 @@ class ExternalStorageRepositoryImpl(
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
     }
 
+    override fun deleteImageFromStorage(imageTitle: String) {
+        val filePath = File(
+            appContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+            PLAYLIST_COVERS_FOLDER
+        )
+        val file = File(filePath, imageTitle)
+
+        if (file.exists()) {
+            file.delete()
+        }
+    }
+
     companion object{
         const val PLAYLIST_COVERS_FOLDER = "playlist_covers"
     }

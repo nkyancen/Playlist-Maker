@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="?attr/colorPrimary"
-    tools:context=".medialibrary.playlists.presentation.fragment.CreatePlaylistFragment">
+    android:orientation="vertical"
+    tools:context=".medialibrary.playlists.presentation.fragment.create.CreatePlaylistFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/newPlaylistHeader"
@@ -23,14 +23,14 @@
         android:layout_marginHorizontal="@dimen/new_playlist_padding"
         android:layout_marginTop="26dp"
         android:background="@drawable/rounded_image_border"
+        android:clipToOutline="true"
         android:contentDescription="@string/new_playlist"
         android:scaleType="centerCrop"
-        android:clipToOutline="true"
         app:layout_constraintDimensionRatio="h, 1:1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/newPlaylistHeader"
-        tools:src="@drawable/ic_add_photo_312"/>
+        tools:src="@drawable/ic_add_photo_312" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/newPlaylistTitleLayout"
@@ -43,8 +43,8 @@
         android:textColorHint="?attr/colorOnPrimary"
         app:boxStrokeColor="@color/text_input_box_stroke"
         app:counterOverflowTextColor="?attr/colorPrimaryVariant"
-        app:hintTextColor="?attr/colorPrimaryVariant"
         app:cursorColor="?attr/colorSecondary"
+        app:hintTextColor="?attr/colorPrimaryVariant"
         app:layout_constraintTop_toBottomOf="@id/newPlaylistImage">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -66,8 +66,8 @@
         android:textColorHint="?attr/colorOnPrimary"
         app:boxStrokeColor="@color/text_input_box_stroke"
         app:counterOverflowTextColor="?attr/colorPrimaryVariant"
-        app:hintTextColor="?attr/colorPrimaryVariant"
         app:cursorColor="?attr/colorSecondary"
+        app:hintTextColor="?attr/colorPrimaryVariant"
         app:layout_constraintTop_toBottomOf="@id/newPlaylistTitleLayout">
 
         <com.google.android.material.textfield.TextInputEditText

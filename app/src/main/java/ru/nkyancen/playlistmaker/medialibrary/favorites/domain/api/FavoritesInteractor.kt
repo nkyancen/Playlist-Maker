@@ -6,7 +6,7 @@ import ru.nkyancen.playlistmaker.search.domain.models.Track
 interface FavoritesInteractor {
     suspend fun insertTrackToFavorites(track: Track)
 
-    suspend fun deleteTrackFromFavorites(track: Track)
+    suspend fun deleteTrackFromFavorites(trackId: Long)
 
     fun getFavoritesTracks() : Flow<List<Track>>
 

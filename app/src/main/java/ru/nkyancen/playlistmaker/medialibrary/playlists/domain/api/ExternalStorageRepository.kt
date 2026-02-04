@@ -7,4 +7,6 @@ interface ExternalStorageRepository {
     fun saveImageToStorage(imageUri: Uri, imageTitle: String)
 
     fun loadImageFromStorage(imageTitle: String): Uri
+
+    fun deleteImageFromStorage(imageTitle: String)
 }

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorPrimary"
+    android:orientation="vertical"
+    tools:context="playlist_detail.presentation.fragment.PlaylistEditorFragment">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/editorPlaylistHeader"
+        style="@style/ToolBar.NewPlaylist"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/editor_title" />
+
+    <ImageView
+        android:id="@+id/editorPlaylistCover"
+        android:layout_width="312dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="@dimen/new_playlist_padding"
+        android:layout_marginTop="26dp"
+        android:background="@drawable/rounded_image_border"
+        android:clipToOutline="true"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="h, 1:1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editorPlaylistHeader"
+        tools:src="@drawable/ic_add_photo_312" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editorPlaylistTitleLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="32dp"
+        android:hint="@string/new_playlist_title"
+        android:textColorHint="?attr/colorOnPrimary"
+        app:boxStrokeColor="@color/text_input_box_stroke"
+        app:counterOverflowTextColor="?attr/colorPrimaryVariant"
+        app:cursorColor="?attr/colorSecondary"
+        app:hintTextColor="?attr/colorPrimaryVariant"
+        app:layout_constraintTop_toBottomOf="@id/editorPlaylistCover">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editorPlaylistTitleEdt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnPrimary"
+            android:textColorHint="?attr/colorOnPrimary" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:hint="@string/new_playlist_description"
+        android:textColorHint="?attr/colorOnPrimary"
+        app:boxStrokeColor="@color/text_input_box_stroke"
+        app:counterOverflowTextColor="?attr/colorPrimaryVariant"
+        app:cursorColor="?attr/colorSecondary"
+        app:hintTextColor="?attr/colorPrimaryVariant"
+        app:layout_constraintTop_toBottomOf="@id/editorPlaylistTitleLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editorPlaylistDescriptionEdt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnPrimary"
+            android:textColorHint="?attr/colorOnPrimary" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/editorPlaylistSaveButton"
+        style="@style/Button"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/rounded_playlist_create_button"
+        android:text="@string/editor_button_text"
+        android:textAppearance="@style/NewPlaylistButtonTextStyle"
+        android:textColor="@color/white"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
