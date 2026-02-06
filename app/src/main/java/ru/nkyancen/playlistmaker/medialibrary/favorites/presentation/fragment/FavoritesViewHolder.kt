@@ -10,7 +10,8 @@ import ru.nkyancen.playlistmaker.core.utils.Converter
 import ru.nkyancen.playlistmaker.databinding.FavoritesItemViewBinding
 import ru.nkyancen.playlistmaker.search.presentation.model.TrackItem
 
-class FavoritesViewHolder(private val binding: FavoritesItemViewBinding) : RecyclerView.ViewHolder(binding.root) {
+class FavoritesViewHolder(private val binding: FavoritesItemViewBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
     fun bind(model: TrackItem) {
 

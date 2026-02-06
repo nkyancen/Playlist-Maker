@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -22,7 +23,7 @@ import ru.nkyancen.playlistmaker.core.utils.Converter
 import ru.nkyancen.playlistmaker.databinding.FragmentMediaPlayerBinding
 import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.PlaylistItem
 import ru.nkyancen.playlistmaker.player.presentation.fragment.playlists.PlayerPlaylistViewAdapter
-import ru.nkyancen.playlistmaker.player.presentation.model.BottomSheetState
+import ru.nkyancen.playlistmaker.player.presentation.model.PlayerBottomSheetState
 import ru.nkyancen.playlistmaker.player.presentation.model.PlayerState
 import ru.nkyancen.playlistmaker.player.presentation.viewmodel.PlayerViewModel
 import ru.nkyancen.playlistmaker.search.presentation.model.TrackItem
@@ -36,6 +37,7 @@ class MediaPlayerFragment : Fragment(), KoinComponent {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
 
     private lateinit var playlistAdapter: PlayerPlaylistViewAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,38 +81,47 @@ class MediaPlayerFragment : Fragment(), KoinComponent {
             }
             Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
         }
-
-        val playlistClickListener = PlayerPlaylistViewAdapter.PlaylistClickListener { playlist ->
-            viewModel.onPlaylistClick(currentTrack.id, playlist)
-        }
-
-        val externalInteractor = PlayerPlaylistViewAdapter.ExternalInteractor { coverName ->
-            viewModel.getUriForCover(coverName)
-        }
-
-        binding.playerPlaylistRecycler.layoutManager = LinearLayoutManager(requireContext())
-        playlistAdapter = PlayerPlaylistViewAdapter(
-            externalInteractor,
-            playlistClickListener
-        )
-        binding.playerPlaylistRecycler.adapter = playlistAdapter
-
         bottomSheetBehavior = BottomSheetBehavior.from(binding.playerBottomSheetContainer)
 
         bottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
 
-            }
+                    BottomSheetBehavior.STATE_HIDDEN -> binding.playerBlackOut.visibility = View.GONE
 
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                if (slideOffset >= -0.85) {
-                    binding.playerBlackOut.visibility = View.VISIBLE
-                } else {
-                    binding.playerBlackOut.visibility = View.GONE
+                    else -> binding.playerBlackOut.visibility = View.VISIBLE
                 }
             }
 
+            override fun onSlide(p0: View, p1: Float) {
+
+            }
+        })
+
+        binding.playerPlaylistRecycler.layoutManager = LinearLayoutManager(requireContext())
+
+        playlistAdapter = PlayerPlaylistViewAdapter(
+            { coverName ->
+                viewModel.getUriForCover(coverName)
+            },
+            { playlist ->
+                viewModel.onPlaylistClick(currentTrack, playlist) {
+
+                }
+            }
+        )
+
+        binding.playerPlaylistRecycler.adapter = playlistAdapter
+
+        requireActivity().onBackPressedDispatcher.addCallback(object :
+            OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                try {
+                    findNavController().navigateUp()
+                } catch (_: Exception) {
+                }
+            }
         })
 
         setClickListeners(currentTrack)
@@ -118,10 +129,11 @@ class MediaPlayerFragment : Fragment(), KoinComponent {
         setContentToViews(currentTrack)
     }
 
-    private fun renderBottomSheet(state: BottomSheetState) {
+
+    private fun renderBottomSheet(state: PlayerBottomSheetState) {
         when (state) {
-            BottomSheetState.Hide -> hideBottomSheet()
-            is BottomSheetState.Show -> showBottomSheet(state.playlists)
+            PlayerBottomSheetState.Hide -> hideBottomSheet()
+            is PlayerBottomSheetState.Show -> showBottomSheet(state.playlists)
         }
     }
 
@@ -149,7 +161,6 @@ class MediaPlayerFragment : Fragment(), KoinComponent {
         }
     }
 
-
     override fun onPause() {
         super.onPause()
         viewModel.onPause()
@@ -163,7 +174,10 @@ class MediaPlayerFragment : Fragment(), KoinComponent {
     private fun setClickListeners(track: TrackItem) {
         binding.apply {
             playerHeader.setNavigationOnClickListener {
-                findNavController().navigateUp()
+                try {
+                    findNavController().navigateUp()
+                } catch (_: Exception) {
+                }
             }
 
             playerPlayButton.setOnClickListener {

@@ -38,7 +38,9 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             binding.rootBottomNavMenu.isVisible =
-                (destination.id != R.id.mediaPlayerFragment && destination.id != R.id.newPlaylistFragment)
+                (destination.id != R.id.mediaPlayerFragment &&
+                        destination.id != R.id.newPlaylistFragment &&
+                        destination.id != R.id.playlistDetailsFragment)
 
         }
     }

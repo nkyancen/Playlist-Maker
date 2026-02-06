@@ -16,4 +16,7 @@ object Converter {
 
     fun formatTime(value: Long?): String =
         SimpleDateFormat("mm:ss", Locale.getDefault()).format(value ?: 0L)
+
+    fun formatTimeByMinutes(value: Long?): Int =
+        SimpleDateFormat("mm", Locale.getDefault()).format(value ?: 0L).toInt()
 }

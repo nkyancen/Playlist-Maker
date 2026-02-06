@@ -10,7 +10,8 @@ import ru.nkyancen.playlistmaker.core.utils.Converter
 import ru.nkyancen.playlistmaker.databinding.HistoryItemViewBinding
 import ru.nkyancen.playlistmaker.search.presentation.model.TrackItem
 
-class HistoryViewHolder(private val binding: HistoryItemViewBinding) : RecyclerView.ViewHolder(binding.root) {
+class HistoryViewHolder(private val binding: HistoryItemViewBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
     fun bind(model: TrackItem) {
 

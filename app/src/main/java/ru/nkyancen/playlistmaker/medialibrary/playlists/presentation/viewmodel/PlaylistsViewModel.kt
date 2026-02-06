@@ -43,15 +43,15 @@ class PlaylistsViewModel(
         }
 
 
-private fun processResult(playlists: List<PlaylistItem>) {
-    if (playlists.isEmpty()) {
-        renderState(PlaylistsState.Empty)
-    } else {
-        renderState(PlaylistsState.Content(playlists))
+    private fun processResult(playlists: List<PlaylistItem>) {
+        if (playlists.isEmpty()) {
+            renderState(PlaylistsState.Empty)
+        } else {
+            renderState(PlaylistsState.Content(playlists))
+        }
     }
-}
 
-private fun renderState(state: PlaylistsState) {
-    playlistsStateLiveData.postValue(state)
-}
+    private fun renderState(state: PlaylistsState) {
+        playlistsStateLiveData.postValue(state)
+    }
 }

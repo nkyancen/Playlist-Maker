@@ -47,7 +47,6 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textAppearance="@style/FavoritesTextStyle.Secondary"
-                android:textSize="@dimen/favorites_secondary_text_size"
                 tools:text="The Beatles" />
 
             <TextView
@@ -55,7 +54,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/FavoritesTextStyle.Secondary"
-                android:textSize="@dimen/favorites_secondary_text_size"
                 app:drawableStartCompat="@drawable/ic_comma_13"
                 app:drawableTint="?attr/colorPrimaryVariant"
                 tools:text="12:34" />

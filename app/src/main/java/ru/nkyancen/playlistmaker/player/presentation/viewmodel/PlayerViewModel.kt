@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 import ru.nkyancen.playlistmaker.core.utils.Converter
 import ru.nkyancen.playlistmaker.core.utils.PlaylistMapper
@@ -17,7 +18,7 @@ import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.PlaylistCover
 import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.PlaylistInteractor
 import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.model.PlaylistItem
 import ru.nkyancen.playlistmaker.player.domain.api.MediaPlayerInteractor
-import ru.nkyancen.playlistmaker.player.presentation.model.BottomSheetState
+import ru.nkyancen.playlistmaker.player.presentation.model.PlayerBottomSheetState
 import ru.nkyancen.playlistmaker.player.presentation.model.PlayerState
 import ru.nkyancen.playlistmaker.search.presentation.model.TrackItem
 
@@ -35,8 +36,10 @@ class PlayerViewModel(
     private val playerStateLiveData = MutableLiveData<PlayerState>()
     fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
 
-    private val bottomSheetLiveData = MutableLiveData<BottomSheetState>(BottomSheetState.Hide)
-    fun observeBottomSheetState(): LiveData<BottomSheetState> = bottomSheetLiveData
+    private val bottomSheetLiveData =
+        MutableLiveData<PlayerBottomSheetState>(PlayerBottomSheetState.Hide)
+
+    fun observeBottomSheetState(): LiveData<PlayerBottomSheetState> = bottomSheetLiveData
 
     private val showMessageLiveData = SingleLiveEvent<Pair<String, Boolean>>()
     fun observeShowMessage(): LiveData<Pair<String, Boolean>> = showMessageLiveData
@@ -69,9 +72,10 @@ class PlayerViewModel(
     }
 
     fun onPlayButtonClicked() {
-        when (playerStateLiveData.value!!) {
+        when (playerStateLiveData.value) {
             is PlayerState.Play -> pausePlayer()
             is PlayerState.Prepared, is PlayerState.Pause -> startPlayer()
+            else -> pausePlayer()
         }
     }
 
@@ -102,7 +106,7 @@ class PlayerViewModel(
         timeJob = viewModelScope.launch {
             while (mediaPlayerInteractor.isPlaying()) {
                 delay(TIMER_UPDATE_DELAY)
-                renderState(
+                playerStateLiveData.setValue(
                     PlayerState.Play(
                         Converter.formatTime(
                             mediaPlayerInteractor.getCurrentPosition().toLong()
@@ -113,7 +117,7 @@ class PlayerViewModel(
             }
 
             if (mediaPlayerInteractor.isPrepared()) {
-                renderState(
+                playerStateLiveData.setValue(
                     PlayerState.Pause(
                         Converter.formatTime(0L),
                         isFavorites()
@@ -124,14 +128,25 @@ class PlayerViewModel(
     }
 
     fun onFavoriteButtonClicked(track: TrackItem) {
-        if (playerStateLiveData.value?.isFavorites!!) {
-            deleteFromFavorites(track)
+        if (playerStateLiveData.value?.isFavorites ?: false) {
+            deleteFromFavorites()
         } else {
             addToFavorites(track)
         }
     }
 
     fun isFavorites(): Boolean = favoritesTracksId.contains(trackId)
+
+    private fun processFavorites(isFavorites: Boolean): PlayerState {
+        val currentProgressTime = playerStateLiveData.value?.progressTime ?: "00:00"
+
+        return when (playerStateLiveData.value) {
+            is PlayerState.Pause -> PlayerState.Pause(currentProgressTime, isFavorites)
+            is PlayerState.Play -> PlayerState.Play(currentProgressTime, isFavorites)
+            is PlayerState.Prepared -> PlayerState.Prepared(currentProgressTime, isFavorites)
+            else -> PlayerState.Prepared(currentProgressTime, isFavorites)
+        }
+    }
 
     private fun addToFavorites(track: TrackItem) {
         favoritesTracksId.add(trackId)
@@ -147,22 +162,12 @@ class PlayerViewModel(
         }
     }
 
-    private fun processFavorites(isFavorites: Boolean): PlayerState {
-        val currentProgressTime = playerStateLiveData.value!!.progressTime
-
-        return when (playerStateLiveData.value!!) {
-            is PlayerState.Pause -> PlayerState.Pause(currentProgressTime, isFavorites)
-            is PlayerState.Play -> PlayerState.Pause(currentProgressTime, isFavorites)
-            is PlayerState.Prepared -> PlayerState.Pause(currentProgressTime, isFavorites)
-        }
-    }
-
-    private fun deleteFromFavorites(track: TrackItem) {
+    private fun deleteFromFavorites() {
         favoritesTracksId.remove(trackId)
 
         viewModelScope.launch {
             favoritesInteractor.deleteTrackFromFavorites(
-                itemMapper.mapToDomain(track)
+                trackId
             )
 
             renderState(
@@ -178,25 +183,33 @@ class PlayerViewModel(
             null
         }
 
-    fun onPlaylistClick(trackId: Long, playlist: PlaylistItem) {
+    fun onPlaylistClick(
+        track: TrackItem,
+        playlist: PlaylistItem,
+        coroutineExec: CompletedCoroutineExec
+    ) {
         val tracksIdList = playlistInteractor.getTracksIdFromPlaylist(
             playlistItemMapper.mapToDomain(playlist)
         )
 
         if (trackId in tracksIdList) {
-            showMessageLiveData.postValue(Pair(playlist.title, false))
+            showMessageLiveData.setValue(Pair(playlist.title, false))
         } else {
 
-            viewModelScope.launch {
-                playlistInteractor.addTrackIdToPlaylist(trackId, playlist.id)
-            }
+            renderBottomSheetState(PlayerBottomSheetState.Hide)
 
             showMessageLiveData.postValue(Pair(playlist.title, true))
-
-        renderBottomSheetState(BottomSheetState.Hide)
+            viewModelScope.launch {
+                coroutineExec.afterCompletion(
+                    playlistInteractor.addTrackToPlaylist(
+                        itemMapper.mapToDomain(track),
+                        playlistItemMapper.mapToDomain(playlist)
+                    ).single()
+                )
+            }
         }
-
     }
+
 
     fun showBottomSheet() {
         viewModelScope.launch {
@@ -204,7 +217,7 @@ class PlayerViewModel(
                 .getAllPlaylists()
                 .collect { playlists ->
                     renderBottomSheetState(
-                        BottomSheetState.Show(
+                        PlayerBottomSheetState.Show(
                             playlistItemMapper.mapListFromDomain(
                                 playlists
                             )
@@ -215,15 +228,19 @@ class PlayerViewModel(
     }
 
     fun hideBottomSheet() {
-        renderBottomSheetState(BottomSheetState.Hide)
+        renderBottomSheetState(PlayerBottomSheetState.Hide)
     }
 
     private fun renderState(state: PlayerState) {
         playerStateLiveData.postValue(state)
     }
 
-    private fun renderBottomSheetState(state: BottomSheetState) {
+    private fun renderBottomSheetState(state: PlayerBottomSheetState) {
         bottomSheetLiveData.postValue(state)
+    }
+
+    fun interface CompletedCoroutineExec {
+        fun afterCompletion(result: Any)
     }
 
     companion object {

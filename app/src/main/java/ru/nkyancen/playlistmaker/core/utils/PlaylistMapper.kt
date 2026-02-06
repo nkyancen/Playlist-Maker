@@ -11,7 +11,7 @@ interface PlaylistMapper<T> {
 
     fun mapToDomain(dto: T): Playlist
 
-    fun mapListToDomain(dtoList: List<T>) : List<Playlist> = dtoList.map {
+    fun mapListToDomain(dtoList: List<T>): List<Playlist> = dtoList.map {
         mapToDomain(it)
     }
 }

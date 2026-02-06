@@ -6,8 +6,8 @@ import ru.nkyancen.playlistmaker.settings.domain.api.SharingInteractor
 class SharingInteractorImpl(
     private val externalNavigator: ExternalNavigator
 ) : SharingInteractor {
-    override fun shareApp() {
-        externalNavigator.shareLink()
+    override fun shareApp(sharedUrl: String) {
+        externalNavigator.shareText(sharedUrl)
     }
 
     override fun openSupport() {

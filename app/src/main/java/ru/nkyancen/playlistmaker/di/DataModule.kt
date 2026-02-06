@@ -10,8 +10,8 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.nkyancen.playlistmaker.core.db.AppDatabase
 import ru.nkyancen.playlistmaker.core.utils.LocalPrefsClient
-import ru.nkyancen.playlistmaker.medialibrary.data.db.AppDatabase
 import ru.nkyancen.playlistmaker.search.data.sources.local.prefs.HistoryPrefsClient
 import ru.nkyancen.playlistmaker.search.data.sources.remote.RemoteClient
 import ru.nkyancen.playlistmaker.search.data.sources.remote.RetrofitClient
@@ -49,7 +49,7 @@ val dataModule = module {
     }
 
     single<LocalPrefsClient<String>>(named(HISTORY_PREFS_CLIENT)) {
-        HistoryPrefsClient(get(named(HISTORY_PREFS)),SEARCH_HISTORY_TAG)
+        HistoryPrefsClient(get(named(HISTORY_PREFS)), SEARCH_HISTORY_TAG)
     }
 
     factory {
@@ -82,6 +82,10 @@ val dataModule = module {
 
     single {
         get<AppDatabase>().playlistDao()
+    }
+
+    single {
+        get<AppDatabase>().playlistTracksDao()
     }
 
 }

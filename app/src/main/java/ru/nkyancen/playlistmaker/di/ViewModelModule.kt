@@ -7,6 +7,7 @@ import ru.nkyancen.playlistmaker.medialibrary.favorites.presentation.viewmodel.F
 import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.viewmodel.CreatePlaylistViewModel
 import ru.nkyancen.playlistmaker.medialibrary.playlists.presentation.viewmodel.PlaylistsViewModel
 import ru.nkyancen.playlistmaker.player.presentation.viewmodel.PlayerViewModel
+import ru.nkyancen.playlistmaker.playlist_detail.presentation.viewmodel.PlaylistDetailsViewModel
 import ru.nkyancen.playlistmaker.search.presentation.viewmodel.SearchViewModel
 import ru.nkyancen.playlistmaker.settings.presentation.viewmodel.SettingsViewModel
 
@@ -62,4 +63,17 @@ val viewModelModule = module {
             get()
         )
     }
+
+    viewModel { (id: Long) ->
+        PlaylistDetailsViewModel(
+            id,
+            get(named(PLAYLIST_ITEM_MAPPER)),
+            get(named(ITEM_MAPPER)),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
+
 }

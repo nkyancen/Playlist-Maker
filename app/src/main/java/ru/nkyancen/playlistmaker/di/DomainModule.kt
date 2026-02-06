@@ -9,16 +9,20 @@ import ru.nkyancen.playlistmaker.medialibrary.favorites.domain.api.FavoritesRepo
 import ru.nkyancen.playlistmaker.medialibrary.favorites.domain.impl.FavoritesInteractorImpl
 import ru.nkyancen.playlistmaker.medialibrary.playlists.data.impl.ExternalStorageRepositoryImpl
 import ru.nkyancen.playlistmaker.medialibrary.playlists.data.impl.PlaylistRepositoryImpl
-import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.PlaylistCoverInteractor
 import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.ExternalStorageRepository
+import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.PlaylistCoverInteractor
 import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.PlaylistInteractor
 import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.api.PlaylistRepository
-import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.impl.ExternalStorageInteractorImpl
+import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.impl.PlaylistCoverInteractorImpl
 import ru.nkyancen.playlistmaker.medialibrary.playlists.domain.impl.PlaylistInteractorImpl
 import ru.nkyancen.playlistmaker.player.data.impl.MediaPlayerRepositoryImpl
 import ru.nkyancen.playlistmaker.player.domain.api.MediaPlayerInteractor
 import ru.nkyancen.playlistmaker.player.domain.api.MediaPlayerRepository
 import ru.nkyancen.playlistmaker.player.domain.use_case.MediaPlayerInteractorImpl
+import ru.nkyancen.playlistmaker.playlist_detail.data.impl.PlaylistDetailsRepositoryImpl
+import ru.nkyancen.playlistmaker.playlist_detail.domain.api.PlaylistDetailInteractor
+import ru.nkyancen.playlistmaker.playlist_detail.domain.api.PlaylistDetailsRepository
+import ru.nkyancen.playlistmaker.playlist_detail.domain.impl.PlaylistDetailsInteractorImpl
 import ru.nkyancen.playlistmaker.search.data.impl.HistoryRepositoryImpl
 import ru.nkyancen.playlistmaker.search.data.impl.TrackSearchRepositoryImpl
 import ru.nkyancen.playlistmaker.search.domain.api.HistoryRepository
@@ -42,7 +46,8 @@ val repositoryModule = module {
     factory<NightModeRepository> {
         NightModeRepositoryImpl(
             get(named(NIGHT_MODE_PREFS_CLIENT)),
-            androidContext())
+            androidContext()
+        )
     }
 
     factory<MediaPlayerRepository> {
@@ -60,26 +65,38 @@ val repositoryModule = module {
     factory<TrackSearchRepository> {
         TrackSearchRepositoryImpl(
             get(),
-            get(named(SEARCH_MAPPER)))
+            get(named(SEARCH_MAPPER))
+        )
     }
 
     factory<FavoritesRepository> {
         FavoritesRepositoryImpl(
             get(),
-            get(named(ENTITY_MAPPER))
+            get(named(FAVORITES_ENTITY_MAPPER))
         )
     }
 
     factory<PlaylistRepository> {
         PlaylistRepositoryImpl(
             get(),
+            get(),
             get(named(PLAYLIST_ENTITY_MAPPER)),
+            get(named(TRACK_ENTITY_MAPPER)),
             get()
         )
     }
 
     factory<ExternalStorageRepository> {
         ExternalStorageRepositoryImpl(
+            androidContext()
+        )
+    }
+
+    factory<PlaylistDetailsRepository> {
+        PlaylistDetailsRepositoryImpl(
+            get(),
+            get(named(TRACK_ENTITY_MAPPER)),
+            get(),
             androidContext()
         )
     }
@@ -111,6 +128,11 @@ val interactorModule = module {
     }
 
     factory<PlaylistCoverInteractor> {
-        ExternalStorageInteractorImpl(get())
+        PlaylistCoverInteractorImpl(get())
     }
+
+    factory<PlaylistDetailInteractor> {
+        PlaylistDetailsInteractorImpl(get())
+    }
+
 }

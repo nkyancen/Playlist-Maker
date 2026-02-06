@@ -8,7 +8,7 @@ sealed interface TracksSearchState {
 
     data class Clear(
         val history: List<TrackItem>
-    ): TracksSearchState
+    ) : TracksSearchState
 
     object Loading : TracksSearchState
 
@@ -18,5 +18,5 @@ sealed interface TracksSearchState {
 
     data class Default(
         val hasFocus: Boolean
-    ): TracksSearchState
+    ) : TracksSearchState
 }

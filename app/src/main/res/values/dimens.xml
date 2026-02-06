@@ -16,6 +16,13 @@
     <dimen name="tabs_text_size">14sp</dimen>
     <dimen name="new_playlist_text_size">16dp</dimen>
     <dimen name="new_playlist_additional_text_size">12dp</dimen>
+    <dimen name="dialog_title_text_size">16sp</dimen>
+    <dimen name="dialog_body_text_size">14sp</dimen>
+    <dimen name="playlist_details_title_text_size">24sp</dimen>
+    <dimen name="playlist_details_body_text_size">18sp</dimen>
+    <dimen name="playlist_details_item_text_size">16sp</dimen>
+    <dimen name="playlist_details_item_secondary_text_size">11sp</dimen>
+    <dimen name="playlist_details_menu_text_size">16sp</dimen>
     <!--    -->
     <dimen name="main_icon_padding">8dp</dimen>
 
@@ -59,12 +66,12 @@
     <dimen name="player_bottom_padding">20dp</dimen>
     <dimen name="player_play_button_vertical_margin">30dp</dimen>
     <dimen name="player_play_button_size">100dp</dimen>
-    <dimen name="search_progressbar_size">44dp</dimen>
+    <dimen name="progressbar_size">44dp</dimen>
 
     <dimen name="tabs_padding_horizontal">16dp</dimen>
     <dimen name="tabs_height">48dp</dimen>
 
-    <dimen name="new_playlist_padding">24dp</dimen>
+    <dimen name="create_playlist_padding">24dp</dimen>
     <dimen name="new_playlist_additional_padding">16dp</dimen>
     <dimen name="new_playlist_text_corner_radius">4dp</dimen>
     <dimen name="image_dash_width">30dp</dimen>
@@ -77,4 +84,9 @@
     <dimen name="corner_radius">8dp</dimen>
     <dimen name="small_corner_radius">2dp</dimen>
     <dimen name="large_corner_radius">16dp</dimen>
+    <dimen name="playlist_details_button_size">24dp</dimen>
+    <dimen name="playlist_details_menu_padding_text_start">16dp</dimen>
+    <dimen name="playlist_details_menu_padding_text_top">21dp</dimen>
+    <dimen name="playlist_details_menu_padding_text_end">44dp</dimen>
+    <dimen name="playlist_details_menu_padding_text_bottom">21dp</dimen>
 </resources>

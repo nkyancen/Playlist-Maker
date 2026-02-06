@@ -43,19 +43,36 @@
     </style>
 
     <style name="HistoryTextStyle.Secondary">
-        <item name="android:textSize">@dimen/search_secondary_text_size</item>
+        <item name="android:textSize">@dimen/history_secondary_text_size</item>
         <item name="android:textColor">?attr/colorPrimaryVariant</item>
     </style>
 
     <style name="FavoritesTextStyle">
         <item name="android:fontFamily">@font/ys_display_regular</item>
-        <item name="android:textSize">@dimen/search_text_size</item>
+        <item name="android:textSize">@dimen/favorites_text_size</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
 
     <style name="FavoritesTextStyle.Secondary">
-        <item name="android:textSize">@dimen/search_secondary_text_size</item>
+        <item name="android:textSize">@dimen/favorites_secondary_text_size</item>
         <item name="android:textColor">?attr/colorPrimaryVariant</item>
+    </style>
+
+    <style name="PlaylistDetailsItemTextStyle">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/playlist_details_item_text_size</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="PlaylistDetailsItemTextStyle.Secondary">
+        <item name="android:textSize">@dimen/playlist_details_item_secondary_text_size</item>
+        <item name="android:textColor">?attr/colorPrimaryVariant</item>
+    </style>
+
+    <style name="PlaylistDetailsMenuTextStyle">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/playlist_details_menu_text_size</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
 
     <style name="PlaylistSmallTextStyle">
@@ -97,9 +114,23 @@
         <item name="android:textSize">@dimen/tabs_text_size</item>
     </style>
 
-    <style name="NewPlaylistButtonTextStyle">
+    <style name="CreatePlaylistButtonTextStyle">
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textSize">@dimen/new_playlist_text_size</item>
+    </style>
+
+    <style name="PlaylistDetailsTextStyle">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="PlaylistDetailsTextStyle.Title">
+        <item name="android:fontFamily">@font/ys_display_bold</item>
+        <item name="android:textSize">@dimen/playlist_details_title_text_size</item>
+    </style>
+
+    <style name="PlaylistDetailsTextStyle.Body">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/playlist_details_body_text_size</item>
     </style>
 
     <style name="Button" parent="Widget.MaterialComponents.Button.UnelevatedButton">
@@ -134,6 +165,18 @@
         <item name="iconGravity">end</item>
         <item name="iconPadding">@dimen/main_icon_padding</item>
         <item name="iconTint">?attr/colorPrimaryVariant</item>
+    </style>
+
+    <style name="Button.PlaylistDetailsMenu">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:backgroundTint">@color/no_color</item>
+        <item name="android:textAppearance">@style/PlaylistDetailsMenuTextStyle</item>
+        <item name="android:paddingStart">@dimen/playlist_details_menu_padding_text_start</item>
+        <item name="android:paddingTop">@dimen/playlist_details_menu_padding_text_top</item>
+        <item name="android:paddingEnd">@dimen/playlist_details_menu_padding_text_end</item>
+        <item name="android:paddingBottom">@dimen/playlist_details_menu_padding_text_bottom</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
 
     <style name="ButtonPlaceholder" parent="Widget.MaterialComponents.Button.UnelevatedButton">
@@ -183,32 +226,40 @@
         <item name="android:orientation">vertical</item>
     </style>
 
-    <style name="VerticalRecyclerView.Search"/>
+    <style name="VerticalRecyclerView.Search" />
 
-    <style name="VerticalRecyclerView.History"/>
+    <style name="VerticalRecyclerView.History" />
 
-    <style name="VerticalRecyclerView.Favorites"/>
+    <style name="VerticalRecyclerView.Favorites" />
 
-    <style name="VerticalRecyclerView.Playlists"/>
+    <style name="VerticalRecyclerView.Playlists" />
+
+    <style name="VerticalRecyclerView.PlaylistDetailsTracks" />
 
     <style name="ToolBar" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">56dp</item>
         <item name="titleTextAppearance">@style/HeaderTextStyle</item>
+        <item name="titleTextColor">?attr/colorOnPrimary</item>
     </style>
 
     <style name="ToolBar.Player">
         <item name="contentInsetStartWithNavigation">64dp</item>
         <item name="navigationIcon">@drawable/ic_arrow_back_24</item>
         <item name="navigationIconTint">?attr/colorOnPrimary</item>
-        <item name="titleTextColor">?attr/colorOnPrimary</item>
     </style>
 
-    <style name="ToolBar.NewPlaylist">
+    <style name="ToolBar.CreatePlaylist">
         <item name="contentInsetStartWithNavigation">64dp</item>
         <item name="navigationIcon">@drawable/ic_arrow_back_24</item>
         <item name="navigationIconTint">?attr/colorOnPrimary</item>
-        <item name="titleTextColor">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="ToolBar.PlaylistDetails">
+        <item name="android:background">@color/no_color</item>
+        <item name="navigationIconTint">@color/dark_gray</item>
+        <item name="contentInsetStartWithNavigation">64dp</item>
+        <item name="navigationIcon">@drawable/ic_arrow_back_24</item>
     </style>
 
     <style name="TextViewPlayerItem" parent="Widget.MaterialComponents.TextView">
@@ -240,14 +291,37 @@
         <item name="android:background">@drawable/round_button</item>
     </style>
 
-    <style name="DialogTheme">
+    <style name="ImageButtonDetails" parent="Widget.MaterialComponents.TimePicker.ImageButton">
+        <item name="android:layout_width">@dimen/playlist_details_button_size</item>
+        <item name="android:layout_height">@dimen/playlist_details_button_size</item>
+        <item name="android:background">@color/no_color</item>
+        <item name="tint">@color/dark_gray</item>
+    </style>
+
+    <style name="DialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog">
         <item name="buttonBarPositiveButtonStyle">@style/DialogTheme.Button</item>
         <item name="buttonBarNeutralButtonStyle">@style/DialogTheme.Button</item>
         <item name="buttonBarNegativeButtonStyle">@style/DialogTheme.Button</item>
+        <item name="android:backgroundDimAmount">0.5</item>
+        <item name="android:background">@color/white</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/DialogTheme.Title</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/DialogTheme.Message</item>
     </style>
 
-    <style name="DialogTheme.Button" parent="Widget.MaterialComponents.Button.TextButton">
+    <style name="DialogTheme.Title" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textSize">@dimen/dialog_title_text_size</item>
+        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+    </style>
+
+    <style name="DialogTheme.Message" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+        <item name="android:textSize">@dimen/dialog_body_text_size</item>
+        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+
+    <style name="DialogTheme.Button" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="backgroundTint">@color/no_color</item>
-        <item name="android:textColor">?attr/colorSecondary</item>
+        <item name="android:textColor">@color/blue</item>
     </style>
 </resources>

@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.nkyancen.playlistmaker.settings.domain.api.NightModeInteractor
 import ru.nkyancen.playlistmaker.settings.domain.api.SharingInteractor
-import ru.nkyancen.playlistmaker.settings.presentation.model.ExternalActionEventState
 import ru.nkyancen.playlistmaker.settings.presentation.model.NightModeState
 
 class SettingsViewModel(
@@ -20,24 +19,47 @@ class SettingsViewModel(
     }
 
     private fun loadSettings() {
-        val isNightMode = getCurrentNightMode()
-        nightModeLiveData.value = NightModeState(isNightMode = isNightMode)
+        if (getCurrentNightMode()) {
+            renderNightState(
+                NightModeState.Night
+            )
+        } else {
+            renderNightState(
+                NightModeState.Day
+            )
+        }
     }
 
     fun switchNightMode(enabled: Boolean) {
-        nightModeLiveData.value = NightModeState(isNightMode = enabled)
+        if (enabled) {
+            renderNightState(
+                NightModeState.Night
+            )
+        } else {
+            renderNightState(
+                NightModeState.Day
+            )
+        }
+
         themeInteractor.switchMode(enabled)
+    }
+
+    fun renderNightState(state: NightModeState) {
+        nightModeLiveData.postValue(state)
     }
 
     fun getCurrentNightMode(): Boolean = themeInteractor.isNightModeFromSettings()
 
-    fun executeExternalNavigation(state: ExternalActionEventState) {
-        when (state) {
-            is ExternalActionEventState.Share -> sharingInteractor.shareApp()
-
-            is ExternalActionEventState.Support -> sharingInteractor.openSupport()
-
-            is ExternalActionEventState.Terms -> sharingInteractor.openTerms()
-        }
+    fun shareApp(sharedUrl: String) {
+        sharingInteractor.shareApp(sharedUrl)
     }
+
+    fun sendMailToSupport() {
+        sharingInteractor.openSupport()
+    }
+
+    fun openTerms() {
+        sharingInteractor.openTerms()
+    }
+
 }
