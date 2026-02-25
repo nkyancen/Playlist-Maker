@@ -39,7 +39,7 @@ class SearchViewModel(
         if (latestSearchText == currentSearchText) {
             return
         }
-        if (currentSearchText.isNotEmpty()) {
+        if (currentSearchText.isNotBlank()) {
             this.latestSearchText = currentSearchText
             trackSearchDebounce(currentSearchText)
         }
