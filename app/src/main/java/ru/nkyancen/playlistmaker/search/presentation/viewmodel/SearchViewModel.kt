@@ -21,7 +21,7 @@ class SearchViewModel(
 
     private var latestSearchText: String? = null
 
-    private val movieSearchDebounce = debounce<String>(
+    private val trackSearchDebounce = debounce<String>(
         SEARCH_DEBOUNCE_DELAY,
         viewModelScope,
         true
@@ -39,9 +39,9 @@ class SearchViewModel(
         if (latestSearchText == currentSearchText) {
             return
         }
-        if (currentSearchText.isNotEmpty()) {
+        if (currentSearchText.isNotBlank()) {
             this.latestSearchText = currentSearchText
-            movieSearchDebounce(currentSearchText)
+            trackSearchDebounce(currentSearchText)
         }
     }
 

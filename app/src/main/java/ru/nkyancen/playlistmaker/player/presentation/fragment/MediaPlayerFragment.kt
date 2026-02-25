@@ -95,7 +95,6 @@ class MediaPlayerFragment : Fragment(), KoinComponent {
             }
 
             override fun onSlide(p0: View, p1: Float) {
-
             }
         })
 

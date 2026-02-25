@@ -106,7 +106,7 @@ class PlayerViewModel(
         timeJob = viewModelScope.launch {
             while (mediaPlayerInteractor.isPlaying()) {
                 delay(TIMER_UPDATE_DELAY)
-                playerStateLiveData.setValue(
+                playerStateLiveData.postValue(
                     PlayerState.Play(
                         Converter.formatTime(
                             mediaPlayerInteractor.getCurrentPosition().toLong()
@@ -117,7 +117,7 @@ class PlayerViewModel(
             }
 
             if (mediaPlayerInteractor.isPrepared()) {
-                playerStateLiveData.setValue(
+                playerStateLiveData.postValue(
                     PlayerState.Pause(
                         Converter.formatTime(0L),
                         isFavorites()
